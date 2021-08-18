@@ -3,9 +3,17 @@
 #include <FS.h>
 #include <SPIFFS.h>
 
+typedef enum
+{
+    CONFIG_LOADED,
+    CONFIG_FILE_ERROR,
+    CONFIG_SERIALIZATION_ERROR
+}
+config_status_t;
+
 namespace Config
 {
-    void load();
+    config_status_t load();
     void save();
 
     extern StaticJsonDocument<256> data;

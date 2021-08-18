@@ -5,26 +5,26 @@
 
 StaticJsonDocument<256> Config::data;
 
-void Config::load()
+config_status_t Config::load()
 {
     File config_file = SPIFFS.open("/config.json", "r");
     if (!config_file)
     {
-        Serial.println("Failed to read config file.");
+        return CONFIG_FILE_ERROR;
     }
-
-    // const char* config = R"=({"ssid":"Zdrajcy metalu","pwd":"Dz3nt31m3n_m3ta1u"})=";
 
     DeserializationError err = deserializeJson(Config::data, config_file);
     if (err)
     {
-        Serial.print(F("deserializeJson() failed: "));
-        Serial.println(err.c_str());
+        return CONFIG_SERIALIZATION_ERROR;
     }
+
+    return CONFIG_LOADED;
 }
 
 void Config::save()
 {
+    // TODO
 }
 
 #endif
