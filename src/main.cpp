@@ -21,9 +21,6 @@ void setup()
     const char* ssid = Config::data["ssid"];
     const char* pwd = Config::data["pwd"];
 
-    Serial.println(ssid);
-    Serial.println(pwd);
-
     WiFi.begin(ssid, pwd);
 
     Serial.print("Connecting");

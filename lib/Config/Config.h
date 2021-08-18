@@ -1,3 +1,6 @@
+#ifndef Config__h
+#define Config__h
+
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <FS.h>
@@ -18,3 +21,5 @@ namespace Config
 
     extern StaticJsonDocument<256> data;
 }
+
+#endif

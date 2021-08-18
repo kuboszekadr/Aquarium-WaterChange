@@ -1,6 +1,3 @@
-#ifndef Config__h
-#define Config__h
-
 #include "Config.h"
 
 StaticJsonDocument<256> Config::data;
@@ -26,5 +23,3 @@ void Config::save()
 {
     // TODO
 }
-
-#endif
