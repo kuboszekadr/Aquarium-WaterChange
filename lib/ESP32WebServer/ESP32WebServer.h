@@ -1,6 +1,8 @@
 #ifndef WebServer__h
 #define WebServer__h
 
+#include "Config.h"
+
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <SPIFFS.h>

@@ -6,7 +6,7 @@ void ESP32WebServer::start()
 {
     ESP32WebServer::server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
                               { request->send(SPIFFS, "/index.html", "text/html"); });
-    ESP32WebServer::server.on("/config", HTTP_GET, ESP32WebServer::handle_GetConfigRequest);
+    ESP32WebServer::server.on("/config", HTTP_GET, handle_GetConfigRequest);
 
     ESP32WebServer::server.on("/src/css/bootstrap.css", HTTP_GET, [](AsyncWebServerRequest *request)
                               { request->send(SPIFFS, "/src/css/bootstrap.css", "text/css"); });
@@ -21,8 +21,19 @@ void ESP32WebServer::start()
 
 void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 {
+    if (Config::load() != CONFIG_LOADED)
+    {
+        request->send(
+            500,
+            "application/json",
+            "Error during config loading");
+    };
+
+    char config[100] = "";
+    serializeJson(Config::data, config);
+
     request->send(
         200,
         "application/json",
-        R"=({"ssid":"Zdrajcy metalu","pwd":"Dz3nt31m3n_m3ta1u"})=");
+        config);
 }
