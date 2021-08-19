@@ -1,4 +1,5 @@
 #include "Config.h"
+#include "ESP32WebServer.h"
 #include "WiFiManager.h"
 
 #include <SPIFFS.h>
@@ -18,6 +19,7 @@ void setup()
 
   Config::load();
   WiFiManager::connect(Config::data["ssid"], Config::data["pwd"]);
+  ESP32WebServer::start();
 }
 
 void loop()
