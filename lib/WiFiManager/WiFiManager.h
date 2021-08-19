@@ -4,10 +4,12 @@
 #include <WiFi.h>
 
 #define CONNECTION_TIMEOUT 60000 // in miliseconds
+WiFi.setTimeOut(CONNECTION_TIMEOUT);
 
-namespace WiFi_Manager
+namespace WiFiManager
 {
     bool connect(const char *ssid, const char *pwd);
+
 }
 
 #endif

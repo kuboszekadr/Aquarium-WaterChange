@@ -6,6 +6,8 @@
 
 int status = WL_IDLE_STATUS;
 
+WiFi.setTimeOut(60 * 1000);
+
 void setup()
 {
   Serial.begin(115200);
@@ -17,9 +19,10 @@ void setup()
   }
 
   Config::load();
-  WiFi_Manager::connect(Config::data["ssid"], Config::data["pwd"]);
+  WiFiManager::connect(Config::data["ssid"], Config::data["pwd"]);
 }
 
 void loop()
 {
 }
+

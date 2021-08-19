@@ -1,6 +1,6 @@
 #include "WiFiManager.h"
 
-bool WiFi_Manager::connect(const char *ssid, const char *pwd)
+bool WiFiManager::connect(const char *ssid, const char *pwd)
 {
     WiFi.begin(ssid, pwd);
 
@@ -8,8 +8,7 @@ bool WiFi_Manager::connect(const char *ssid, const char *pwd)
 
     Serial.print("Connecting");
 
-    while ((WiFi.status() != WL_CONNECTED) &&
-           (millis() - timeout_start <= CONNECTION_TIMEOUT))
+    while (WiFi.status() != WL_CONNECTED)
     {
         Serial.print('.');
         delay(500);
