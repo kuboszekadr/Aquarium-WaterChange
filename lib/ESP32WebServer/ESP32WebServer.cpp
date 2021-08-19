@@ -21,6 +21,9 @@ void ESP32WebServer::start()
 
 void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 {
+    Serial.print(F("New request from IP: "));
+    Serial.println(request->client()->remoteIP());
+
     if (Config::load() != CONFIG_LOADED)
     {
         request->send(
