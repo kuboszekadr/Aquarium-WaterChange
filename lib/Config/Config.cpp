@@ -4,7 +4,7 @@ StaticJsonDocument<256> Config::data;
 
 config_status_t Config::load()
 {
-    File config_file = SPIFFS.open("config/wifi.json", "r");
+    File config_file = SPIFFS.open("/config/wifi.json", "r");
     if (!config_file)
     {
         return CONFIG_FILE_ERROR;
