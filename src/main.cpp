@@ -6,8 +6,6 @@
 
 int status = WL_IDLE_STATUS;
 
-WiFi.setTimeOut(60 * 1000);
-
 void setup()
 {
   Serial.begin(115200);
