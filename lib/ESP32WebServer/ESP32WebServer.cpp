@@ -4,9 +4,16 @@ AsyncWebServer ESP32WebServer::server(80);
 
 void ESP32WebServer::start()
 {
-    ESP32WebServer::server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-                              { request->send(SPIFFS, "/index.html", "text/html"); });
-    ESP32WebServer::server.on("/config", HTTP_GET, handle_GetConfigRequest);
+    // TODO: change for serverStatic
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+              { request->send(SPIFFS, "/index.html", "text/html"); });
+
+    server.on("/config", HTTP_GET, handle_GetConfigRequest);
+
+    AsyncCallbackJsonWebHandler *handler = new AsyncCallbackJsonWebHandler(
+        "/config",
+        handle_PostConfigRequest);
+    handler->setMethod(HTTP_POST);
 
     ESP32WebServer::server.on("/src/css/bootstrap.css", HTTP_GET, [](AsyncWebServerRequest *request)
                               { request->send(SPIFFS, "/src/css/bootstrap.css", "text/css"); });
@@ -16,6 +23,7 @@ void ESP32WebServer::start()
                               { request->send(SPIFFS, "/src/js/jquery.min", "text/javascript"); });
     ESP32WebServer::server.begin();
 
+    server.addHandler(handler);
     Serial.println("Server started on port 80");
 };
 
@@ -39,4 +47,29 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
         200,
         "application/json",
         config);
+}
+
+void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
+{
+    Serial.println("Config update requested - updating");
+
+    JsonObject obj = json.as<JsonObject>();
+
+    const char* ssid = obj["ssid"];
+    const char* pwd = obj["pwd"];
+
+    Config::data["ssid"] = ssid;
+    Config::data["pwd"] = pwd;
+
+    if (Config::save() == CONFIG_SAVED)
+    {
+        Serial.println("Config file updated.");
+        request->send(200);
+        
+    }
+    else 
+    {
+        request->send(500);
+    }
+
 }

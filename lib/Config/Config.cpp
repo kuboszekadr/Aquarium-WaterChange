@@ -19,7 +19,14 @@ config_status_t Config::load()
     return CONFIG_LOADED;
 }
 
-void Config::save()
+config_status_t Config::save()
 {
-    // TODO
+    File config_file = SPIFFS.open("/config/wifi.json", "w");
+    if (!config_file)
+    {
+        return CONFIG_FILE_ERROR;
+    }
+
+    serializeJson(data, config_file);
+    return CONFIG_SAVED;
 }
