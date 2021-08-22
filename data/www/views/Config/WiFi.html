@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    
     <!-- SSID -->
     <div class="form-group">
         <label for="SSID">SSID</label>
@@ -27,7 +28,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/config", false);
+        xhr.open("GET", "/config?wifi", false);
         xhr.send(null);
 
         var obj = JSON.parse(xhr.responseText);
@@ -45,7 +46,7 @@
 			console.log(jsonString);            
 
 			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "/config", true);
+			xhr.open("POST", "/config?wifi", true);
 			xhr.setRequestHeader('Content-Type', 'application/json');
 			xhr.send(jsonString);
         });    
