@@ -99,7 +99,7 @@
 
 			var obj = JSON.parse(xhr.responseText);
 			console.log(xhr.responseText);
-			document.getElementById("SSID").value = obj["wifi"]["ssid"];
+			document.getElementById("SSID").value = obj["ssid"];
 
 			document.getElementById("IP").value = obj["api"]["apiHostIP"];
 			document.getElementById("Port").value = obj["api"]["apiHostPort"];
