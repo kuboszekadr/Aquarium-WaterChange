@@ -4,23 +4,13 @@ AsyncWebServer ESP32WebServer::server(80);
 
 void ESP32WebServer::start()
 {
-    // TODO: change for serverStatic
-    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-              { request->send(SPIFFS, "/index.html", "text/html"); });
-
+    server.serveStatic("/", SPIFFS, "/www/");
     server.on("/config", HTTP_GET, handle_GetConfigRequest);
 
     AsyncCallbackJsonWebHandler *handler = new AsyncCallbackJsonWebHandler(
         "/config",
         handle_PostConfigRequest);
     handler->setMethod(HTTP_POST);
-
-    ESP32WebServer::server.on("/src/css/bootstrap.css", HTTP_GET, [](AsyncWebServerRequest *request)
-                              { request->send(SPIFFS, "/src/css/bootstrap.css", "text/css"); });
-    ESP32WebServer::server.on("/src/css/custom.min.css", HTTP_GET, [](AsyncWebServerRequest *request)
-                              { request->send(SPIFFS, "/src/css/custom.min.css", "text/css"); });
-    ESP32WebServer::server.on("/src/js/jquery.min", HTTP_GET, [](AsyncWebServerRequest *request)
-                              { request->send(SPIFFS, "/src/js/jquery.min", "text/javascript"); });
     ESP32WebServer::server.begin();
 
     server.addHandler(handler);
