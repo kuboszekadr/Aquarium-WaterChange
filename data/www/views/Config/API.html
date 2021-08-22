@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="../../css/bootstrap.css" media="screen">
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="form-group">
+        <label for="SecretKey" disabled="">Sekret key</label>
+        <input type="text" class="form-control" id="Secret" aria-describedby="SSID" placeholder="" disabled="">
+        <small id="SSIDHelp" class="form-text text-muted" disabled="">Secret key to be used when connecting to
+            API.</small>
+
+    </div>
+
+    <div class="form-group">
+        <label for="HostIP">Host IP</label>
+        <input type="text" class="form-control" id="IP" placeholder="">
+        <small id="IPHelp" class="form-text text-muted">IP of local API server.</small>
+
+        <label for="HostPort">Port</label>
+        <input type="number" class="form-control" id="Port" placeholder=80>
+        <small id="PortHelp" class="form-text text-muted">API server port (default 80).</small>
+    </div>
+
+    <div class="form-group">
+        <label for="DeviceAPIID">Device ID</label>
+        <input type="number" class="form-control" id="DeviceAppId" placeholder="">
+        <small id="DeviceAPIIDHelp" class="form-text text-muted">Device ID in SmartHome app.</small>
+    </div>
+
+    <div class="form-group">
+        <label for="DeviceAPIID">Device API name</label>
+        <input type="text" class="form-control" id="DeviceAppName" placeholder="">
+        <small id="DeviceAPIIDHelp" class="form-text text-muted">Device name in SmartHome app.</small>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="APISubmitBtn">Submit</button>
+    </div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/config", false);
+        xhr.send(null);
+
+        var obj = JSON.parse(xhr.responseText);
+        console.log(xhr.responseText);
+
+        document.getElementById("IP").value = obj["apiHostIP"];
+        document.getElementById("Port").value = obj["apiHostPort"];
+
+        document.getElementById("DeviceAppId").value = obj["apiDeviceId"];
+        document.getElementById("DeviceAppName").value = obj["apiDeviceName"];
+    });
+
+    document.getElementById("APISubmitBtn").addEventListener("click", function () {
+        var obj = new Object();
+
+        obj.appHostIp = document.getElementById("IP").value;
+        obj.appHostPort = document.getElementById("Port").value;
+
+        obj.appDeviceId = document.getElementById("DeviceAppId").value;
+        obj.appDeviceName = document.getElementById("DeviceAppName").value;
+
+        var jsonString = JSON.stringify(obj);
+        console.log(jsonString);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/config?api", true);
+        xhr.setRequestHeader('Content-Type', 'text/plain');
+        xhr.send(jsonString);
+    });
+
+</script>
+
+
+</html>
