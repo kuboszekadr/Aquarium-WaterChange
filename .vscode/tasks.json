@@ -10,6 +10,11 @@
 			"label": "PlatformIO: Remote Upload",
 			"group": {
 				"kind": "build"
+			},
+			"presentation": {
+				"reveal": "silent",
+				"revealProblems": "onProblem",
+				"close": true
 			}
 		}
 	]

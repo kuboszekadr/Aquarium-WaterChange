@@ -22,7 +22,9 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
     Serial.print(F("New request from IP: "));
     Serial.println(request->client()->remoteIP());
 
-    Config *config = Config::getByName("wifi");
+    const char *arg = request->argName(0).c_str();
+    Serial.println(arg);
+    Config *config = Config::getByName(arg);
 
     if (config == nullptr)
     {
