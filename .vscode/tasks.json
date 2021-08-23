@@ -3,11 +3,14 @@
 	"tasks": [
 		{
 			"type": "PlatformIO",
-			"task": "Remote Upload (esp32doit-devkit-v1)",
+			"task": "Remote Upload",
 			"problemMatcher": [
 				"$platformio"
 			],
-			"label": "PlatformIO: Remote Upload (esp32doit-devkit-v1)"
+			"label": "PlatformIO: Remote Upload",
+			"group": {
+				"kind": "build"
+			}
 		}
 	]
 }
