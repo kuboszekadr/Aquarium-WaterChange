@@ -34,11 +34,9 @@ public:
 
 protected:
     char _name[16];
-    void loadConfigFile();
 
     static Config *_configs[CONFIG_FILES_AMOUNT];
     static uint8_t _files_amount;
-    static void _loadNewConfig(const char *name);
 };
 
 #endif
