@@ -22,10 +22,23 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
     Serial.print(F("New request from IP: "));
     Serial.println(request->client()->remoteIP());
 
+    Config *config = Config::getByName("wifi");
+
+    if (config == nullptr)
+    {
+        request->send(
+            500,
+            "application/json",
+            "Error");
+    }
+
+    char response[100] = "";
+    serializeJson(config->data, response);
+
     request->send(
-        500,
+        200,
         "application/json",
-        "Error");
+        response);    
 }
 
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
