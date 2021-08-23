@@ -19,6 +19,7 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "regex": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "typeinfo": "cpp"
     }
 }

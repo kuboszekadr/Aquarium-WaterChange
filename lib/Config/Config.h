@@ -1,6 +1,8 @@
 #ifndef Config__h
 #define Config__h
 
+#define CONFIG_FILES_AMOUNT 3
+
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <FS.h>
@@ -17,7 +19,7 @@ typedef enum
 class Config
 {
 public:
-    Config(char *name);
+    Config(const char *name);
 
     char *name(){return _name;};
 
@@ -32,8 +34,11 @@ public:
 
 protected:
     char _name[16];
+    void loadConfigFile();
 
-    static Config *configs[3];
+    static Config *_configs[CONFIG_FILES_AMOUNT];
+    static uint8_t _files_amount;
+    static void _loadNewConfig(const char *name);
 };
 
 #endif
