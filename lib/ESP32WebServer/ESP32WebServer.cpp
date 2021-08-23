@@ -22,44 +22,20 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
     Serial.print(F("New request from IP: "));
     Serial.println(request->client()->remoteIP());
 
-    if (Config::load() != CONFIG_LOADED)
-    {
-        request->send(
-            500,
-            "application/json",
-            "Error during config loading");
-    };
-
-    char config[100] = "";
-    serializeJson(Config::data, config);
-
     request->send(
-        200,
+        500,
         "application/json",
-        config);
+        "Error");
 }
 
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
 {
     Serial.println("Config update requested - updating");
-
     JsonObject obj = json.as<JsonObject>();
 
-    const char* ssid = obj["ssid"];
-    const char* pwd = obj["pwd"];
+    request->send(500);
+}
 
-    Config::data["ssid"] = ssid;
-    Config::data["pwd"] = pwd;
-
-    if (Config::save() == CONFIG_SAVED)
-    {
-        Serial.println("Config file updated.");
-        request->send(200);
-        
-    }
-    else 
-    {
-        request->send(500);
-    }
-
+void ESP32WebServer::update_WiFiConfig(JsonObject &obj)
+{
 }

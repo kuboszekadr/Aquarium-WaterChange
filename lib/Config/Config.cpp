@@ -1,32 +1,19 @@
 #include "Config.h"
 
-StaticJsonDocument<256> Config::data;
-
-config_status_t Config::load()
+Config::Config(char *name)
 {
-    File config_file = SPIFFS.open("/config/wifi.json", "r");
-    if (!config_file)
-    {
-        return CONFIG_FILE_ERROR;
-    }
-
-    DeserializationError err = deserializeJson(Config::data, config_file);
-    if (err)
-    {
-        return CONFIG_SERIALIZATION_ERROR;
-    }
-
-    return CONFIG_LOADED;
+    memcpy(_name, name, 15);
 }
 
-config_status_t Config::save()
+Config *Config::getByName(const char *configName)
 {
-    File config_file = SPIFFS.open("/config/wifi.json", "w");
-    if (!config_file)
+    for (uint8_t i = 0; i < 3; i++)
     {
-        return CONFIG_FILE_ERROR;
+        Config *config = configs[i];
+        if (strcmp(config->name(), configName) == 0)
+        {
+            return config;
+        }
     }
-
-    serializeJson(data, config_file);
-    return CONFIG_SAVED;
+    return nullptr;
 }

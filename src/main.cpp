@@ -17,8 +17,8 @@ void setup()
     Serial.println("Failed to mount file system.");
   }
 
-  Config::load();
-  WiFiManager::connect(Config::data["ssid"], Config::data["pwd"]);
+  // Config::load();
+  WiFiManager::connect("Zdrajcy metalu", "pwd");
   ESP32WebServer::start();
 }
 
