@@ -13,7 +13,6 @@ Config::Config(const char *name)
 Config *Config::getByName(const char *configName)
 {
     Serial.printf("Getting %s config.\n", configName);
-    Serial.println(_files_amount);
     for (uint8_t i = 0; i < _files_amount; i++)
     {
         Config *config = _configs[i];
