@@ -52,21 +52,21 @@
         var obj = JSON.parse(xhr.responseText);
         console.log(xhr.responseText);
 
-        document.getElementById("IP").value = obj["ip"];
+        document.getElementById("IP").value = obj["host"];
         document.getElementById("Port").value = obj["port"];
 
-        document.getElementById("DeviceAppId").value = obj["deviceId"];
-        document.getElementById("DeviceAppName").value = obj["deviceName"];
+        document.getElementById("DeviceAppId").value = obj["device_id"];
+        document.getElementById("DeviceAppName").value = obj["device_name"];
     });
 
     document.getElementById("APISubmitBtn").addEventListener("click", function () {
         var obj = new Object();
 
-        obj.ip = document.getElementById("IP").value;
+        obj.host = document.getElementById("IP").value;
         obj.port = document.getElementById("Port").value;
 
-        obj.deviceId = document.getElementById("DeviceAppId").value;
-        obj.deviceName = document.getElementById("DeviceAppName").value;
+        obj.device_id = document.getElementById("DeviceAppId").value;
+        obj.device_name = document.getElementById("DeviceAppName").value;
 
         var jsonString = JSON.stringify(obj);
         console.log(jsonString);

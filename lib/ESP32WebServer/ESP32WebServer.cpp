@@ -23,15 +23,12 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
     Serial.println(request->client()->remoteIP());
 
     const char *arg = request->argName(0).c_str();
-    Serial.println(arg);
     Config *config = Config::getByName(arg);
 
     if (config == nullptr)
     {
-        request->send(
-            500,
-            "application/json",
-            "Error");
+        Config::load(arg);
+        return;
     }
 
     char response[100] = "";
@@ -46,11 +43,7 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
 {
     Serial.println("Config update requested - updating");
-    JsonObject obj = json.as<JsonObject>();
+    // JsonObject obj = json.as<JsonObject>();
 
     request->send(500);
-}
-
-void ESP32WebServer::update_WiFiConfig(JsonObject &obj)
-{
 }

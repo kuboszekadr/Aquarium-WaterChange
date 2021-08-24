@@ -8,11 +8,12 @@ Config::Config(const char *name)
     memcpy(_name, name, 15);
     _configs[_files_amount] = this;
     _files_amount++;
-
 }
 
 Config *Config::getByName(const char *configName)
 {
+    Serial.printf("Getting %s config.\n", configName);
+    Serial.println(_files_amount);
     for (uint8_t i = 0; i < _files_amount; i++)
     {
         Config *config = _configs[i];
@@ -21,6 +22,7 @@ Config *Config::getByName(const char *configName)
             return config;
         }
     }
+    Serial.printf("%s has not been found.", configName);
     return nullptr;
 }
 
@@ -29,12 +31,11 @@ config_status_t Config::load(const char *name)
     Config *config = Config::getByName(name);
     if (config == nullptr)
     {
-        Serial.println("Config %s not found, creating new.");
+        Serial.printf("Config %s not found, creating new.\n", name);
         config = new Config(name);
     }
-    
-    Serial.println("Config created");
 
+    Serial.println("Loading config file...");
     config->load();
     return CONFIG_LOADED;
 }
