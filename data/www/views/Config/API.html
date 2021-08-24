@@ -8,6 +8,26 @@
 </head>
 
 <body>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">API connection status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group">
         <label for="SecretKey" disabled="">Sekret key</label>
         <input type="text" class="form-control" id="Secret" aria-describedby="SSID" placeholder="" disabled="">
@@ -28,7 +48,7 @@
 
     <div class="form-group">
         <label for="DeviceAPIID">Device ID</label>
-        <input type="number" class="form-control" id="DeviceAppId" placeholder="">
+        <input type="number" class="form-control" id="DeviceAppId" placeholder="" disabled="">
         <small id="DeviceAPIIDHelp" class="form-text text-muted">Device ID in SmartHome app.</small>
     </div>
 
@@ -42,13 +62,18 @@
         <button type="button" class="btn btn-primary" id="SubmitBtn" margin-left="100px">Submit</button>
         </div>
         </div>
-        <button type="button" class="btn btn-primary" id="TestBtn">Test</button>
+        <button type="button" class="btn btn-primary" id="TestBtn" data-toggle="modal"
+            data-target="#exampleModal">Test</button>
         </div>
         </div>
     </row>
 </body>
 
 <script>
+
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+
     document.addEventListener('DOMContentLoaded', function () {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/config?api", false);
@@ -83,29 +108,31 @@
     });
 
     document.getElementById("TestBtn").addEventListener("click", function () {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/config?api", false);
-        xhr.send(null);
+        try {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/config?api", false);
+            xhr.send(null);
 
-        var obj = JSON.parse(xhr.responseText);
-        console.log(xhr.responseText);
+            var obj = JSON.parse(xhr.responseText);
+            console.log(xhr.responseText);
 
-        host = obj["host"];
-        port = obj["port"];
+            host = obj["host"];
+            port = obj["port"];
 
-        url = 'http://' +  host + ':' + port + '/get_date'
-        xhr.open("GET", url);
-        xhr.send(null);
-
-        if (xhr.status == 200) {
-            console.log("Ok");
+            url = 'http://' + host + ':' + port + '/get_date'
+            xhr.open("GET", url);
+            xhr.send(null);
         }
-        else
-        {
-            console.log("Error");
+        finally {
+            modal = $("#exampleModal .modal-body");
+            if (xhr.status == 200) {
+                modal.text("Connection successfull");
+            }
+            else {
+                modal.text("Upssss... Something went wrong.");
+            }
         }
     });
+
 </script>
-
-
 </html>
