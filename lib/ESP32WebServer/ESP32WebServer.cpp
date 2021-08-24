@@ -49,6 +49,7 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
     Config *config = Config::getByName(arg);
 
     config->data = obj;
+    config->save();
 
-    request->send(500);
+    request->send(200);
 }

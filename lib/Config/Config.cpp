@@ -41,15 +41,13 @@ config_status_t Config::load(const char *name)
 
 config_status_t Config::load()
 {
-    char file_path[32];
-    strcpy(file_path, "/config/");
-    strcat(file_path, _name);
-    strcat(file_path, ".json");
+    char _file_path[32];
+    file_path(_file_path);
 
     Serial.print("Loading: ");
-    Serial.println(file_path);
+    Serial.println(_file_path);
 
-    File config_file = SPIFFS.open(file_path);
+    File config_file = SPIFFS.open(_file_path);
     if (!config_file)
     {
         return CONFIG_FILE_ERROR;
@@ -62,4 +60,27 @@ config_status_t Config::load()
     }
 
     return CONFIG_LOADED;
+}
+
+config_status_t Config::save()
+{
+    char _file_path[32];
+    file_path(_file_path);
+
+    File config_file = SPIFFS.open(_file_path);
+    if (!config_file)
+    {
+        return CONFIG_FILE_ERROR;
+    }
+
+    serializeJson(data, config_file);
+
+    return CONFIG_LOADED;
+}
+
+void Config::file_path(char *buff)
+{
+    strcpy(buff, "/config/");
+    strcat(buff, _name);
+    strcat(buff, ".json");
 }

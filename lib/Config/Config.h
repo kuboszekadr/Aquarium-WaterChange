@@ -22,9 +22,10 @@ public:
     Config(const char *name);
 
     char *name(){return _name;};
+    void file_path(char *buff);
 
     config_status_t load();
-    config_status_t save(JsonObject &data);
+    config_status_t save();
 
     StaticJsonDocument<128> data;
 
@@ -34,9 +35,11 @@ public:
 
 protected:
     char _name[16];
+    char _file_path[32];
 
     static Config *_configs[CONFIG_FILES_AMOUNT];
     static uint8_t _files_amount;
+
 };
 
 #endif
