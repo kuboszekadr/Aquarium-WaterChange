@@ -38,9 +38,14 @@
         <small id="DeviceAPIIDHelp" class="form-text text-muted">Device name in SmartHome app.</small>
     </div>
 
-    <button type="button" class="btn btn-primary" id="APISubmitBtn">Submit</button>
-    </div>
-    </div>
+    <row>
+        <button type="button" class="btn btn-primary" id="SubmitBtn" margin-left="100px">Submit</button>
+        </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="TestBtn">Test</button>
+        </div>
+        </div>
+    </row>
 </body>
 
 <script>
@@ -59,7 +64,7 @@
         document.getElementById("DeviceAppName").value = obj["device_name"];
     });
 
-    document.getElementById("APISubmitBtn").addEventListener("click", function () {
+    document.getElementById("SubmitBtn").addEventListener("click", function () {
         var obj = new Object();
 
         obj.host = document.getElementById("IP").value;
@@ -77,6 +82,25 @@
         xhr.send(jsonString);
     });
 
+    document.getElementById("TestBtn").addEventListener("click", function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/config?api", false);
+        xhr.send(null);
+
+        var obj = JSON.parse(xhr.responseText);
+        console.log(xhr.responseText);
+
+        host = obj["host"];
+        port = obj["port"];
+
+        url = 'http://' +  host + ':' + port + '/get_date'
+        xhr.open("GET", url);
+        xhr.send(null);
+
+        if (xhr.status == 200) {
+            console.log("Ok");
+        }
+    });
 </script>
 
 
