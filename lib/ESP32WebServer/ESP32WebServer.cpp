@@ -43,7 +43,12 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
 {
     Serial.println("Config update requested - updating");
-    // JsonObject obj = json.as<JsonObject>();
+    JsonObject obj = json.as<JsonObject>();
+
+    const char *arg = request->argName(0).c_str();
+    Config *config = Config::getByName(arg);
+
+    config->data = obj;
 
     request->send(500);
 }
