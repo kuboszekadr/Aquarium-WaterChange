@@ -6,10 +6,21 @@
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+
+    <style>
+        .footer {
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            color: white;
+            text-align: center;
+			font-size: 8px;
+        }
+    </style>
 </head>
 
 </body>
-<title>Config</title>
+<title></title>
 
 <div class="container" style="margin:0 auto;">
 	<div class="col-lg-9">
@@ -30,7 +41,7 @@
 
 		<div id="content" class="tab-content">
 			<div class="tab-pane fade show active" id="Home">
-				<iframe src="views/Config/Home.html" width="100%" height="100%"></iframe>
+				<iframe src="views/Home.html" width="100%" height="100%"></iframe>
 			</div>
 			<div class="tab-pane fade show active" id="WiFi">
 				<iframe src="views/Config/WiFi.html" width="100%" height="100%"></iframe>
@@ -39,11 +50,38 @@
 				<iframe src="views/Config/API.html" width="100%" height="100%"></iframe>
 			</div>
 			<div class="tab-pane fade show" id="Logs">
-				TODO
+				<iframe src="views/Logs.html" width="100%" height="100%"></iframe>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="footer">
+	2021-08-25 15:07:46
+</div>
 </body>
+
+<script>
+	async function getDeviceName() {
+		var title = '';
+		document.title = title;
+
+		try {
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "/config?api", false);
+			xhr.send(null);
+
+			var obj = JSON.parse(xhr.responseText);
+			device_name = obj["device_name"];
+
+			title = device_name;
+		}
+		catch {
+			title = "Config";
+		}
+		document.title = title;
+	}
+	getDeviceName();
+</script>
 
 </html>

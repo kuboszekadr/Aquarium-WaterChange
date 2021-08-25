@@ -8,12 +8,12 @@
 </head>
 
 <body>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">API connection status</h5>
+                    <h5 class="modal-title" id="statusModalLabel">API connection status</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -59,11 +59,21 @@
     </div>
 
     <row>
-        <button type="button" class="btn btn-primary" id="SubmitBtn" margin-left="100px">Submit</button>
+        <button 
+            type="button" 
+            class="btn btn-primary" 
+            id="SubmitBtn" 
+            margin-left="100px" 
+            data-toggle="modal" 
+            data-target="#statusModal">Submit</button>
         </div>
         </div>
-        <button type="button" class="btn btn-primary" id="TestBtn" data-toggle="modal"
-            data-target="#exampleModal">Test</button>
+        <button 
+            type="button" 
+            class="btn btn-primary" 
+            id="TestBtn"
+            data-toggle="modal"
+            data-target="#statusModal">Test</button>
         </div>
         </div>
     </row>
@@ -105,6 +115,12 @@
         xhr.open("POST", "/config?api", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(jsonString);
+
+        modal = $("#statusModal .modal-body");
+        modal.text("Ok");
+        
+        modal = $("#statusModal .modal-header");
+        modal.text("Config update status");
     });
 
     document.getElementById("TestBtn").addEventListener("click", function () {
@@ -124,7 +140,7 @@
             xhr.send(null);
         }
         finally {
-            modal = $("#exampleModal .modal-body");
+            modal = $("#statusModal .modal-body");
             if (xhr.status == 200) {
                 modal.text("Connection successfull");
             }
