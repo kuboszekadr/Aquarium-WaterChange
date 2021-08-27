@@ -15,9 +15,6 @@ namespace ESP32WebServer
     void start();
     void handle_GetConfigRequest(AsyncWebServerRequest *request);
     void handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json);
-
-    void update_WiFiConfig(JsonObject &obj);
-    void update_APIConfig();
 }
 
 #endif
