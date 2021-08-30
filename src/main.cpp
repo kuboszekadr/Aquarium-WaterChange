@@ -4,6 +4,7 @@
 
 #include <SPIFFS.h>
 #include <WiFi.h>
+#include <ESP32Time.h>
 
 int status = WL_IDLE_STATUS;
 
@@ -22,6 +23,7 @@ void setup()
 
   WiFiManager::connect(wifi_config->data["ssid"], wifi_config->data["pwd"]);
   ESP32WebServer::start();
+
 }
 
 void loop()

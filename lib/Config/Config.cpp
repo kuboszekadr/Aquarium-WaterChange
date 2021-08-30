@@ -47,9 +47,12 @@ config_status_t Config::load()
     Serial.print("Loading: ");
     Serial.println(_file_path);
 
-    File config_file = SPIFFS.open(_file_path);
+    File config_file = SPIFFS.open(_file_path, FILE_READ);
     if (!config_file)
     {
+        Serial.printf("Config file %s does not exists - creating new.", _name);
+        File config_file = SPIFFS.open(_file_path, FILE_WRITE);
+        config_file.close();
         return CONFIG_FILE_ERROR;
     }
 
@@ -67,15 +70,14 @@ config_status_t Config::save()
     char _file_path[32];
     file_path(_file_path);
 
-    File config_file = SPIFFS.open(_file_path);
+    File config_file = SPIFFS.open(_file_path, FILE_WRITE);
     if (!config_file)
     {
         return CONFIG_FILE_ERROR;
     }
 
     serializeJson(data, config_file);
-
-    return CONFIG_LOADED;
+    return CONFIG_SAVED;
 }
 
 void Config::file_path(char *buff)

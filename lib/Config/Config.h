@@ -27,7 +27,7 @@ public:
     config_status_t load();
     config_status_t save();
 
-    StaticJsonDocument<128> data;
+    StaticJsonDocument<256> data;
 
     static config_status_t load(const char *name);
     static config_status_t save(const char *name);

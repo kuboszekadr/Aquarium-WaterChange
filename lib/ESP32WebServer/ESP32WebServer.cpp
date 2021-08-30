@@ -31,8 +31,9 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
         return;
     }
 
-    char response[100] = "";
+    char response[256] = "";
     serializeJson(config->data, response);
+    serializeJson(config->data, Serial);
 
     request->send(
         200,
@@ -42,14 +43,24 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
 {
-    Serial.println("Config update requested - updating");
+    Serial.println("Config update requested - updating.");
     JsonObject obj = json.as<JsonObject>();
 
     const char *arg = request->argName(0).c_str();
     Config *config = Config::getByName(arg);
 
     config->data = obj;
-    config->save();
+    serializeJsonPretty(obj, Serial);
 
+    int status = config->save();
+
+    if (status != CONFIG_SAVED)
+    {
+        Serial.print("Error during config update: ");
+        Serial.println(status);
+        request->send(500);
+    }
+    
+    Serial.println("File saved.");
     request->send(200);
 }
