@@ -79,7 +79,6 @@
 	
 	$(document).on('click', 'a', function(event){
 		target = event.target.innerText;
-		target = target.toLowerCase();
 
 		file = "views/" + target + ".html"
 		$("#content").attr("src", file);
