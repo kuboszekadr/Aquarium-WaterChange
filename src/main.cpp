@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "ESP32WebServer.h"
+#include "SmartHomeDevice.h"
 #include "WiFiManager.h"
 
 #include <SPIFFS.h>
