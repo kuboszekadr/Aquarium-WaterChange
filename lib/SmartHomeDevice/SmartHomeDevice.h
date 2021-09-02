@@ -18,7 +18,7 @@ class SmartHomeDevice
 
         uint8_t id;
     protected:
-        char _host[12];
+        char _host[16];
         char _port[5];
 };
 
