@@ -37,19 +37,19 @@ void loop()
   StaticJsonDocument<256> doc;
   doc["device_id"] = 1;
 
-  JsonObject data = doc.createNestedObject("data");
-  data["sensor_id"] = -1;
-  data["timestamp"] = "20000000 000000";
+  JsonArray data = doc.createNestedArray("data");
+  JsonObject sensor_data = data.createNestedObject();
 
-  StaticJsonDocument<128> reading;
+  sensor_data["sensor_id"] = -1;
+  sensor_data["timestamp"] = "20000101 000000";
+
+  JsonArray readings = sensor_data.createNestedArray("readings");
+  JsonObject reading = readings.createNestedObject();
   reading["measure_id"] = -1;
-  reading["value"] = -1.0;
+  reading["value"] = -1;
 
-  JsonArray readings = data.createNestedArray("readings");
-  readings.add(reading);
-
-  serializeJson(doc, Serial);
-
+  device->sendData(doc);
+ 
   delay(5000);
 }
 
