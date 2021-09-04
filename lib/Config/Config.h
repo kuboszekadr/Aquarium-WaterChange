@@ -20,6 +20,7 @@ class Config
 {
 public:
     Config(const char *name);
+    ~Config();
 
     char *name(){return _name;};
     void file_path(char *buff);

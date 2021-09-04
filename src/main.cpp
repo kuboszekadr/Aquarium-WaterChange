@@ -28,8 +28,21 @@ void setup()
   WiFiManager::connect(wifi_config->data["ssid"], wifi_config->data["pwd"]);
   ESP32WebServer::start();
 
-  device = new SmartHomeDevice("192.168.0.107", "8080");
+  Config::load("api");
+  Config *api_config = Config::getByName("api");
 
+  if (api_config == nullptr)
+  {
+    Serial.println("API config not available");
+  } 
+  else
+  {
+    Serial.println("API setup completed");
+
+    device = new SmartHomeDevice(
+      api_config->data["host"], 
+      api_config->data["port"].as<int>());
+  }
 }
 
 void loop()
@@ -48,8 +61,9 @@ void loop()
   reading["measure_id"] = -1;
   reading["value"] = -1;
 
-  device->sendData(doc);
- 
+  if (device != nullptr)
+  {
+    device->sendData(doc);
+  }
   delay(5000);
 }
-

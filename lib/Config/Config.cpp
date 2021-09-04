@@ -10,12 +10,21 @@ Config::Config(const char *name)
     _files_amount++;
 }
 
+Config::~Config()
+{
+    _configs[_files_amount] = nullptr;
+    _files_amount--;
+    memset(_name, 0, 15);
+}
+
 Config *Config::getByName(const char *configName)
 {
     Serial.printf("Getting %s config.\n", configName);
+
     for (uint8_t i = 0; i < _files_amount; i++)
     {
         Config *config = _configs[i];
+        Serial.printf("Got config at index %d", i);
         if (strcmp(config->name(), configName) == 0)
         {
             return config;
@@ -30,13 +39,20 @@ config_status_t Config::load(const char *name)
     Config *config = Config::getByName(name);
     if (config == nullptr)
     {
-        Serial.printf("Config %s not found, creating new.\n", name);
+        Serial.printf("Config for %s not found, creating new.\n", name);
         config = new Config(name);
+        Serial.println("New instance created");
     }
 
     Serial.println("Loading config file...");
-    config->load();
-    return CONFIG_LOADED;
+    config_status_t status = config->load();
+
+    if (status != CONFIG_LOADED)
+    {
+        Serial.printf("Unable to init config. Status code: %d", status);
+    }
+    
+    return status;
 }
 
 config_status_t Config::load()
@@ -50,18 +66,18 @@ config_status_t Config::load()
     File config_file = SPIFFS.open(_file_path, FILE_READ);
     if (!config_file)
     {
-        Serial.printf("Config file %s does not exists - creating new.", _name);
-        File config_file = SPIFFS.open(_file_path, FILE_WRITE);
-        config_file.close();
+        Serial.printf("Config file %s.json does not exists!", _name);
         return CONFIG_FILE_ERROR;
     }
 
     DeserializationError err = deserializeJson(data, config_file);
     if (err)
     {
+        Serial.println("Serialization error...");
         return CONFIG_SERIALIZATION_ERROR;
     }
 
+    Serial.println("Config loaded sucesfully.");
     return CONFIG_LOADED;
 }
 
@@ -74,7 +90,7 @@ config_status_t Config::save()
     if (!config_file)
     {
         return CONFIG_FILE_ERROR;
-    }
+    } 
 
     serializeJson(data, config_file);
     return CONFIG_SAVED;

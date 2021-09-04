@@ -1,16 +1,18 @@
 #include "SmartHomeDevice.h"
 
-SmartHomeDevice::SmartHomeDevice(const char *host, const char *port)
+SmartHomeDevice::SmartHomeDevice(const char *host, int port)
 {
     memcpy(_host, host, 15);
-    memcpy(_port, port, 11);
+    _port = port;
+
 }
 
 void SmartHomeDevice::sendData(JsonDocument &data)
 {
     Serial.println("Sending data to API...");
     char url[60];
-    sprintf(url, "http://%s:%s/api/data_collector", _host, _port);
+    sprintf(url, "http://%s:%d/api/data_collector", _host, _port);
+    Serial.println(url);
 
     HTTPClient client;
     client.begin(url);
