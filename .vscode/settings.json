@@ -20,6 +20,12 @@
         "streambuf": "cpp",
         "regex": "cpp",
         "fstream": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "ctime": "cpp",
+        "numeric": "cpp",
+        "cmath": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     }
 }

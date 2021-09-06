@@ -12,6 +12,8 @@
 int status = WL_IDLE_STATUS;
 SmartHomeDevice *device;
 
+ESP32Time _time = ESP32Time();
+
 void setup()
 {
   Serial.begin(115200);
@@ -43,6 +45,11 @@ void setup()
       api_config->data["host"], 
       api_config->data["port"].as<int>());
   }
+
+  _time.setTime(0, 0, 0, 6, 9, 2021);
+
+  String tm = _time.getDateTime();
+  Serial.println(tm);
 }
 
 void loop()
@@ -54,7 +61,7 @@ void loop()
   JsonObject sensor_data = data.createNestedObject();
 
   sensor_data["sensor_id"] = -1;
-  sensor_data["timestamp"] = "20000101 000000";
+  sensor_data["timestamp"] = _time.getTime("%F %T");
 
   JsonArray readings = sensor_data.createNestedArray("readings");
   JsonObject reading = readings.createNestedObject();
@@ -63,6 +70,7 @@ void loop()
 
   if (device != nullptr)
   {
+    serializeJson(doc, Serial);
     device->sendData(doc);
   }
   delay(5000);
