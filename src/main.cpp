@@ -2,6 +2,7 @@
 #include "ESP32WebServer.h"
 #include "SmartHomeDevice.h"
 #include "WiFiManager.h"
+#include "Task.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -17,6 +18,8 @@ ESP32Time _time = ESP32Time();
 void setupAPI();
 void setupWiFI();
 void setupTime();
+void setupTasks();
+void sampleTask();
 
 void setup()
 {
@@ -30,6 +33,7 @@ void setup()
   setupWiFI();
   setupAPI();
   setupTime();
+  setupTasks();
 }
 
 void loop()
@@ -53,6 +57,7 @@ void loop()
     serializeJson(doc, Serial);
     device->sendData(doc);
   }
+
   delay(5000);
 }
 
@@ -94,6 +99,7 @@ void setupTime()
     return;
   }
 
+  // TODO: clean up
   char timestamp[60];
   device->sync(timestamp);
 
@@ -123,4 +129,16 @@ void setupTime()
 
   String tm = _time.getDateTime();
   Serial.println("Time set sucessfully");
+}
+
+void setupTasks()
+{
+  TaskScheduler::Task task = TaskScheduler::Task("test", sampleTask);
+  task.schedule(2200);
+  Serial.printf("Task executable: %d\n", task.isExecutable());
+}
+
+void sampleTask()
+{
+  Serial.println("Test run");
 }
