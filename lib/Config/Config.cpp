@@ -24,7 +24,6 @@ Config *Config::getByName(const char *configName)
     for (uint8_t i = 0; i < _files_amount; i++)
     {
         Config *config = _configs[i];
-        Serial.printf("Got config at index %d", i);
         if (strcmp(config->name(), configName) == 0)
         {
             return config;
