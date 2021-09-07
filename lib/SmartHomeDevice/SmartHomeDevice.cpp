@@ -2,20 +2,18 @@
 
 SmartHomeDevice::SmartHomeDevice(const char *host, int port)
 {
-    memcpy(_host, host, 15);
-    _port = port;
-
+    sprintf(_host_url, "http://%s:%d/api", host, port);
 }
 
 void SmartHomeDevice::sendData(JsonDocument &data)
 {
     Serial.println("Sending data to API...");
-    char url[60];
-    sprintf(url, "http://%s:%d/api/data_collector", _host, _port);
-    Serial.println(url);
+    char endpoint[60];
+    sprintf(endpoint, "%s/%s", _host_url, "data_collector");
+    Serial.println(endpoint);
 
     HTTPClient client;
-    client.begin(url);
+    client.begin(endpoint);
     client.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
     String payload;
@@ -30,4 +28,27 @@ void SmartHomeDevice::sendData(JsonDocument &data)
     
     client.end();
     Serial.printf("Server response code: %d\n", response_code);
+}
+
+void SmartHomeDevice::sync(char *buf)
+{
+    Serial.println("Syncing time with the server...");
+    char endpoint[60];
+    sprintf(endpoint, "%s/%s", _host_url, "date");
+
+    HTTPClient client;
+    client.begin(endpoint);
+
+    int response_code = client.GET();
+
+    if (response_code != 200)
+    {
+        Serial.println("Cannot sync device.");
+        return;
+    }
+
+    client.getString().toCharArray(buf, 60);
+    client.end();
+
+    Serial.println("Sync succesfull.");
 }

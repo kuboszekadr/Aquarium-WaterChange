@@ -14,12 +14,12 @@ class SmartHomeDevice
         void login();
         void sendData(JsonDocument &data);
         void registerDevice();
-        void sync();
+        void sync(char *buf);
 
         uint8_t id;
     protected:
-        char _host[16];
-        int _port;
+        char _host_url[60];
+
 };
 
 #endif
