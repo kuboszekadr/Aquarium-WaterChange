@@ -16,13 +16,11 @@ void TaskScheduler::Scheduler::loop()
     for (int i = 0; i < Task::tasks_amount; i++)
     {
         Task *task = Task::tasks[i];
-        char task_name[TASK_NAME_LENGTH + 1];
-        task->getName(task_name);
-        
-        Serial.printf("Task %s executable: %d\n", task_name, task->isExecutable());
+
         if (task->isExecutable())
         {
-
+            char task_name[TASK_NAME_LENGTH + 1];
+            task->getName(task_name);
             Serial.printf("Task %s is starting", task_name);
 
             task->execute();
