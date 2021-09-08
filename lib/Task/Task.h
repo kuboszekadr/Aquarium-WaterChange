@@ -19,6 +19,7 @@ namespace TaskScheduler
         static uint8_t tasks_amount;
 
         Task(const char *name, void (*fnc)());
+        void getName(char *buf);
 
         bool isExecutable();
 

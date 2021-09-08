@@ -3,6 +3,7 @@
 #include "SmartHomeDevice.h"
 #include "WiFiManager.h"
 #include "Task.h"
+#include "TaskScheduler.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -14,6 +15,7 @@ int status = WL_IDLE_STATUS;
 SmartHomeDevice *device;
 
 ESP32Time _time = ESP32Time();
+TaskScheduler::Scheduler scheduler = TaskScheduler::Scheduler::getInstance();
 
 void setupAPI();
 void setupWiFI();
@@ -38,25 +40,27 @@ void setup()
 
 void loop()
 {
-  StaticJsonDocument<256> doc;
-  doc["device_id"] = 1;
+  // StaticJsonDocument<256> doc;
+  // doc["device_id"] = 1;
 
-  JsonArray data = doc.createNestedArray("data");
-  JsonObject sensor_data = data.createNestedObject();
+  // JsonArray data = doc.createNestedArray("data");
+  // JsonObject sensor_data = data.createNestedObject();
 
-  sensor_data["sensor_id"] = -1;
-  sensor_data["timestamp"] = _time.getTime("%F %T");
+  // sensor_data["sensor_id"] = -1;
+  // sensor_data["timestamp"] = _time.getTime("%F %T");
 
-  JsonArray readings = sensor_data.createNestedArray("readings");
-  JsonObject reading = readings.createNestedObject();
-  reading["measure_id"] = -1;
-  reading["value"] = -1;
+  // JsonArray readings = sensor_data.createNestedArray("readings");
+  // JsonObject reading = readings.createNestedObject();
+  // reading["measure_id"] = -1;
+  // reading["value"] = -1;
 
-  if (device != nullptr)
-  {
-    serializeJson(doc, Serial);
-    device->sendData(doc);
-  }
+  // if (device != nullptr)
+  // {
+  //   serializeJson(doc, Serial);
+  //   device->sendData(doc);
+  // }
+
+  scheduler.loop();
 
   delay(5000);
 }
@@ -133,9 +137,9 @@ void setupTime()
 
 void setupTasks()
 {
-  TaskScheduler::Task task = TaskScheduler::Task("test", sampleTask);
-  task.schedule(2200);
-  Serial.printf("Task executable: %d\n", task.isExecutable());
+  TaskScheduler::Task *task = new TaskScheduler::Task("test", sampleTask);
+  task->schedule(800);
+  Serial.printf("Task executable: %d\n", task->isExecutable());
 }
 
 void sampleTask()

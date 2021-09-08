@@ -16,6 +16,11 @@ TaskScheduler::Task::Task(const char *name, void (*fnc)()) : ESP32Time()
     tasks[tasks_amount++] = this;
 }
 
+void TaskScheduler::Task::getName(char *buf)
+{
+    memcpy(buf, _name, TASK_NAME_LENGTH);
+}
+
 bool TaskScheduler::Task::isExecutable()
 {
     // return false always when task is deactivated
