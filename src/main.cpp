@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "ESP32WebServer.h"
+#include "Events.h"
 #include "SmartHomeDevice.h"
 #include "WiFiManager.h"
 #include "Task.h"
@@ -137,12 +138,6 @@ void setupTime()
 
 void setupTasks()
 {
-  TaskScheduler::Task *task = new TaskScheduler::Task("test", sampleTask);
-  task->schedule(800);
-  Serial.printf("Task executable: %d\n", task->isExecutable());
-}
-
-void sampleTask()
-{
-  Serial.println("Test run");
+  TaskScheduler::Task *task = new TaskScheduler::Task("TimeSync", setupTime);
+  task->schedule(400);
 }
