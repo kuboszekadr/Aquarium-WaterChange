@@ -21,7 +21,7 @@ void TaskScheduler::Scheduler::loop()
         {
             char task_name[TASK_NAME_LENGTH + 1];
             task->getName(task_name);
-            Serial.printf("Task %s is starting", task_name);
+            Serial.printf("Task %s is starting\n", task_name);
 
             task->execute();
         }

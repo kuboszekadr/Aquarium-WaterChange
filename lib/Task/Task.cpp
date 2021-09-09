@@ -29,15 +29,13 @@ bool TaskScheduler::Task::isExecutable()
         return _is_active;
     }
 
-    uint8_t day_of_week = getDayofWeek();
-    
     String date = getTime("%F");
     date.replace("-", "");
-    uint16_t current_date = date.toInt();
+    long current_date = date.toInt();
     
     date = getTime("%T");
     date.replace(":", "");
-    uint16_t current_time = date.toInt();
+    long current_time = date.toInt();
 
     // check if task was run during a day
     if (_last_run_date == current_date)
@@ -45,6 +43,7 @@ bool TaskScheduler::Task::isExecutable()
         return false;
     }
 
+    uint8_t day_of_week = getDayofWeek();
     return _schedule[day_of_week] <= current_time;
 }
 
@@ -52,11 +51,11 @@ void TaskScheduler::Task::execute()
 {
     String date = getTime("%F");
     date.replace("-", "");
-    uint16_t current_date = date.toInt();
+    long current_date = date.toInt();
     
     date = getTime("%T");
     date.replace(":", "");
-    uint16_t current_time = date.toInt();
+    long current_time = date.toInt();
 
     _last_run_date = current_date;
     _last_run_time = current_time;

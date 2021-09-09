@@ -38,11 +38,11 @@ namespace TaskScheduler
         void (*_fnc)();    // pointer to the function to be executed
 
         bool _is_active = true; // is task activate
-        uint32_t _schedule[7];  // array of days with scheduled execution dates
+        long _schedule[7];  // array of days with scheduled execution dates
 
         // when task was run last time
-        uint16_t _last_run_date;
-        uint16_t _last_run_time;
+        long _last_run_date;
+        long _last_run_time;
     };
 } // namespace TaskScheduler
 
