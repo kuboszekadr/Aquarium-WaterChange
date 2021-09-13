@@ -7,8 +7,6 @@
 #include <ArduinoJson.h>
 #include <ESP32Time.h>
 
-#define ARRAY_COUNT(arr) sizeof(arr)/sizeof(arr[0])
-
 namespace Sensors
 {
     class SensorReading : public ESP32Time
@@ -16,10 +14,10 @@ namespace Sensors
     public:
         SensorReading(
             uint8_t sensor_id,
-            Measures *measures_id
-            );
+            Measures *measures_id,
+            uint8_t measures_amount);
         void toJSON(JsonDocument &doc);
-    
+
     protected:
         uint8_t _sensor_id;
         uint8_t *_measures_id;

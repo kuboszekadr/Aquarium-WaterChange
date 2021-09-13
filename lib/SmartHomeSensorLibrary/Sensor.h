@@ -17,6 +17,7 @@ namespace Sensors
     public:
         Sensor(uint8_t sensor_id,
                Measures *measures_id,
+               uint8_t measures_amount,
                const char *name,
 
                uint32_t sampling_interval,

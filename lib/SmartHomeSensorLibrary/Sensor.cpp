@@ -3,6 +3,7 @@
 Sensors::Sensor::Sensor(
     uint8_t sensor_id,
     Measures *measures_id,
+    uint8_t measures_amount,
     const char *name,
 
     uint32_t sampling_interval,
@@ -14,7 +15,8 @@ Sensors::Sensor::Sensor(
     Events::EventType trigger_low,
     Events::EventType trigger_high) : SensorReading(
         sensor_id,
-        measures_id
+        measures_id,
+        measures_amount
     )
 {
     if (sensors_amount == SENSOR_AMOUNT)

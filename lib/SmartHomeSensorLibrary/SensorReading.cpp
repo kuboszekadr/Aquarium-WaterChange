@@ -1,13 +1,11 @@
 #include "SensorReading.h"
 
-Sensors::SensorReading::SensorReading(uint8_t sensor_id, Sensors::Measures *measures_id) : ESP32Time()
+Sensors::SensorReading::SensorReading(uint8_t sensor_id, Measures *measures_id, uint8_t measures_amount) : ESP32Time()
 {
     _sensor_id = sensor_id;
 
-    _measures_amount = ARRAY_COUNT(measures_id);
     _measures_id = new uint8_t[_measures_amount]();
-    
-    for (uint8_t i = 0; i < _measures_amount; i++)
+    for (uint8_t i = 0; i < measures_amount; i++)
     {
         // convert measures enum into uint8_t
         _measures_id[i] = static_cast<uint8_t>(_measures_id[i]);
