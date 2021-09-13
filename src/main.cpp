@@ -1,10 +1,11 @@
 #include "Config.h"
 #include "ESP32WebServer.h"
 #include "Events.h"
+#include "Sensors.h"
 #include "SmartHomeDevice.h"
-#include "WiFiManager.h"
 #include "Task.h"
 #include "TaskScheduler.h"
+#include "WiFiManager.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
