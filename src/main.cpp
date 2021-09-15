@@ -6,6 +6,7 @@
 #include "Task.h"
 #include "TaskScheduler.h"
 #include "WiFiManager.h"
+#include "WaterLevel.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -18,6 +19,20 @@ SmartHomeDevice *device;
 
 ESP32Time _time = ESP32Time();
 TaskScheduler::Scheduler scheduler = TaskScheduler::Scheduler::getInstance();
+
+#define WATER_LEVEL_LOW 20.0
+#define WATER_LEVEL_HIGH 15.0
+
+uint8_t water_level_sensor_id = 1;
+Sensors::WaterLevel water_level_sensor(
+    25,               // echo
+    26,               // trig
+    1,                // sensor_id
+    "WaterLevelSump", // sensor_name
+    (float)WATER_LEVEL_LOW,
+    (float)WATER_LEVEL_HIGH,
+    500L,
+    30);
 
 void setupAPI();
 void setupWiFI();
@@ -42,29 +57,8 @@ void setup()
 
 void loop()
 {
-  // StaticJsonDocument<256> doc;
-  // doc["device_id"] = 1;
-
-  // JsonArray data = doc.createNestedArray("data");
-  // JsonObject sensor_data = data.createNestedObject();
-
-  // sensor_data["sensor_id"] = -1;
-  // sensor_data["timestamp"] = _time.getTime("%F %T");
-
-  // JsonArray readings = sensor_data.createNestedArray("readings");
-  // JsonObject reading = readings.createNestedObject();
-  // reading["measure_id"] = -1;
-  // reading["value"] = -1;
-
-  // if (device != nullptr)
-  // {
-  //   serializeJson(doc, Serial);
-  //   device->sendData(doc);
-  // }
-
   scheduler.loop();
-
-  delay(5000);
+  Sensors::loop();
 }
 
 void setupAPI()

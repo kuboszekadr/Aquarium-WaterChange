@@ -4,6 +4,8 @@
 #include "Sensor.h"
 #include <Arduino.h>
 
+#define WATER_LEVEL_MEASURE_ID 2
+
 namespace Sensors
 {
 	class WaterLevel : public Sensor
@@ -14,17 +16,13 @@ namespace Sensors
 			uint8_t trig,
 
 			uint8_t id_sensor,
-			Measures *id_measure,
 			const char *name,
 
 			float trigger_value_low,
 			float trigger_value_high,
 
 			uint32_t sampling_interval,
-			uint8_t sampling_amount,
-
-			Events::EventType trigger_low,
-			Events::EventType trigger_high);
+			uint8_t sampling_amount);
 
 		bool makeReading();
 		Events::EventType checkTrigger();

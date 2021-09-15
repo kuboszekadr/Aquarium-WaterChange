@@ -16,7 +16,7 @@ namespace Sensors
     {
     public:
         Sensor(uint8_t sensor_id,
-               Measures *measures_id,
+               Measures measures_id,
                uint8_t measures_amount,
                const char *name,
 
@@ -59,8 +59,9 @@ namespace Sensors
         const char *_name; // sensor name / label
     };                     // namespace Sensors
 
-    extern Sensor *sensors[SENSOR_AMOUNT]; // array of generated sensors
     extern uint8_t sensors_amount;         // how many sensors are initalized
+    extern Sensor *sensors[SENSOR_AMOUNT]; // array of generated sensors
+
 }
 
 #endif

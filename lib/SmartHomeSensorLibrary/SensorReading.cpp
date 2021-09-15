@@ -1,6 +1,6 @@
 #include "SensorReading.h"
 
-Sensors::SensorReading::SensorReading(uint8_t sensor_id, Measures *measures_id, uint8_t measures_amount) : ESP32Time()
+Sensors::SensorReading::SensorReading(uint8_t sensor_id, Measures measures_id, uint8_t measures_amount) : ESP32Time()
 {
     _sensor_id = sensor_id;
 

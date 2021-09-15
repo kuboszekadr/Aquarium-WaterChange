@@ -4,20 +4,16 @@ Sensors::WaterLevel::WaterLevel(
     uint8_t echo,
     uint8_t trig,
     uint8_t id_sensor,
-    Measures *id_measure,
     const char *name,
 
     float trigger_value_low,
     float trigger_value_high,
 
     uint32_t sampling_interval,
-    uint8_t sampling_amount,
-
-    Events::EventType trigger_low,
-    Events::EventType trigger_high)
+    uint8_t sampling_amount)
     : Sensor(
           id_sensor,
-          id_measure,
+          {Sensors::Measures::WATER_LEVEL},
           1,
           name,
 
@@ -27,8 +23,8 @@ Sensors::WaterLevel::WaterLevel(
           trigger_value_low,
           trigger_value_high,
 
-          trigger_low,
-          trigger_high)
+          Events::EventType::WATER_LOW,
+          Events::EventType::WATER_HIGH)
 {
     _echo = echo; // echo pin
     _trig = trig; // trig pin
@@ -49,7 +45,8 @@ bool Sensors::WaterLevel::makeReading()
     digitalWrite(_trig, LOW);
 
     // Get value
-    _readings[0] += pulseIn(_echo, HIGH) / 58.0; // returns water level in cm
+    float reading = pulseIn(_echo, HIGH) / 58.0;
+    _readings[0] += reading; // returns water level in cm
     _readings_count++;
 
     _last_reading = millis();

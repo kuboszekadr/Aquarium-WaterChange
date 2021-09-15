@@ -2,7 +2,7 @@
 
 Sensors::Sensor::Sensor(
     uint8_t sensor_id,
-    Measures *measures_id,
+    Measures measures_id,
     uint8_t measures_amount,
     const char *name,
 
@@ -13,19 +13,17 @@ Sensors::Sensor::Sensor(
     float trigger_value_high,
 
     Events::EventType trigger_low,
-    Events::EventType trigger_high) : SensorReading(
-        sensor_id,
-        measures_id,
-        measures_amount
-    )
+    Events::EventType trigger_high) : SensorReading(sensor_id,
+                                                    measures_id,
+                                                    measures_amount)
 {
     if (sensors_amount == SENSOR_AMOUNT)
     {
         return;
     }
 
-    sensors[sensors_amount] = this;                            // add sensor to the list of sensors
-    sensors_amount += sensors_amount == SENSOR_AMOUNT ? 0 : 1; // increase amount of sensors
+    sensors[sensors_amount] = this; // add sensor to the list of sensors
+    sensors_amount++;
 
     _readings = new float[_measures_amount]();
     _last_readings = new float[_measures_amount]();
