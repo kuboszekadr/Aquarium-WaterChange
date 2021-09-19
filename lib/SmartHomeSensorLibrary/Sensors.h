@@ -6,6 +6,7 @@
 #include "Sensor.h"
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
 
 #define SENSOR_THRESHOLD_MIN 0.0
 #define SENSOR_THRESHOLD_MAX 99.99
@@ -16,6 +17,7 @@ namespace Sensors
 {
   extern uint8_t sensors_amount;         // how many sensors are initalized
   extern Sensor *sensors[SENSOR_AMOUNT]; // array of generated sensors
+  extern StaticJsonDocument<1024> readings;
 
   void loop();
 } // namespace Sensors

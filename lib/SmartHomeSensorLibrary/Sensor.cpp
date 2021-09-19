@@ -2,7 +2,7 @@
 
 Sensors::Sensor::Sensor(
     uint8_t sensor_id,
-    Measures measures_id,
+    Measures *measures_id,
     uint8_t measures_amount,
     const char *name,
 
@@ -25,7 +25,6 @@ Sensors::Sensor::Sensor(
     sensors[sensors_amount] = this; // add sensor to the list of sensors
     sensors_amount++;
 
-    _readings = new float[_measures_amount]();
     _last_readings = new float[_measures_amount]();
 
     _name = name;
@@ -58,4 +57,14 @@ Events::EventType Sensors::Sensor::checkTrigger()
 void Sensors::Sensor::getName(char *buffer)
 {
     strncpy(buffer, _name, SENSOR_NAME_LENGHT);
+}
+
+void Sensors::Sensor::restart()
+{
+    _readings_count = 0;
+    for (uint8_t i = 0; i < _measures_amount; i++)
+    {
+        _readings[i] = 0.0;
+    }
+    
 }

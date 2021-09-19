@@ -14,9 +14,9 @@ namespace Sensors
     public:
         SensorReading(
             uint8_t sensor_id,
-            Measures measures_id,
+            Measures *measures_id,
             uint8_t measures_amount);
-        void toJSON(JsonDocument &doc);
+        void toJSON(JsonObject &doc);
 
     protected:
         uint8_t _sensor_id;
@@ -24,6 +24,7 @@ namespace Sensors
         uint8_t _measures_amount;
 
         float *_readings;
+        uint8_t _readings_count;
     };
 }
 

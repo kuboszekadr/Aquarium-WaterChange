@@ -1,5 +1,7 @@
 #include "WaterLevel.h"
 
+Sensors::Measures Sensors::water_level_measure[1] = {Sensors::Measures::WATER_LEVEL};
+
 Sensors::WaterLevel::WaterLevel(
     uint8_t echo,
     uint8_t trig,
@@ -13,7 +15,7 @@ Sensors::WaterLevel::WaterLevel(
     uint8_t sampling_amount)
     : Sensor(
           id_sensor,
-          {Sensors::Measures::WATER_LEVEL},
+          water_level_measure,
           1,
           name,
 
@@ -35,6 +37,7 @@ Sensors::WaterLevel::WaterLevel(
 
 bool Sensors::WaterLevel::makeReading()
 {
+
     digitalWrite(_trig, LOW);
     delayMicroseconds(2);
 
@@ -47,7 +50,7 @@ bool Sensors::WaterLevel::makeReading()
     // Get value
     float reading = pulseIn(_echo, HIGH) / 58.0;
     _readings[0] += reading; // returns water level in cm
-    _readings_count++;
+    _readings_count ++ ;
 
     _last_reading = millis();
     return true;

@@ -8,6 +8,7 @@
 
 namespace Sensors
 {
+	extern Measures water_level_measure[1];
 	class WaterLevel : public Sensor
 	{
 	public:

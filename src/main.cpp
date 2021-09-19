@@ -32,7 +32,7 @@ Sensors::WaterLevel water_level_sensor(
     (float)WATER_LEVEL_LOW,
     (float)WATER_LEVEL_HIGH,
     500L,
-    30);
+    5);
 
 void setupAPI();
 void setupWiFI();

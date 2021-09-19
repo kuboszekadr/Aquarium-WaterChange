@@ -1,7 +1,8 @@
 #include "Sensors.h"
 
-uint8_t Sensors::sensors_amount;         // how many sensors are initalized
+uint8_t Sensors::sensors_amount;                  // how many sensors are initalized
 Sensors::Sensor *Sensors::sensors[SENSOR_AMOUNT]; // array of generated sensors
+StaticJsonDocument<1024> Sensors::readings;
 
 void Sensors::loop()
 {
@@ -9,7 +10,6 @@ void Sensors::loop()
     for (int i = 0; i < sensors_amount; i++)
     {
         Sensor *sensor = sensors[i];
-        // char sensor_name[SENSOR_NAME_LENGHT + 1] = {};
 
         // check if sensor is reading for data collection
         if (sensor->isReady())
@@ -21,6 +21,18 @@ void Sensors::loop()
         if (sensor->isAvailable())
         {
             Events::EventType event = sensor->checkTrigger();
+            if (!readings.containsKey("data"))
+            {   
+                readings.createNestedArray("data");
+            }
+            
+            JsonObject reading = readings["data"].createNestedObject();
+            sensor->toJSON(reading); 
+
+            serializeJsonPretty(readings, Serial);
+            sensor->restart();
+
+            readings.clear();
         }
-    }
+    }    
 }

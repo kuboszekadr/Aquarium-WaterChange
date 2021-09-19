@@ -16,7 +16,7 @@ namespace Sensors
     {
     public:
         Sensor(uint8_t sensor_id,
-               Measures measures_id,
+               Measures *measures_id,
                uint8_t measures_amount,
                const char *name,
 
@@ -35,18 +35,15 @@ namespace Sensors
         bool isAvailable() { return _readings_count >= _sampling_amount; };          // check if sensor gathered enough data
         bool isReady() { return (millis() - _last_reading) >= _sampling_interval; }; // check if sensor can gather data
 
-        void getName(char *buffer);
-        float *getReadings() { return _last_readings; };
 
+        void getName(char *buffer);
+        void restart();
     protected:
         float *_last_readings;       // to store
-        float *_readings;            // array to hold all readings done before publishing
-        uint8_t _readings_count = 0; // amount of readings done in the sesion
+        uint32_t _last_reading = 0L; // when last reading was done (as millis)
 
         uint32_t _sampling_interval;
         uint8_t _sampling_amount;
-
-        uint32_t _last_reading = 0L; // when last reading was done (as millis)
 
         float _trigger_value_low = -1.0; // average sensor value
         Events::EventType _trigger_low;  // event to be rised when sensor value is below low value
