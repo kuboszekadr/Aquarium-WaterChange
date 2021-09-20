@@ -21,18 +21,16 @@ void Sensors::loop()
         if (sensor->isAvailable())
         {
             Events::EventType event = sensor->checkTrigger();
-            if (!readings.containsKey("data"))
+            if (!readings.size() == 0)
             {   
-                readings.createNestedArray("data");
+                readings.createNestedArray();
             }
             
-            JsonObject reading = readings["data"].createNestedObject();
+            JsonObject reading = readings.createNestedObject();
             sensor->toJSON(reading); 
-
-            serializeJsonPretty(readings, Serial);
             sensor->restart();
 
-            readings.clear();
+            readings.add(reading);
         }
     }    
 }

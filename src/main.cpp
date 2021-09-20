@@ -39,6 +39,7 @@ void setupWiFI();
 void setupTime();
 void setupTasks();
 void sampleTask();
+void sendData();
 
 void setup()
 {
@@ -59,6 +60,8 @@ void loop()
 {
   scheduler.loop();
   Sensors::loop();
+
+  sendData();
 }
 
 void setupAPI()
@@ -76,7 +79,8 @@ void setupAPI()
 
     device = new SmartHomeDevice(
         api_config->data["host"],
-        api_config->data["port"].as<int>());
+        api_config->data["port"].as<int>(),
+        1);
   }
 }
 
@@ -135,4 +139,14 @@ void setupTasks()
 {
   TaskScheduler::Task *task = new TaskScheduler::Task("TimeSync", setupTime);
   task->schedule(400);
+}
+
+void sendData()
+{
+  if (Sensors::readings.size() > 0)
+  {
+    JsonVariant data = Sensors::readings.as<JsonVariant>();
+    device->sendData(data);
+    Sensors::readings.clear();
+  }
 }

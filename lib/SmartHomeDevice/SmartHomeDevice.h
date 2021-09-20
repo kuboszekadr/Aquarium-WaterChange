@@ -8,17 +8,17 @@
 class SmartHomeDevice
 {
     public:
-        SmartHomeDevice(const char *host, int port);
+        SmartHomeDevice(const char *host, int port, uint8_t device_id);
         ~SmartHomeDevice();
 
         void login();
-        void sendData(JsonDocument &data);
+        void sendData(const JsonVariant &obj);
         void registerDevice();
         void sync(char *buf);
 
-        uint8_t id;
     protected:
         char _host_url[60];
+        uint8_t _device_id;
 
 };
 

@@ -50,7 +50,7 @@ bool Sensors::WaterLevel::makeReading()
     // Get value
     float reading = pulseIn(_echo, HIGH) / 58.0;
     _readings[0] += reading; // returns water level in cm
-    _readings_count ++ ;
+    _readings_count++;
 
     _last_reading = millis();
     return true;

@@ -1,11 +1,12 @@
 #include "SmartHomeDevice.h"
 
-SmartHomeDevice::SmartHomeDevice(const char *host, int port)
+SmartHomeDevice::SmartHomeDevice(const char *host, int port, uint8_t device_id)
 {
     sprintf(_host_url, "http://%s:%d/api", host, port);
+    _device_id = device_id;
 }
 
-void SmartHomeDevice::sendData(JsonDocument &data)
+void SmartHomeDevice::sendData(const JsonVariant &obj)
 {
     Serial.println("Sending data to API...");
     char endpoint[60];
@@ -16,14 +17,18 @@ void SmartHomeDevice::sendData(JsonDocument &data)
     client.begin(endpoint);
     client.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
+    DynamicJsonDocument doc(2222);
+    doc["device_id"] = _device_id;
+    doc["data"] = obj; 
+
     String payload;
-    serializeJson(data, payload);
+    serializeJson(doc, payload);
     int response_code = client.POST("data=" + payload); //TODO
 
     if (response_code != 200)
     {
         Serial.printf("Error during sending request. Server response code: %d\n", response_code);
-        Serial.printf("Response content:\n%s\n", payload);
+        // Serial.printf("Response content:\n%s\n", payload);
     }
     
     client.end();
