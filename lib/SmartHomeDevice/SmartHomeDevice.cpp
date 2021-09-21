@@ -22,7 +22,7 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
     doc["data"] = obj; 
 
     String payload;
-    serializeJson(doc, payload);
+    serializeJson(doc, payload); 
     int response_code = client.POST("data=" + payload); //TODO
 
     if (response_code != 200)

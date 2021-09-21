@@ -6,6 +6,7 @@
 #include "Task.h"
 #include "TaskScheduler.h"
 #include "WiFiManager.h"
+#include "WaterChange.h"
 #include "WaterLevel.h"
 
 #include <Arduino.h>
@@ -33,6 +34,8 @@ Sensors::WaterLevel water_level_sensor(
     (float)WATER_LEVEL_HIGH,
     500L,
     5);
+
+Programs::WaterChange water_change = Programs::WaterChange(24, 23, 1);
 
 void setupAPI();
 void setupWiFI();
