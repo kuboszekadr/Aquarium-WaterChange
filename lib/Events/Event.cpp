@@ -23,7 +23,7 @@ void Events::Event::notifyListeners()
 
 Events::Event *Events::Event::getEvent(EventType event)
 {
-    if (_events[event]==nullptr)    
+    if (_events[event] == nullptr)
     {
         new Event(event);
     }
