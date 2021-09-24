@@ -19,6 +19,8 @@ namespace Sensors
         void toJSON(JsonObject &doc);
 
     protected:
+        float *_last_readings;
+
         uint8_t _sensor_id;
         uint8_t *_measures_id;
         uint8_t _measures_amount;

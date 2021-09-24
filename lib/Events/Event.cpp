@@ -28,4 +28,4 @@ Events::Event *Events::Event::getEvent(EventType event)
         new Event(event);
     }
     return _events[event];
-}
+} 

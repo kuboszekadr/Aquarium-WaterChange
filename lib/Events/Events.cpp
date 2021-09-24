@@ -1,7 +1,7 @@
 #include "Events.h"
 
 int Events::queue_length = 0;
-Events::EventType Events::queue[EVENT_QUEUE_LENGTH];
+Events::EventType Events::queue[EVENT_QUEUE_LENGTH] = {};
 Events::Event *Events::Event::_events[EVENT_DEFINED_EVENTS];
 
 void Events::raise(EventType event)
@@ -15,7 +15,6 @@ void Events::raise(EventType event)
     {
         return;
     }
-
     queue[queue_length++] = event; // insert event into queue
 }
 
@@ -24,8 +23,8 @@ void Events::notifyListeners()
     // loop through subscribers and notify about event
     for (int i = 0; i < queue_length; i++)
     {
-        EventType event_type = queue[i];      // take event type from the queue
-        Event *event = Event::getEvent(event_type); // get event object based on event type
+        EventType event_type = queue[i];
+        Event *event = Event::getEvent(event_type);
 
         if (event)
         {

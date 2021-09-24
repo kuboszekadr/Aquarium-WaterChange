@@ -28,7 +28,7 @@ namespace Events
         static Event *_events[EVENT_DEFINED_EVENTS];
         
         EventListener *_listeners[EVENT_MAX_SUBSCRIBERS];
-        uint8_t _listeners_amount = 0;
+        int _listeners_amount = 0;
 
         EventType _type;
     };

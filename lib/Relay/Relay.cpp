@@ -4,17 +4,19 @@ Relay::Relay(int pin)
 {
     _pin = pin;
     pinMode(_pin, OUTPUT);
-    pinMode(_pin, LOW);
+    digitalWrite(_pin, HIGH); // on ESP32 seems like HIGH=LOW on arduino...
 }
 
 void Relay::turnOn()
 {
-    pinMode(_pin, HIGH);
+    Serial.printf("Opening relay on pin %d\n", _pin);
+    digitalWrite(_pin, LOW);
 }
 
 void Relay::turnOff()
 {
-    pinMode(_pin, LOW);
+    Serial.printf("Closing relay on pin %d\n", _pin);
+    digitalWrite(_pin, HIGH);
 }
 
 int Relay::pin()

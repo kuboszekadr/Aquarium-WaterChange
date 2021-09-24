@@ -61,7 +61,7 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
         {
             _is_active = false; // finish water change
         }
-        
+        Serial.println("Water high!");
         // turn of the relays
         _water->turnOff(); 
         _pomp->turnOff();
@@ -71,6 +71,7 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
     // check if water has to be poured
     else if (event == Events::WATER_LOW)
     {
+        Serial.println("Water low!");
         _state = event;
         pour();
     }

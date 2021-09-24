@@ -10,6 +10,7 @@ Sensors::SensorReading::SensorReading(
     _measures_amount = measures_amount;
     _measures_id = new uint8_t[_measures_amount]();
     _readings = new float[_measures_amount]();
+    _last_readings = new float[_measures_amount]();
 
     for (uint8_t i = 0; i < measures_amount; i++)
     {
@@ -29,6 +30,9 @@ void Sensors::SensorReading::toJSON(JsonObject &doc)
     {
         JsonObject reading = readings.createNestedObject();
         reading["measure_id"] = _measures_id[i];
-        reading["value"] = _readings[i] / _readings_count;
+
+        float value = _readings[i] / _readings_count;
+        reading["value"] = value;
+        _last_readings[i] = value;
     }
 }

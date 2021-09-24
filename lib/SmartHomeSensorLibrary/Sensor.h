@@ -39,7 +39,6 @@ namespace Sensors
         void getName(char *buffer);
         void restart();
     protected:
-        float *_last_readings;       // to store
         uint32_t _last_reading = 0L; // when last reading was done (as millis)
 
         uint32_t _sampling_interval;

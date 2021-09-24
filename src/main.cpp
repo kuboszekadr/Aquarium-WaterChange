@@ -22,7 +22,7 @@ ESP32Time _time = ESP32Time();
 TaskScheduler::Scheduler scheduler = TaskScheduler::Scheduler::getInstance();
 
 #define WATER_LEVEL_LOW 20.0
-#define WATER_LEVEL_HIGH 15.0
+#define WATER_LEVEL_HIGH 10.0
 
 uint8_t water_level_sensor_id = 1;
 Sensors::WaterLevel water_level_sensor(
@@ -35,7 +35,7 @@ Sensors::WaterLevel water_level_sensor(
     500L,
     5);
 
-Programs::WaterChange water_change = Programs::WaterChange(24, 23, 1);
+Programs::WaterChange water_change = Programs::WaterChange(33, 32, 1);
 
 void setupAPI();
 void setupWiFI();
@@ -47,6 +47,9 @@ void sendData();
 void setup()
 {
   Serial.begin(115200);
+
+  pinMode(33, OUTPUT);
+  pinMode(32, OUTPUT);
 
   if (!SPIFFS.begin())
   {
@@ -63,8 +66,9 @@ void loop()
 {
   scheduler.loop();
   Sensors::loop();
+  Events::notifyListeners();
 
-  sendData();
+  // sendData();
 }
 
 void setupAPI()
@@ -149,7 +153,7 @@ void sendData()
   if (Sensors::readings.size() > 0)
   {
     JsonVariant data = Sensors::readings.as<JsonVariant>();
-    device->sendData(data);
+    // device->sendData(data);
     Sensors::readings.clear();
   }
 }

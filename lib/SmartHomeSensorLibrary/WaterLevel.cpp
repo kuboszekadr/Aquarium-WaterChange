@@ -69,10 +69,12 @@ Events::EventType Sensors::WaterLevel::checkTrigger()
         event = _trigger_high;
     }
 
+    Serial.println(_last_readings[0]);
+
     // push to the queue if event is not empty
     if ((event != Events::EventType::EMPTY) & (event != _last_trigger))
     {
-        // Events::raise(event);
+        Events::raise(event);
     }
 
     return event;
