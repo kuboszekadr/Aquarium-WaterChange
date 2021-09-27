@@ -68,7 +68,7 @@ void loop()
   Sensors::loop();
   Events::notifyListeners();
 
-  // sendData();
+  sendData();
 }
 
 void setupAPI()
@@ -144,8 +144,11 @@ void setupTime()
 
 void setupTasks()
 {
-  TaskScheduler::Task *task = new TaskScheduler::Task("TimeSync", setupTime);
-  task->schedule(400);
+  TaskScheduler::Task *time_sync = new TaskScheduler::Task("TimeSync", setupTime);
+  time_sync->schedule(400);
+
+  TaskScheduler::Task *water_change_task = new TaskScheduler::Task("WaterChange", []() {water_change.start();});
+  water_change_task->schedule(900);
 }
 
 void sendData()

@@ -20,7 +20,6 @@ void Sensors::loop()
         // check if sensor has collected enough data to share
         if (sensor->isAvailable())
         {
-            Events::EventType event = sensor->checkTrigger();
             if (!readings.size() == 0)
             {   
                 readings.createNestedArray();
@@ -31,6 +30,7 @@ void Sensors::loop()
             sensor->restart();
 
             readings.add(reading);
+            Events::EventType event = sensor->checkTrigger();
         }
     }    
 }

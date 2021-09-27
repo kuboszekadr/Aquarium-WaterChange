@@ -59,6 +59,11 @@ bool Sensors::WaterLevel::makeReading()
 Events::EventType Sensors::WaterLevel::checkTrigger()
 {
     Events::EventType event = Events::EventType::EMPTY;
+    if (!_readings_count)
+    {
+        return event;
+    }
+    
     // check current level of water
     if (_last_readings[0] > _trigger_value_low)
     {
@@ -68,8 +73,6 @@ Events::EventType Sensors::WaterLevel::checkTrigger()
     {
         event = _trigger_high;
     }
-
-    Serial.println(_last_readings[0]);
 
     // push to the queue if event is not empty
     if ((event != Events::EventType::EMPTY) & (event != _last_trigger))
