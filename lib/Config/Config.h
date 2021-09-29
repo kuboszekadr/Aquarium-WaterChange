@@ -30,7 +30,7 @@ public:
 
     StaticJsonDocument<256> data;
 
-    static config_status_t load(const char *name);
+    static config_status_t load(const char *name, const char *folder="config");
     static config_status_t save(const char *name);
     static Config *getByName(const char *name);
 

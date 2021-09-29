@@ -33,14 +33,12 @@ Config *Config::getByName(const char *configName)
     return nullptr;
 }
 
-config_status_t Config::load(const char *name)
+config_status_t Config::load(const char *name, const char *folder)
 {
     Config *config = Config::getByName(name);
     if (config == nullptr)
     {
-        Serial.printf("Config for %s not found, creating new.\n", name);
         config = new Config(name);
-        Serial.println("New instance created");
     }
 
     Serial.println("Loading config file...");
@@ -48,7 +46,7 @@ config_status_t Config::load(const char *name)
 
     if (status != CONFIG_LOADED)
     {
-        Serial.printf("Unable to init config. Status code: %d", status);
+        Serial.printf("Unable to init config from file: %s/%s. Status code: %d\n", folder, name, status);
     }
     
     return status;
@@ -65,7 +63,7 @@ config_status_t Config::load()
     File config_file = SPIFFS.open(_file_path, FILE_READ);
     if (!config_file)
     {
-        Serial.printf("Config file %s.json does not exists!", _name);
+        Serial.printf("Config file %s.json does not exists!\n", _name);
         return CONFIG_FILE_ERROR;
     }
 
