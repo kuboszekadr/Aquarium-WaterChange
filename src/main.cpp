@@ -5,6 +5,7 @@
 #include "SmartHomeDevice.h"
 #include "Task.h"
 #include "TaskScheduler.h"
+#include "TaskLoader.h"
 #include "WiFiManager.h"
 #include "WaterChange.h"
 #include "WaterLevel.h"
@@ -48,9 +49,6 @@ void setup()
 {
   Serial.begin(115200);
 
-  pinMode(33, OUTPUT);
-  pinMode(32, OUTPUT);
-
   if (!SPIFFS.begin())
   {
     Serial.println("Failed to mount file system.");
@@ -60,6 +58,8 @@ void setup()
   setupAPI();
   setupTime();
   setupTasks();
+
+  TaskScheduler::loadConfig();
 }
 
 void loop()
@@ -144,10 +144,11 @@ void setupTime()
 
 void setupTasks()
 {
-  TaskScheduler::Task *time_sync = new TaskScheduler::Task("TimeSync", setupTime);
+  TaskScheduler::Task *time_sync = new TaskScheduler::Task("time_sync", setupTime);
   time_sync->schedule(400);
 
-  TaskScheduler::Task *water_change_task = new TaskScheduler::Task("WaterChange", []() {water_change.start();});
+  TaskScheduler::Task *water_change_task = new TaskScheduler::Task("water_change", []()
+                                                                   { water_change.start(); });
   water_change_task->schedule(900);
 }
 
