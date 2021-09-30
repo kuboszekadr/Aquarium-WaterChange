@@ -33,8 +33,8 @@ Sensors::WaterLevel water_level_sensor(
     "WaterLevelSump", // sensor_name
     (float)WATER_LEVEL_LOW,
     (float)WATER_LEVEL_HIGH,
-    500L,
-    5);
+    1000L,
+    30);
 
 Programs::WaterChange water_change = Programs::WaterChange(33, 32, 1);
 
@@ -157,7 +157,7 @@ void sendData()
   if (Sensors::readings.size() > 0)
   {
     JsonVariant data = Sensors::readings.as<JsonVariant>();
-    // device->sendData(data);
+    device->sendData(data);
     Sensors::readings.clear();
   }
 }

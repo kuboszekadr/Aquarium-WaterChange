@@ -59,11 +59,11 @@ bool Sensors::WaterLevel::makeReading()
 Events::EventType Sensors::WaterLevel::checkTrigger()
 {
     Events::EventType event = Events::EventType::EMPTY;
-    if (!_readings_count)
+    if (_readings_count==0)
     {
         return event;
     }
-    
+
     // check current level of water
     if (_last_readings[0] > _trigger_value_low)
     {

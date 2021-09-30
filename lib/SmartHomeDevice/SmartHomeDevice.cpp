@@ -11,7 +11,6 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
     Serial.println("Sending data to API...");
     char endpoint[60];
     sprintf(endpoint, "%s/%s", _host_url, "data_collector");
-    Serial.println(endpoint);
 
     HTTPClient client;
     client.begin(endpoint);
