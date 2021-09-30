@@ -1,10 +1,12 @@
 #ifndef TaskScheduler_Task_h
 #define TaskScheduler_Task_h
 
+#include "Config.h"
+
 #include <Arduino.h>
 #include <ESP32Time.h>
 
-#define TASK_MAX_TASKS 1
+#define TASK_MAX_TASKS 5
 #define TASK_NAME_LENGTH 20
 #define TASK_JSON_SIZE 256
 
@@ -22,6 +24,7 @@ namespace TaskScheduler
         void getName(char *buf);
 
         bool isExecutable();
+        bool loadConfig();
 
         void forceExecute() { _fnc(); };
         void execute();

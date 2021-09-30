@@ -47,6 +47,29 @@ bool TaskScheduler::Task::isExecutable()
     return _schedule[day_of_week] <= current_time;
 }
 
+bool TaskScheduler::Task::loadConfig()
+{
+    config_status_t status = Config::load(_name, "tasks");
+    if (!status == CONFIG_LOADED)
+    {
+        Serial.printf("Error loading %s.json file. Status code: %d\n", _name, status);
+        return false;
+    }
+    
+    Config *config = Config::getByName(_name);
+
+    JsonArray schedules = config->data.as<JsonArray>();
+    int day = 0;
+    for (JsonVariant entry : schedules)
+    {
+        uint16_t hour = entry['hour'];
+        schedule(day, hour);
+        day++;
+    }
+    
+    return true;
+}
+
 void TaskScheduler::Task::execute()
 {
     String date = getTime("%F");
