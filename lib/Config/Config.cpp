@@ -3,9 +3,11 @@
 uint8_t Config::_files_amount = 0;
 Config *Config::_configs[CONFIG_FILES_AMOUNT];
 
-Config::Config(const char *name)
+Config::Config(const char *name, const char *root)
 {
     memcpy(_name, name, 15);
+    memcpy(_root, root, 15);
+
     _configs[_files_amount] = this;
     _files_amount++;
 }
@@ -33,12 +35,12 @@ Config *Config::getByName(const char *configName)
     return nullptr;
 }
 
-config_status_t Config::load(const char *name, const char *folder)
+config_status_t Config::load(const char *name, const char *root)
 {
     Config *config = Config::getByName(name);
     if (config == nullptr)
     {
-        config = new Config(name);
+        config = new Config(name, root);
     }
 
     Serial.println("Loading config file...");
@@ -46,7 +48,7 @@ config_status_t Config::load(const char *name, const char *folder)
 
     if (status != CONFIG_LOADED)
     {
-        Serial.printf("Unable to init config from file: %s/%s. Status code: %d\n", folder, name, status);
+        Serial.printf("Unable to init config from file: %s/%s. Status code: %d\n", root, name, status);
     }
     
     return status;
@@ -57,8 +59,7 @@ config_status_t Config::load()
     char _file_path[32];
     file_path(_file_path);
 
-    Serial.print("Loading: ");
-    Serial.println(_file_path);
+    Serial.printf("Loading: %s\n", _file_path);
 
     File config_file = SPIFFS.open(_file_path, FILE_READ);
     if (!config_file)
@@ -95,7 +96,5 @@ config_status_t Config::save()
 
 void Config::file_path(char *buff)
 {
-    strcpy(buff, "/config/");
-    strcat(buff, _name);
-    strcat(buff, ".json");
+    sprintf(buff, "/%s/%s.json", _root, _name);
 }
