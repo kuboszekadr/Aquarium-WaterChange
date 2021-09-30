@@ -62,8 +62,9 @@ bool TaskScheduler::Task::loadConfig()
     int day = 0;
     for (JsonVariant entry : schedules)
     {
-        uint16_t hour = entry['hour'];
+        uint16_t hour = entry["hour"];
         schedule(day, hour);
+        Serial.printf("Scheduled task %s: day %d hour %d\n", _name, day, hour);
         day++;
     }
     
