@@ -3,7 +3,7 @@
 TaskScheduler::Task *TaskScheduler::Task::tasks[TASK_MAX_TASKS] = {};
 uint8_t TaskScheduler::Task::tasks_amount = 0;
 
-TaskScheduler::Task::Task(const char *name, void (*fnc)()) : ESP32Time()
+TaskScheduler::Task::Task(const char *name, task fnc) : ESP32Time()
 {
     _name = name;
     _fnc = fnc;

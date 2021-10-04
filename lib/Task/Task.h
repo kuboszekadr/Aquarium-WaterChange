@@ -10,6 +10,8 @@
 #define TASK_NAME_LENGTH 20
 #define TASK_JSON_SIZE 256
 
+typedef void (*task)();
+
 namespace TaskScheduler
 {
     const char config_path[] PROGMEM = "tasks/%s.json";
@@ -20,7 +22,7 @@ namespace TaskScheduler
         static Task *tasks[TASK_MAX_TASKS];
         static uint8_t tasks_amount;
 
-        Task(const char *name, void (*fnc)());
+        Task(const char *name, task fnc);
         void getName(char *buf);
 
         bool isExecutable();
