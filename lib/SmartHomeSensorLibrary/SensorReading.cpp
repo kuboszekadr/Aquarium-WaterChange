@@ -32,7 +32,6 @@ void Sensors::SensorReading::toJSON(JsonObject &doc)
         reading["measure_id"] = _measures_id[i];
 
         float value = _readings[i] / _readings_count;
-        Serial.println(value);
         reading["value"] = value;
         _last_readings[i] = value;
     }

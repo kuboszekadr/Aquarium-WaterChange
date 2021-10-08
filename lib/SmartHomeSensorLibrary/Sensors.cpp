@@ -27,10 +27,10 @@ void Sensors::loop()
             
             JsonObject reading = readings.createNestedObject();
             sensor->toJSON(reading); 
-            sensor->restart();
-
             readings.add(reading);
-            Events::EventType event = sensor->checkTrigger();
+            
+            sensor->checkTrigger();
+            sensor->restart();
         }
     }    
 }

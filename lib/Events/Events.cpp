@@ -26,8 +26,6 @@ void Events::notifyListeners()
         EventType event_type = queue[i];
         Event *event = Event::getEvent(event_type);
 
-        Serial.printf("New event: %d\n", event_type);
-
         if (event)
         {
             event->notifyListeners();
