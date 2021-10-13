@@ -23,11 +23,11 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
     String payload;
     serializeJson(doc, payload); 
     int response_code = client.POST("data=" + payload); //TODO
+    Serial.println(payload);
 
     if (response_code != 200)
     {
         Serial.printf("Error during sending request. Server response code: %d\n", response_code);
-        // Serial.printf("Response content:\n%s\n", payload);
     }
     
     client.end();
