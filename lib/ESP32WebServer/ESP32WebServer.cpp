@@ -39,6 +39,8 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
         200,
         "application/json",
         response);    
+
+    delete arg;
 }
 
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
@@ -63,4 +65,6 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
     
     Serial.println("File saved.");
     request->send(200);
+
+    delete arg;
 }
