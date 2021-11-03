@@ -13,17 +13,12 @@
 int status = WL_IDLE_STATUS;
 
 TaskScheduler::Scheduler scheduler = TaskScheduler::Scheduler::getInstance();
-
-#define WATER_LEVEL_LOW 27.0
-#define WATER_LEVEL_HIGH 18.0
-
-uint8_t water_level_sensor_id = 1;
 Sensors::WaterLevel water_level_sensor(
-    25,               // echo
-    26,               // trig
-    1,                // sensor_id
+    25,              // echo
+    26,              // trig
+    1,               // sensor_id
     "WaterLevelSump" // sensor_name
-    );
+);
 
 Programs::WaterChange water_change = Programs::WaterChange(33, 32, 1);
 
@@ -80,13 +75,10 @@ void setupSensor()
   Config::load("sensor");
   Config *sensor_config = Config::getByName("sensor");
 
-  Serial.println("Setting samling data...");
   water_level_sensor.setSampling(
       sensor_config->data["sampling_amount"],
-      sensor_config->data["sampling_interval"]
-      );
+      sensor_config->data["sampling_interval"]);
 
-  Serial.println("Setting trigger data...");
   water_level_sensor.setTriggerValues(
       sensor_config->data["trigger_low"],
       sensor_config->data["trigger_high"]);
