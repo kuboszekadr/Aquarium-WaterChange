@@ -18,7 +18,7 @@
                 <small class="form-text text-muted">Low value</small>
             </div>
             <div class="col">
-                <input type="number" class="form-control" placeholder="" id=triggerHigh>
+                <input type="number" class="form-control" placeholder="" id="triggerHigh">
                 <small class="form-text text-muted">High value</small>
             </div>
         </div>
@@ -29,11 +29,11 @@
         <h5></h5>Sampling</h5>
         <div class="row">
             <div class="col">
-                <input type="number" class="form-control" placeholder="">
+                <input type="number" class="form-control" placeholder="" id="samplingAmount">
                 <small class="form-text text-muted">Amount</small>
             </div>
             <div class="col">
-                <input type="number" class="form-control" placeholder="">
+                <input type="number" class="form-control" placeholder="" id="samplingInterval">
                 <small class="form-text text-muted">Interval</small>
             </div>
         </div>
@@ -53,6 +53,9 @@
 
         document.getElementById("triggerLow").value = obj["trigger_low"];
         document.getElementById("triggerHigh").value = obj["trigger_high"];
+
+        document.getElementById("samplingAmount").value = obj["sampling_amount"];
+        document.getElementById("samplingInterval").value = obj["sampling_interval"];
     });
 </script>
 
