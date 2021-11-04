@@ -19,8 +19,8 @@ void ESP32WebServer::start()
 
 void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 {
-    Serial.print(F("New request from IP: "));
-    Serial.println(request->client()->remoteIP());
+    auto remote_ip = request->client()->remoteIP();
+    Serial.printf("New request from IP: %s\n", remote_ip));
 
     const char *arg = request->argName(0).c_str();
     Config *config = Config::getByName(arg);
@@ -39,8 +39,6 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
         200,
         "application/json",
         response);    
-
-    delete arg;
 }
 
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
@@ -58,13 +56,10 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
 
     if (status != CONFIG_SAVED)
     {
-        Serial.print("Error during config update: ");
-        Serial.println(status);
+        Serial.printf("Error during config update: %d\n", status);
         request->send(500);
     }
     
     Serial.println("File saved.");
     request->send(200);
-
-    delete arg;
 }
