@@ -13,7 +13,12 @@ namespace ESP32WebServer
 {
     extern AsyncWebServer server;
     void start();
+    
     void handle_GetConfigRequest(AsyncWebServerRequest *request);
-    void handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json);}
+    void handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json);
+    
+    void handle_PostChangePinMode(AsyncWebServerRequest *request, int pin);
+    void handle_GetPinMode(AsyncWebServerRequest *request, int pin);
+}
 
 #endif
