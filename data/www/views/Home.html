@@ -14,16 +14,16 @@
                 <fieldset>
                     <legend class="mt-4">Water change</legend>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="Active" disabled="">
+                        <input type="checkbox" class="custom-control-input" id="Active">
                         <label class="custom-control-label" for="Active">Active</label>
                     </div>
                     <div style="margin-left: 30px">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="PompingOut" disabled="">
+                            <input type="checkbox" class="custom-control-input" id="PompingOut">
                             <label class="custom-control-label" for="PompingOut">Pomping out</label>
                         </div>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="FillingIn" disabled="">
+                            <input type="checkbox" class="custom-control-input" id="FillingIn">
                             <label class="custom-control-label" for="FillingIn">Filling in</label>
                         </div>
                 </fieldset>
@@ -40,16 +40,25 @@
 </body>
 
 <script>
-    $("#Active").prop("checked", true);
-    $("#PompingOut").prop("checked", true);
-
-    document.addEventListener("DOMContentLoaded", function() {
+    function getPinStatus(pin) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/relay?pin=32", false);
+        var endpoint = "/relay?pin=${pin}";
+        xhr.open("GET", endpoint, false);
         xhr.send(null);
-
+    
         var obj = JSON.parse(xhr.responseText);
-        console.log(xhr.responseText);        
+        console.log(xhr.responseText);    
+        
+        result = obj["status"];
+        return result;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {        
+        status = getPinStatus(32);
+        $("#FillingIn").prop("checked", status);
+
+        status = getPinStatus(33);
+        $("#PompingOut").prop("checked", status);
     })
 </script>
 
