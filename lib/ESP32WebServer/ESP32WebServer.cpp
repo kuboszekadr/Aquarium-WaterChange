@@ -65,12 +65,7 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
     request->send(200);
 }
 
-void handle_PostChangeRelayMode(AsyncWebServerRequest *request)
-{
-
-}
-
-void handle_GetRelayMode(AsyncWebServerRequest *request)
+void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
 {
     auto arg = request->getParam(0)->value();
     int pin = arg.toInt();

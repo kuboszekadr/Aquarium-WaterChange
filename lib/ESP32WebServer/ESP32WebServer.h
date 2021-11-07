@@ -17,8 +17,8 @@ namespace ESP32WebServer
     void handle_GetConfigRequest(AsyncWebServerRequest *request);
     void handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json);
     
-    void handle_PostChangePinMode(AsyncWebServerRequest *request, int pin);
-    void handle_GetPinMode(AsyncWebServerRequest *request, int pin);
+    void handle_PostChangeRelayMode(AsyncWebServerRequest *request);
+    void handle_GetRelayMode(AsyncWebServerRequest *request);
 }
 
 #endif

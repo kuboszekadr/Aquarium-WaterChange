@@ -45,7 +45,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/relay?32", false);
+        xhr.open("GET", "/relay?pin=32", false);
         xhr.send(null);
 
         var obj = JSON.parse(xhr.responseText);
