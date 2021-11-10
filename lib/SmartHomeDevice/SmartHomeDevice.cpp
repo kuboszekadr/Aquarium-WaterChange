@@ -8,7 +8,7 @@ SmartHomeDevice::SmartHomeDevice(const char *host, int port, uint8_t device_id)
 
 void SmartHomeDevice::sendData(const JsonVariant &obj)
 {
-    Serial.println("Sending data to API...");
+    logger.log("Sending data to API...");
     char endpoint[60];
     sprintf(endpoint, "%s/%s", _host_url, "data_collector");
 
@@ -22,21 +22,22 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
 
     String payload;
     serializeJson(doc, payload); 
+    
     int response_code = client.POST("data=" + payload); //TODO
-    Serial.println(payload);
 
     if (response_code != 200)
     {
-        Serial.printf("Error during sending request. Server response code: %d\n", response_code);
+        logger.logf("Error during sending request. Server response code: %d\n", response_code);
     }
     
     client.end();
-    Serial.printf("Server response code: %d\n", response_code);
+    logger.logf("Server response code: %d\n", response_code);
 }
 
 void SmartHomeDevice::sync(char *buf)
 {
-    Serial.println("Syncing time with the server...");
+    logger.log("Syncing time with the server...");
+
     char endpoint[60];
     sprintf(endpoint, "%s/%s", _host_url, "date");
 
@@ -44,15 +45,14 @@ void SmartHomeDevice::sync(char *buf)
     client.begin(endpoint);
 
     int response_code = client.GET();
-
     if (response_code != 200)
     {
-        Serial.println("Cannot sync device.");
+        logger.log("Cannot sync device.");
         return;
     }
 
     client.getString().toCharArray(buf, 60);
     client.end();
 
-    Serial.println("Sync succesfull.");
+    logger.log("Sync succesfull.");
 }

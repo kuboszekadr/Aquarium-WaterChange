@@ -55,7 +55,6 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
     serializeJsonPretty(obj, Serial);
 
     int status = config->save();
-
     if (status != CONFIG_SAVED)
     {
         logger.logf("Error during config update: %d", status);
