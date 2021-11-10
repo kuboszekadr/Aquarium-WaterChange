@@ -3,6 +3,8 @@
 
 #include "Programs.h"
 
+#include <Logger.h>
+
 namespace Programs
 {
 class WaterChange : public Program

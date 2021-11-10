@@ -18,7 +18,7 @@ void Programs::WaterChange::start()
         return;
     }
 
-    Serial.println("Starting water change...");
+    logger.log("Starting water change...");
     _is_active = true;
 
     // check latest water status, if low only pour
@@ -34,14 +34,14 @@ void Programs::WaterChange::start()
 
 void Programs::WaterChange::pumpOut()
 {
-    Serial.println("Pomping water out");
+    logger.log("Pomping water out");
     _water->turnOff();
     _pomp->turnOn();
 }
 
 void Programs::WaterChange::pour()
 {
-    Serial.println("Pouring water");
+    logger.log("Pouring water");
     _pomp->turnOff();
     _water->turnOn(); 
 }
@@ -57,12 +57,13 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
     // Check if program can be closed
     if (event == Events::WATER_HIGH)
     {
+        logger.log("Water high!");
+
         if (_is_active)
         {
             _is_active = false; // finish water change
         }
-        Serial.println("Water high!");
-        // turn of the relays
+
         _water->turnOff(); 
         _pomp->turnOff();
 
@@ -71,7 +72,7 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
     // check if water has to be poured
     else if (event == Events::WATER_LOW)
     {
-        Serial.println("Water low!");
+        logger.log("Water low!");
         _state = event;
         pour();
     }

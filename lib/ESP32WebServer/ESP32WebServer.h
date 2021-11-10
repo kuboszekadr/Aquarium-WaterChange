@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <AsyncJson.h>
+#include <Logger.h>
 #include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
 

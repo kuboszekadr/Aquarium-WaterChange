@@ -15,13 +15,14 @@ void ESP32WebServer::start()
 
     ESP32WebServer::server.begin();
     server.addHandler(handler);
-    Serial.println("Server started on port 80");
+
+    logger.log("Server started on port 80");
 };
 
 void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 {
     auto remote_ip = request->client()->remoteIP();
-    Serial.printf("New request from IP: %s\n", remote_ip);
+    logger.logf("New request from IP: %s", remote_ip);
 
     const char *arg = request->argName(0).c_str();
     Config *config = Config::getByName(arg);
@@ -34,7 +35,7 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 
     char response[256] = "";
     serializeJson(config->data, response);
-    serializeJson(config->data, Serial);
+    logger.log(response);
 
     request->send(
         200,
@@ -44,7 +45,7 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
 
 void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, JsonVariant &json)
 {
-    Serial.println("Config update requested - updating.");
+    logger.log("Config update requested - updating.");
     JsonObject obj = json.as<JsonObject>();
 
     const char *arg = request->argName(0).c_str();
@@ -57,21 +58,22 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
 
     if (status != CONFIG_SAVED)
     {
-        Serial.printf("Error during config update: %d\n", status);
+        logger.logf("Error during config update: %d", status);
         request->send(500);
     }
 
-    Serial.println("File saved.");
+    logger.log("File saved.");
     request->send(200);
 }
 
 void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
 {
     auto arg = request->getParam(0)->value();
+
     int pin = arg.toInt();
-    Serial.printf("Getting  pin %d mode\n", pin);
-    
     int val = digitalRead(pin);
+
+    logger.logf("Getting pin %d mode", pin);
 
     StaticJsonDocument<200> doc;
     JsonObject result = doc.to<JsonObject>();
