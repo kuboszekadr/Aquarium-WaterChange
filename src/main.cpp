@@ -34,7 +34,7 @@ void setup()
   logger.setStream([](const char *msg)
                    { Serial.println(msg); });
 
-
+  
   setupSPIFSS();
   setupWiFi();
   setupAPI();

@@ -10,11 +10,11 @@ void setupAPI()
 
   if (api_config == nullptr)
   {
-    Serial.println("Unable to load API config.");
+    // logger.log("Unable to load API config.");
   }
   else
   {
-    Serial.println("API setup completed.");
+    // logger.log("API setup completed.");
 
     device = new SmartHomeDevice(
         api_config->data["host"],
@@ -38,7 +38,7 @@ void setupTime()
 {
   if (device == nullptr)
   {
-    Serial.println("Can not sync time with the server.");
+    logger.log("Can not sync time with the server.");
     return;
   }
 
@@ -71,13 +71,13 @@ void setupTime()
       atoi(year));
 
   String tm = _time.getDateTime();
-  Serial.println("Time set sucessfully");
+  logger.log("Time set sucessfully");
 }
 
 void setupSPIFSS()
 {
   if (!SPIFFS.begin())
   {
-    Serial.println("Failed to mount file system.");
+    logger.log("Failed to mount file system.");
   }
 }

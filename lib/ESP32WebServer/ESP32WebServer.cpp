@@ -16,7 +16,7 @@ void ESP32WebServer::start()
     ESP32WebServer::server.begin();
     server.addHandler(handler);
 
-    logger.log("Server started on port 80");
+    // logger.log("Server started on port 80");
 };
 
 void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)

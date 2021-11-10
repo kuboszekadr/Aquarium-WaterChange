@@ -10,6 +10,7 @@
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include <ESP32Time.h>
+#include <Logger.h>
 
 extern SmartHomeDevice *device;
 extern ESP32Time _time;
