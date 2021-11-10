@@ -1,6 +1,7 @@
 #include "Device.h"
 #include "WaterChange.h"
 #include "WaterLevel.h"
+#include "Logger.h"
 
 #include <Arduino.h>
 #include <Events.h>
@@ -30,6 +31,9 @@ void sendData();
 void setup()
 {
   Serial.begin(115200);
+  logger.setStream([](const char *msg)
+                   { Serial.println(msg); });
+
 
   setupSPIFSS();
   setupWiFi();
@@ -40,6 +44,7 @@ void setup()
   setupSensor();
 
   TaskScheduler::loadConfig();
+  logger.log("Setup complete");
 }
 
 void loop()
@@ -53,6 +58,7 @@ void loop()
 
 void setupTasks()
 {
+  logger.log("Setting tasks...");
   TaskScheduler::Task *time_sync = new TaskScheduler::Task("time_sync", setupTime);
   time_sync->schedule(400);
 
@@ -73,6 +79,8 @@ void sendData()
 
 void setupSensor()
 {
+  logger.log("Setting sensors...");
+
   Config::load("sensor");
   Config *sensor_config = Config::getByName("sensor");
 
