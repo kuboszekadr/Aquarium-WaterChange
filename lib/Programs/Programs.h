@@ -14,8 +14,11 @@ namespace Programs
         Program(){};
 
         virtual void start();
-        void end();
-        void reactForEvent(Events::EventType event);
+        virtual void stop();
+        virtual void reactForEvent(Events::EventType event);
+
+        void deactivate();
+        void activate();
 
         bool isActive();
 

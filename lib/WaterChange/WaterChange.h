@@ -12,6 +12,7 @@ class WaterChange : public Program
 public:
     WaterChange(uint8_t pin_pomp, uint8_t pin_water, uint8_t id);
     void start();
+    void stop();
     void pumpOut();
     void pour();
     void reactForEvent(Events::EventType event);

@@ -1,31 +1,16 @@
 #include "Programs.h"
 
-void Programs::Program::start()
-{
-    if (_is_active)
-    {
-        return;
-    }
-
-    _relay->turnOn();
-}
-
-void Programs::Program::end()
-{
-    _relay->turnOff();
-}
-
 bool Programs::Program::isActive()
 {
     return _is_active;
 }
 
-void Programs::Program::reactForEvent(Events::EventType event)
+void Programs::Program::deactivate()
 {
-    if (_state == event)
-    {
-        return;
-    }
+    _is_active = false;
+}
 
-    // TODO
+void Programs::Program::activate()
+{
+    _is_active = true;
 }
