@@ -27,11 +27,11 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
 
     if (response_code != 200)
     {
-        logger.logf("Error during sending request. Server response code: %d\n", response_code);
+        logger.logf("Error during sending request. Server response code: %d", response_code);
     }
     
     client.end();
-    logger.logf("Server response code: %d\n", response_code);
+    logger.logf("Server response code: %d", response_code);
 }
 
 void SmartHomeDevice::sync(char *buf)
