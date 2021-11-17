@@ -9,6 +9,7 @@ Programs::WaterChange::WaterChange(uint8_t pin_pomp, uint8_t pin_water, uint8_t 
 
     listenTo(Events::WATER_LOW);
     listenTo(Events::WATER_HIGH);
+    listenTo(Events::READING_ERROR);
 }
 
 void Programs::WaterChange::start()
@@ -34,6 +35,7 @@ void Programs::WaterChange::start()
 
 void Programs::WaterChange::stop()
 {
+    logger.log("Stop program execution...");
     _pomp->turnOff();
     _water->turnOff();     
 }
@@ -67,12 +69,14 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
         deactivate();
         stop();
     }
-    else if (event == Events::WATER_LOW)
+    
+    if (event == Events::WATER_LOW)
     {
         logger.log("Water low!");
         pour();
     }
-    else if (event == Events::READING_ERROR)
+    
+    if (event == Events::READING_ERROR)
     {
         logger.log("Reading error, terminating");
         stop();

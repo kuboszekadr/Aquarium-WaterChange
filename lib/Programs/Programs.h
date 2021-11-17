@@ -26,7 +26,7 @@ namespace Programs
         uint8_t _id;
         uint32_t _execution_id = 0;
         bool _is_active = false;
-        Events::EventType _state;
+        Events::EventType _state = Events::EventType::EMPTY;
 
     private:
         Relay *_relay;
