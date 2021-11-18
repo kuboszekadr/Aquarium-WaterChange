@@ -87,3 +87,14 @@ void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
         "application/json", 
         response);
 }
+
+void ESP32WebServer::handle_GetSystemTime(AsyncWebServerRequest *request)
+{
+    ESP32Time t;
+    String response = t.getTime("%F %X");     
+
+    request->send(
+        200, 
+        "application/json", 
+        response);
+}

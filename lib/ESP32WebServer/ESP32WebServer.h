@@ -9,6 +9,7 @@
 #include <Logger.h>
 #include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
+#include <ESP32Time.h>
 
 namespace ESP32WebServer
 {
@@ -20,6 +21,8 @@ namespace ESP32WebServer
     
     void handle_PostChangeRelayMode(AsyncWebServerRequest *request);
     void handle_GetRelayMode(AsyncWebServerRequest *request);
+
+    void handle_GetSystemTime(AsyncWebServerRequest *request);
 }
 
 #endif

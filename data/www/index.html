@@ -51,7 +51,7 @@
 			<iframe id="content" src="views/Home.html" width="100%" height="90%"></iframe>
 		</div>
 
-		<div class="footer">
+		<div class="footer" id="time">
 			2021-08-25 15:07:46
 		</div>
 
@@ -87,6 +87,16 @@
 		$("#content").attr("src", file);
 	});
 
+	async function getSystemTime() {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "/time", false);
+		xhr.send(null);
+
+		var response = JSON.parse(xhr.responseText);
+		$("#time").prop("innerText", response["time"]);
+	}
+
+	setInterval(getSystemTime, 500);
 </script>
 
 </html>
