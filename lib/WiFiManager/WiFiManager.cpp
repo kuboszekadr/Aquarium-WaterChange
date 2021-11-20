@@ -1,17 +1,38 @@
 #include "WiFiManager.h"
 
-bool WiFiManager::connect(const char *ssid, const char *pwd)
+wl_status_t WiFiManager::connect(const char *ssid, const char *pwd)
 {
     WiFi.begin(ssid, pwd);
+    return waitForConnection();
+}
 
-    // logger.log("Connecting to the target WiFi...");
-    while (WiFi.status() != WL_CONNECTED)
+void WiFiManager::manageConnection()
+{
+    int status = WiFi.status();
+    if (status != WL_CONNECTED)
     {
-        delay(500);
+        logger.log("Reconecting...");
+        WiFi.begin();
+        waitForConnection();
+    }
+}
+
+wl_status_t WiFiManager::waitForConnection()
+{
+    long timeout = millis();
+
+    while (
+        WiFi.status() != WL_CONNECTED ||
+        isTimeouted(timeout, CONNECTION_TIMEOUT))
+    {
+        delay(100);
     }
 
-    // logger.logf("Connected, device IP: TODO");
+    return WiFi.status();
+}
 
-    bool result = WiFi.status() == WL_CONNECTED;
+bool WiFiManager::isTimeouted(long connection_start, long timeout)
+{
+    bool result = (millis() - connection_start > timeout);
     return result;
 }

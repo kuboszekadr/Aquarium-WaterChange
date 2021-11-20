@@ -54,6 +54,8 @@ void loop()
 
   Events::notifyListeners();
   sendData();
+
+  WiFiManager::manageConnection();
 }
 
 void setupTasks()

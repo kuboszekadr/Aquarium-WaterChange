@@ -10,12 +10,9 @@ void setupAPI()
 
   if (api_config == nullptr)
   {
-    // logger.log("Unable to load API config.");
   }
   else
   {
-    // logger.log("API setup completed.");
-
     device = new SmartHomeDevice(
         api_config->data["host"],
         api_config->data["port"].as<int>(),
@@ -30,7 +27,10 @@ void setupWiFi()
   Config::load("wifi");
   Config *wifi_config = Config::getByName("wifi");
 
-  WiFiManager::connect(wifi_config->data["ssid"], wifi_config->data["pwd"]);
+  WiFiManager::connect(
+      wifi_config->data["ssid"],
+      wifi_config->data["pwd"]);
+
   ESP32WebServer::start();
 }
 

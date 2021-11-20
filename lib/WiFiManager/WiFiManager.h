@@ -8,7 +8,12 @@
 
 namespace WiFiManager
 {
-    bool connect(const char *ssid, const char *pwd);
+    wl_status_t connect(const char *ssid, const char *pwd);
+    void manageConnection();
+    
+    wl_status_t waitForConnection();
+    bool isTimeouted(long connection_start, long timeout);
+    
     inline IPAddress getIP() { return WiFi.localIP(); };
 }
 
