@@ -7,6 +7,7 @@ void ESP32WebServer::start()
     server.serveStatic("/", SPIFFS, "/www/");
     server.on("/config", HTTP_GET, handle_GetConfigRequest);
     server.on("/relay", HTTP_GET, handle_GetRelayMode);
+    server.on("/time", HTTP_GET, handle_GetSystemTime);
 
     AsyncCallbackJsonWebHandler *handler = new AsyncCallbackJsonWebHandler(
         "/config",
@@ -15,8 +16,6 @@ void ESP32WebServer::start()
 
     ESP32WebServer::server.begin();
     server.addHandler(handler);
-
-    // logger.log("Server started on port 80");
 };
 
 void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
@@ -82,6 +81,7 @@ void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
 
     char response[256];
     serializeJson(doc, response);
+    
     request->send(
         200, 
         "application/json", 
@@ -91,7 +91,14 @@ void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
 void ESP32WebServer::handle_GetSystemTime(AsyncWebServerRequest *request)
 {
     ESP32Time t;
-    String response = t.getTime("%F %X");     
+    String system_time = t.getTime("%F %X");     
+
+    StaticJsonDocument<80> doc;
+    JsonObject result = doc.to<JsonObject>();
+    result["time"] = system_time;
+
+    char response[80];
+    serializeJson(doc, response);
 
     request->send(
         200, 

@@ -245,10 +245,12 @@
  select,
  optgroup,
  textarea {
-   margin: 0;
+   margin: 5;
    font-family: inherit;
-   font-size: inherit;
    line-height: inherit;
+   color: var(--light);
+   background-color: var(--dark);
+
  }
  
  button,
