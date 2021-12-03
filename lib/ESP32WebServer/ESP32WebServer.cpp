@@ -24,16 +24,11 @@ void ESP32WebServer::handle_GetConfigRequest(AsyncWebServerRequest *request)
     logger.logf("New request from IP: %s", remote_ip);
 
     const char *arg = request->argName(0).c_str();
-    Config *config = Config::getByName(arg);
-
-    if (config == nullptr)
-    {
-        Config::load(arg);
-        return;
-    }
+    Config config = Config(arg);
+    config.load();
 
     char response[256] = "";
-    serializeJson(config->data, response);
+    serializeJson(config.data, response);
     logger.log(response);
 
     request->send(
@@ -48,12 +43,13 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
     JsonObject obj = json.as<JsonObject>();
 
     const char *arg = request->argName(0).c_str();
-    Config *config = Config::getByName(arg);
+    Config config = Config(arg);
+    config.load();
 
-    config->data = obj;
+    config.data = obj;
     serializeJsonPretty(obj, Serial);
 
-    int status = config->save();
+    int status = config.save();
     if (status != CONFIG_SAVED)
     {
         logger.logf("Error during config update: %d", status);

@@ -83,14 +83,14 @@ void setupSensor()
 {
   logger.log("Setting sensors...");
 
-  Config::load("sensor");
-  Config *sensor_config = Config::getByName("sensor");
+  Config sensor_config = Config("sensor");
+  sensor_config.load();
 
   water_level_sensor.setSampling(
-      sensor_config->data["sampling_amount"],
-      sensor_config->data["sampling_interval"]);
+      sensor_config.data["sampling_amount"],
+      sensor_config.data["sampling_interval"]);
 
   water_level_sensor.setTriggerValues(
-      sensor_config->data["trigger_low"],
-      sensor_config->data["trigger_high"]);
+      sensor_config.data["trigger_low"],
+      sensor_config.data["trigger_high"]);
 }

@@ -5,31 +5,25 @@ ESP32Time _time = ESP32Time();
 
 void setupAPI()
 {
-  Config::load("api");
-  Config *api_config = Config::getByName("api");
+  Config config = Config("api");
+  config.load();
 
-  if (api_config == nullptr)
-  {
-  }
-  else
-  {
-    device = new SmartHomeDevice(
-        api_config->data["host"],
-        api_config->data["port"].as<int>(),
-        1);
-  }
+  device = new SmartHomeDevice(
+      config.data["host"],
+      config.data["port"].as<int>(),
+      1);
 }
 
 void setupWiFi()
 {
   WiFi.mode(WIFI_STA);
 
-  Config::load("wifi");
-  Config *wifi_config = Config::getByName("wifi");
+  Config config = Config("wifi");
+  config.load();
 
   WiFiManager::connect(
-      wifi_config->data["ssid"],
-      wifi_config->data["pwd"]);
+      config.data["ssid"],
+      config.data["pwd"]);
 
   ESP32WebServer::start();
 }
