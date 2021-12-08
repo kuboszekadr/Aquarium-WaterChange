@@ -1,7 +1,6 @@
 #include "Device.h"
 
 SmartHomeDevice *device;
-ESP32Time _time = ESP32Time();
 
 void setupAPI()
 {
@@ -36,35 +35,20 @@ void setupTime()
     return;
   }
 
-  // TODO: clean up
+  // send request to host server
   char timestamp[60];
   device->sync(timestamp);
 
-  char year[5];
-  char month[3];
-  char day[3];
+  // deserialize response
+  StaticJsonDocument<128> doc;
+  deserializeJson(doc, timestamp);
+  long epoch = doc["date"];
 
-  char hour[3];
-  char minute[3];
-  char second[3];
+  // set device time
+  ESP32Time _time = ESP32Time();
+  _time.setTime(epoch);
 
-  memcpy(year, timestamp, 4);
-  memcpy(month, &timestamp[4], 2);
-  memcpy(day, &timestamp[6], 2);
-
-  memcpy(hour, &timestamp[9], 2);
-  memcpy(minute, &timestamp[11], 2);
-  memcpy(second, &timestamp[13], 2);
-
-  _time.setTime(
-      atoi(second),
-      atoi(minute),
-      atoi(hour),
-      atoi(day),
-      atoi(month),
-      atoi(year));
-
-  String tm = _time.getDateTime();
+  // String tm = _time.getDateTime();
   logger.log("Time set sucessfully");
 }
 

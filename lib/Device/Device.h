@@ -13,7 +13,6 @@
 #include <Logger.h>
 
 extern SmartHomeDevice *device;
-extern ESP32Time _time;
 
 void setupAPI();
 void setupWiFi();

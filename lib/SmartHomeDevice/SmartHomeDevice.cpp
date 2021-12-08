@@ -14,7 +14,7 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
 
     HTTPClient client;
     client.begin(endpoint);
-    client.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    client.addHeader("Content-Type", "application/json");
 
     DynamicJsonDocument doc(2222);
     doc["device_id"] = _device_id;
@@ -23,7 +23,7 @@ void SmartHomeDevice::sendData(const JsonVariant &obj)
     String payload;
     serializeJson(doc, payload); 
     
-    int response_code = client.POST("data=" + payload); //TODO
+    int response_code = client.POST(payload);
 
     if (response_code != 200)
     {
@@ -47,6 +47,7 @@ void SmartHomeDevice::sync(char *buf)
     int response_code = client.GET();
     if (response_code != 200)
     {
+        
         logger.log("Cannot sync device.");
         return;
     }
