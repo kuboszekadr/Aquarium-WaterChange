@@ -14,6 +14,7 @@
 namespace ESP32WebServer
 {
     extern AsyncWebServer server;
+    extern Logger logger;
     void start();
     
     void handle_GetConfigRequest(AsyncWebServerRequest *request);

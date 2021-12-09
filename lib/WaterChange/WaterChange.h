@@ -18,6 +18,7 @@ public:
     void reactForEvent(Events::EventType event);
 
 private:
+    Logger logger = Logger("WaterChange");
     Relay *_pomp;
     Relay *_water;
 };

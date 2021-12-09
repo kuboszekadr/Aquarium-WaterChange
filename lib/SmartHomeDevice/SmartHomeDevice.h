@@ -18,6 +18,7 @@ class SmartHomeDevice
         void sync(char *buf);
 
     protected:
+        Logger logger = Logger("SmartHomeDevice");
         char _host_url[60];
         uint8_t _device_id;
 

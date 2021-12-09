@@ -1,8 +1,9 @@
 #include "Device.h"
 
-SmartHomeDevice *device;
+SmartHomeDevice *Device::device;
+Logger Device::logger = Logger("Device");
 
-void setupAPI()
+void Device::setupAPI()
 {
   Config config = Config("api");
   config.load();
@@ -13,7 +14,7 @@ void setupAPI()
       1);
 }
 
-void setupWiFi()
+void Device::setupWiFi()
 {
   WiFi.mode(WIFI_STA);
 
@@ -27,7 +28,7 @@ void setupWiFi()
   ESP32WebServer::start();
 }
 
-void setupTime()
+void Device::setupTime()
 {
   if (device == nullptr)
   {
@@ -52,7 +53,7 @@ void setupTime()
   logger.log("Time set sucessfully");
 }
 
-void setupSPIFSS()
+void Device::setupSPIFSS()
 {
   if (!SPIFFS.begin())
   {

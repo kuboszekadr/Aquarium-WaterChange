@@ -8,6 +8,8 @@
 
 namespace WiFiManager
 {
+    extern Logger logger;
+
     wl_status_t connect(const char *ssid, const char *pwd);
     void manageConnection();
     

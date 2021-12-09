@@ -10,7 +10,7 @@
 #include <TaskLoader.h>
 #include <TaskScheduler.h>
 #include <SPIFFS.h>
-
+ 
 int status = WL_IDLE_STATUS;
 
 TaskScheduler::Scheduler scheduler = TaskScheduler::Scheduler::getInstance();
@@ -27,23 +27,27 @@ Programs::WaterChange water_change = Programs::WaterChange(33, 32, 1);
 void setupTasks();
 void setupSensor();
 void sendData();
+void streamToSerial(const char *module_name,
+              const char *log_level,
+              const char *msg,
+              const char *timestamp);
+Logger logger = Logger("main");
 
 void setup()
 {
   Serial.begin(115200);
-  logger.setStream([](const char *msg)
-                   { Serial.println(msg); });
 
+  Device::setupSPIFSS();
+  Device::setupWiFi();
+  Device::setupAPI();
+
+  Device::setupTime();
+  Logger::addStream(streamToSerial);
   
-  setupSPIFSS();
-  setupWiFi();
-  setupAPI();
-
-  setupTime();
   setupTasks();
   setupSensor();
-
   TaskScheduler::loadConfig();
+
   logger.log("Setup complete");
 }
 
@@ -61,7 +65,7 @@ void loop()
 void setupTasks()
 {
   logger.log("Setting tasks...");
-  TaskScheduler::Task *time_sync = new TaskScheduler::Task("time_sync", setupTime);
+  TaskScheduler::Task *time_sync = new TaskScheduler::Task("time_sync", Device::setupTime);
   time_sync->schedule(400);
 
   TaskScheduler::Task *water_change_task = new TaskScheduler::Task("water_change", []()
@@ -74,7 +78,7 @@ void sendData()
   if (Sensors::readings.size() > 0)
   {
     JsonVariant data = Sensors::readings.as<JsonVariant>();
-    device->sendData(data);
+    Device::device->sendData(data);
     Sensors::readings.clear();
   }
 }
@@ -87,10 +91,22 @@ void setupSensor()
   sensor_config.load();
 
   water_level_sensor.setSampling(
-      sensor_config.data["sampling_amount"],
+      sensor_config.data["sampling_amount"] ,
       sensor_config.data["sampling_interval"]);
 
   water_level_sensor.setTriggerValues(
       sensor_config.data["trigger_low"],
       sensor_config.data["trigger_high"]);
+}
+
+void streamToSerial(const char *module_name,
+                    const char *log_level,
+                    const char *msg,
+                    const char *timestamp)
+{
+  char _msg[256];
+  sprintf(_msg,
+          "%s | %s | [%s] %s",
+          module_name, log_level, timestamp, msg);
+  Serial.println(_msg);
 }

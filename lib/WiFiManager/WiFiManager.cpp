@@ -1,5 +1,7 @@
 #include "WiFiManager.h"
 
+Logger WiFiManager::logger = Logger("wifimanager");
+
 wl_status_t WiFiManager::connect(const char *ssid, const char *pwd)
 {
     WiFi.begin(ssid, pwd);

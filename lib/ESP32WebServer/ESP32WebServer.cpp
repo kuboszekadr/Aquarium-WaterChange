@@ -1,6 +1,7 @@
 #include "ESP32WebServer.h"
 
 AsyncWebServer ESP32WebServer::server(80);
+Logger ESP32WebServer::logger = Logger("webserver");
 
 void ESP32WebServer::start()
 {
