@@ -44,12 +44,12 @@ void Device::setupTime()
   StaticJsonDocument<128> doc;
   deserializeJson(doc, timestamp);
   long epoch = doc["date"];
+  // TODO: Add timezone
 
   // set device time
   ESP32Time _time = ESP32Time();
   _time.setTime(epoch);
 
-  // String tm = _time.getDateTime();
   logger.log("Time set sucessfully");
 }
 

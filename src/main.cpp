@@ -27,6 +27,7 @@ Programs::WaterChange water_change = Programs::WaterChange(33, 32, 1);
 void setupTasks();
 void setupSensor();
 void sendData();
+
 void streamToSerial(const char *module_name,
               const char *log_level,
               const char *msg,
@@ -35,6 +36,7 @@ void streamToAPI(const char *module_name,
               const char *log_level,
               const char *msg,
               const char *timestamp);
+
 Logger logger = Logger("main");
 
 void setup()
@@ -44,7 +46,6 @@ void setup()
   Device::setupSPIFSS();
   Device::setupWiFi();
   Device::setupAPI();
-
   Device::setupTime();
 
   Logger::addStream(streamToSerial);
@@ -52,6 +53,7 @@ void setup()
   
   setupTasks();
   setupSensor();
+
   TaskScheduler::loadConfig();
 
   logger.log("Setup complete");

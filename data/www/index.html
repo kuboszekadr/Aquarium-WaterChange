@@ -52,7 +52,7 @@
 		</div>
 
 		<div class="footer" id="time">
-			2021-08-25 15:07:46
+			0000-00-00 00:00:00
 		</div>
 
 	</div>
@@ -78,7 +78,6 @@
 		}
 		document.title = title;
 	}
-	getDeviceName();
 	
 	$(document).on('click', 'a', function(event){
 		target = event.target.innerText;
@@ -96,7 +95,8 @@
 		$("#time").prop("innerText", response["time"]);
 	}
 
-	setInterval(getSystemTime, 500);
+	getSystemTime();
+	getDeviceName();
 </script>
 
 </html>
