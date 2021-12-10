@@ -6,32 +6,38 @@ SmartHomeDevice::SmartHomeDevice(const char *host, int port, uint8_t device_id)
     _device_id = device_id;
 }
 
-void SmartHomeDevice::sendData(const JsonVariant &obj)
+void SmartHomeDevice::postReadings(const JsonVariant &obj)
 {
-    logger.log("Sending data to API...");
-    char endpoint[60];
-    sprintf(endpoint, "%s/%s", _host_url, "data_collector");
+    StaticJsonDocument<1000> doc;
+    JsonObject _obj = doc.to<JsonObject>();
+
+    _obj["device_id"] = _device_id;
+    _obj["data"] = obj; 
+
+    postData(_obj, "data_collector");
+}
+
+void SmartHomeDevice::postLog(const JsonVariant &obj)
+{
+    postData(obj, "logs");
+}
+
+int SmartHomeDevice::postData(const JsonVariant &obj, const char *endpoint)
+{
+    String payload;
+    serializeJson(obj, payload); 
+
+    char url[60];
+    sprintf(url, "%s/%s", _host_url, endpoint);
 
     HTTPClient client;
-    client.begin(endpoint);
+    client.begin(url);
     client.addHeader("Content-Type", "application/json");
-
-    DynamicJsonDocument doc(2222);
-    doc["device_id"] = _device_id;
-    doc["data"] = obj; 
-
-    String payload;
-    serializeJson(doc, payload); 
     
-    int response_code = client.POST(payload);
-
-    if (response_code != 200)
-    {
-        logger.logf("Error during sending request. Server response code: %d", response_code);
-    }
-    
+    int response_code = client.POST(payload);    
     client.end();
-    logger.logf("Server response code: %d", response_code);
+
+    return response_code;
 }
 
 void SmartHomeDevice::sync(char *buf)

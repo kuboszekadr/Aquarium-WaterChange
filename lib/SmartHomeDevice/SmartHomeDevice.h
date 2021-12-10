@@ -12,10 +12,14 @@ class SmartHomeDevice
         SmartHomeDevice(const char *host, int port, uint8_t device_id);
         ~SmartHomeDevice();
 
+        uint8_t id() {return _device_id;};
         void login();
-        void sendData(const JsonVariant &obj);
         void registerDevice();
         void sync(char *buf);
+        
+        int postData(const JsonVariant &obj, const char *endpoint);
+        void postReadings(const JsonVariant &obj);
+        void postLog(const JsonVariant &obj);
 
     protected:
         Logger logger = Logger("SmartHomeDevice");

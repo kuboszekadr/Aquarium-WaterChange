@@ -31,6 +31,10 @@ void streamToSerial(const char *module_name,
               const char *log_level,
               const char *msg,
               const char *timestamp);
+void streamToAPI(const char *module_name,
+              const char *log_level,
+              const char *msg,
+              const char *timestamp);
 Logger logger = Logger("main");
 
 void setup()
@@ -42,7 +46,9 @@ void setup()
   Device::setupAPI();
 
   Device::setupTime();
+
   Logger::addStream(streamToSerial);
+  Logger::addStream(streamToAPI);
   
   setupTasks();
   setupSensor();
@@ -63,7 +69,7 @@ void loop()
 }
 
 void setupTasks()
-{
+{  
   logger.log("Setting tasks...");
   TaskScheduler::Task *time_sync = new TaskScheduler::Task("time_sync", Device::setupTime);
   time_sync->schedule(400);
@@ -78,7 +84,7 @@ void sendData()
   if (Sensors::readings.size() > 0)
   {
     JsonVariant data = Sensors::readings.as<JsonVariant>();
-    Device::device->sendData(data);
+    Device::device->postReadings(data);
     Sensors::readings.clear();
   }
 }
@@ -109,4 +115,21 @@ void streamToSerial(const char *module_name,
           "%s | %s | [%s] %s",
           module_name, log_level, timestamp, msg);
   Serial.println(_msg);
+}
+
+void streamToAPI(const char *module_name,
+                    const char *log_level,
+                    const char *msg,
+                    const char *timestamp)
+{
+  StaticJsonDocument<512> doc;
+  JsonObject obj = doc.to<JsonObject>();
+
+  obj["device_id"] = Device::device->id();
+  obj["module_name"] = module_name;
+  obj["log_level"] = log_level;
+  obj["msg"] = msg;
+  obj["log_timestamp"] = timestamp;
+
+  Device::device->postLog(obj);
 }
