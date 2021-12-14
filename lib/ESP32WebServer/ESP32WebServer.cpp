@@ -5,7 +5,11 @@ Logger ESP32WebServer::logger = Logger("Webserver");
 
 void ESP32WebServer::start()
 {
-    server.serveStatic("/", SPIFFS, "/www/");
+    server.on("/", [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/www/index.html", "text/html", false);
+    });
+    server.serveStatic("/", SPIFFS, "/www");
+
     server.on("/config", HTTP_GET, handle_GetConfigRequest);
     server.on("/relay", HTTP_GET, handle_GetRelayMode);
     server.on("/time", HTTP_GET, handle_GetSystemTime);
@@ -67,26 +71,26 @@ void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
     StaticJsonDocument<200> doc;
     JsonArray result = doc.to<JsonArray>();
 
-    for (const auto& relay : Relay::relays)
+    for (const auto &relay : Relay::relays)
     {
         JsonObject pin = result.createNestedObject();
         pin["pin"] = relay.first;
-        pin["status"] = relay.second->getState(); 
+        pin["status"] = relay.second->getState();
     }
 
     char response[256];
     serializeJson(doc, response);
-    
+
     request->send(
-        200, 
-        "application/json", 
+        200,
+        "application/json",
         response);
 }
 
 void ESP32WebServer::handle_GetSystemTime(AsyncWebServerRequest *request)
 {
     ESP32Time t;
-    String system_time = t.getTime("%F %X");     
+    String system_time = t.getTime("%F %X");
 
     StaticJsonDocument<80> doc;
     JsonObject result = doc.to<JsonObject>();
@@ -96,7 +100,7 @@ void ESP32WebServer::handle_GetSystemTime(AsyncWebServerRequest *request)
     serializeJson(doc, response);
 
     request->send(
-        200, 
-        "application/json", 
+        200,
+        "application/json",
         response);
 }
