@@ -2,6 +2,7 @@
 #define WebServer__h
 
 #include "Config.h"
+#include "Relay.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>

@@ -41,20 +41,20 @@
 
 <script>
     function getPinStatus(pin) {
-        var xhr = new XMLHttpRequest();
-        var endpoint = "/relay?pin=${pin}";
-        xhr.open("GET", endpoint, false);
-        xhr.send(null);
+        // var xhr = new XMLHttpRequest();
+        // var endpoint = "/relay?pin=${pin}";
+        // xhr.open("GET", endpoint, false);
+        // xhr.send(null);
     
-        var obj = JSON.parse(xhr.responseText);
-        console.log(xhr.responseText);    
+        // var obj = JSON.parse(xhr.responseText);
+        // console.log(xhr.responseText);    
         
-        result = obj["status"];
-        return result;
+        // result = obj["status"];
+        // return result;
     }
 
     document.addEventListener("DOMContentLoaded", function() {        
-        status = getPinStatus(32);
+        status = getPinStatus("");
         $("#FillingIn").prop("checked", status);
 
         status = getPinStatus(33);

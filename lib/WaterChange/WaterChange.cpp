@@ -2,8 +2,8 @@
 
 Programs::WaterChange::WaterChange(uint8_t pin_pomp, uint8_t pin_water, uint8_t id)
 {
-    _pomp = new Relay(pin_pomp);
-    _water = new Relay(pin_water);
+    _pomp = new Relay("Pomp", pin_pomp);
+    _water = new Relay("WaterIn", pin_water);
 
     _id = id;
 
@@ -35,9 +35,11 @@ void Programs::WaterChange::start()
 
 void Programs::WaterChange::stop()
 {
-    logger.log("Stop program execution...");
+    logger.log("Stopping program execution...");
     _pomp->turnOff();
     _water->turnOff();     
+
+    deactivate();
 }
 
 void Programs::WaterChange::pumpOut()
@@ -66,7 +68,6 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
     {
         logger.log("Water high!");
 
-        deactivate();
         stop();
     }
     

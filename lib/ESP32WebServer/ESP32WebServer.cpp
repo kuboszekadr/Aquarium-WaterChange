@@ -1,7 +1,7 @@
 #include "ESP32WebServer.h"
 
 AsyncWebServer ESP32WebServer::server(80);
-Logger ESP32WebServer::logger = Logger("webserver");
+Logger ESP32WebServer::logger = Logger("Webserver");
 
 void ESP32WebServer::start()
 {
@@ -63,18 +63,16 @@ void ESP32WebServer::handle_PostConfigRequest(AsyncWebServerRequest *request, Js
 
 void ESP32WebServer::handle_GetRelayMode(AsyncWebServerRequest *request)
 {
-    auto arg = request->getParam(0)->value();
-
-    int pin = arg.toInt();
-    int val = digitalRead(pin);
-
-    logger.logf("Getting pin %d mode", pin);
 
     StaticJsonDocument<200> doc;
-    JsonObject result = doc.to<JsonObject>();
+    JsonArray result = doc.to<JsonArray>();
 
-    result["pin"] = pin;
-    result["status"] = val;
+    for (const auto& relay : Relay::relays)
+    {
+        JsonObject pin = result.createNestedObject();
+        pin["pin"] = relay.first;
+        pin["status"] = relay.second->getState(); 
+    }
 
     char response[256];
     serializeJson(doc, response);

@@ -88,7 +88,7 @@
 
 	async function getSystemTime() {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "/time", true);
+		xhr.open("GET", "/time", false);
 		xhr.send(null);
 
 		var response = JSON.parse(xhr.responseText);
