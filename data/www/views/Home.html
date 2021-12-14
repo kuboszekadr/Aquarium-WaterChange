@@ -20,11 +20,11 @@
                     <div style="margin-left: 30px">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="PompingOut">
-                            <label class="custom-control-label" for="PompingOut">Pomping out</label>
+                            <label class="custom-control-label" for="Pomp">Pomping out</label>
                         </div>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="FillingIn">
-                            <label class="custom-control-label" for="FillingIn">Filling in</label>
+                            <label class="custom-control-label" for="WaterIn">Filling in</label>
                         </div>
                 </fieldset>
             </form>
@@ -40,25 +40,28 @@
 </body>
 
 <script>
-    function getPinStatus(pin) {
-        // var xhr = new XMLHttpRequest();
-        // var endpoint = "/relay?pin=${pin}";
-        // xhr.open("GET", endpoint, false);
-        // xhr.send(null);
-    
-        // var obj = JSON.parse(xhr.responseText);
-        // console.log(xhr.responseText);    
-        
-        // result = obj["status"];
-        // return result;
+    function getPinStatus() {
+        var xhr = new XMLHttpRequest();
+        var endpoint = "/relay";
+
+        xhr.open("GET", endpoint, false);
+        xhr.send(null);
+
+        var obj = JSON.parse(xhr.responseText);
+        console.log(xhr.responseText);
+
+        return obj;
     }
 
-    document.addEventListener("DOMContentLoaded", function() {        
-        status = getPinStatus("");
-        $("#FillingIn").prop("checked", status);
+    document.addEventListener("DOMContentLoaded", function () {
+        data = getPinStatus();
 
-        status = getPinStatus(33);
-        $("#PompingOut").prop("checked", status);
+        for (const pin in data) {
+            state = !!pin["state"];
+            name = pin["name"];
+
+            $("#" + name).prop("checked", state);
+        }
     })
 </script>
 
