@@ -54,14 +54,14 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        data = getPinStatus();
+        pins = getPinStatus();
 
-        for (const pin in data) {
+        pins.forEach(function(pin){
             state = !!pin["state"];
-            name = pin["name"];
+            name = pin["pin"];        
 
             $("#" + name).prop("checked", state);
-        }
+        });        
     })
 </script>
 
