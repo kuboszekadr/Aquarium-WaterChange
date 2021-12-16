@@ -6,14 +6,10 @@
 #include <Arduino.h>
 #include <Events.h>
 #include <Sensors.h>
-#include <Task.h>
-#include <TaskLoader.h>
-#include <TaskScheduler.h>
 #include <SPIFFS.h>
- 
-int status = WL_IDLE_STATUS;
+#include <CronAlarms.h>
 
-TaskScheduler::Scheduler scheduler = TaskScheduler::Scheduler::getInstance();
+int status = WL_IDLE_STATUS;
 
 Sensors::WaterLevel water_level_sensor(
     25,              // echo
@@ -29,13 +25,13 @@ void setupSensor();
 void sendData();
 
 void streamToSerial(const char *module_name,
-              const char *log_level,
-              const char *msg,
-              const char *timestamp);
+                    const char *log_level,
+                    const char *msg,
+                    const char *timestamp);
 void streamToAPI(const char *module_name,
-              const char *log_level,
-              const char *msg,
-              const char *timestamp);
+                 const char *log_level,
+                 const char *msg,
+                 const char *timestamp);
 
 Logger logger = Logger("main");
 
@@ -50,18 +46,16 @@ void setup()
 
   Logger::addStream(streamToSerial);
   Logger::addStream(streamToAPI);
-  
+
   setupTasks();
   setupSensor();
-
-  TaskScheduler::loadConfig();
 
   logger.log("Setup complete");
 }
 
 void loop()
 {
-  scheduler.loop();
+  Cron.delay();
   Sensors::loop();
 
   Events::notifyListeners();
@@ -71,14 +65,18 @@ void loop()
 }
 
 void setupTasks()
-{  
+{
   logger.log("Setting tasks...");
-  TaskScheduler::Task *time_sync = new TaskScheduler::Task("time_sync", Device::setupTime);
-  time_sync->schedule(400);
+  Cron.create(
+      "0 0 4 * * *",
+      Device::setupTime,
+      false);
 
-  TaskScheduler::Task *water_change_task = new TaskScheduler::Task("water_change", []()
-                                                                   { water_change.start(); });
-  water_change_task->schedule(900);
+  Cron.create(
+      "0 0 9 * * *",
+      []()
+      { water_change.start(); },
+      false);
 }
 
 void sendData()
@@ -99,7 +97,7 @@ void setupSensor()
   sensor_config.load();
 
   water_level_sensor.setSampling(
-      sensor_config.data["sampling_amount"] ,
+      sensor_config.data["sampling_amount"],
       sensor_config.data["sampling_interval"]);
 
   water_level_sensor.setTriggerValues(
@@ -120,9 +118,9 @@ void streamToSerial(const char *module_name,
 }
 
 void streamToAPI(const char *module_name,
-                    const char *log_level,
-                    const char *msg,
-                    const char *timestamp)
+                 const char *log_level,
+                 const char *msg,
+                 const char *timestamp)
 {
   StaticJsonDocument<512> doc;
   JsonObject obj = doc.to<JsonObject>();

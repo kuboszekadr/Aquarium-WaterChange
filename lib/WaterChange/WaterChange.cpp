@@ -67,17 +67,14 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
     if (event == Events::WATER_HIGH)
     {
         logger.log("Water high!");
-
         stop();
     }
-    
-    if (event == Events::WATER_LOW)
+    else if (event == Events::WATER_LOW)
     {
         logger.log("Water low!");
         pour();
     }
-    
-    if (event == Events::READING_ERROR)
+    else if (event == Events::READING_ERROR)
     {
         logger.log("Reading error, terminating");
         stop();
