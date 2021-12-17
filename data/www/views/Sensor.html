@@ -23,7 +23,7 @@
             </div>
         </div>
     </form>
-    
+
     <!-- Sampling -->
     <form>
         <h5></h5>Sampling</h5>
@@ -43,7 +43,7 @@
 </body>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/config?sensor", false);
         xhr.send(null);
@@ -57,6 +57,28 @@
         document.getElementById("samplingAmount").value = obj["sampling_amount"];
         document.getElementById("samplingInterval").value = obj["sampling_interval"];
     });
+
+    document.getElementById("SubmitBtn").addEventListener("click", function () {
+        var obj = new Object();
+
+        obj["trigger_low"] = $("#triggerLow").value;
+        obj["trigger_high"] = $("#triggerHigh").value;
+
+        obj["sampling_amount"] = $("#samplingAmount").value;
+        obj["sampling_interval"] = $("#samplintInterva;").value;
+
+        var payload = JSON.stringify(obj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/config?sensor", false);
+        xhr.send(payload);
+
+        if (xhr.status == 200)
+        {
+            console.log("OK");
+        }
+    }
+    );
 </script>
 
 </html>
