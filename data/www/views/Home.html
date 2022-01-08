@@ -57,10 +57,10 @@
         pins = getPinStatus();
 
         pins.forEach(function(pin){
-            state = !!pin["state"];
+            status = !!pin["status"];
             name = pin["pin"];        
 
-            $("#" + name).prop("checked", state);
+            $("#" + name).prop("checked", status);
         });        
     })
 </script>
