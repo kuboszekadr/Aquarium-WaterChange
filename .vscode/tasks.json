@@ -12,9 +12,17 @@
 				"kind": "build"
 			},
 			"presentation": {
-				"revealProblems": "onProblem",
-				// "close": true
+				"revealProblems": "onProblem"
 			}
+		},
+		{
+			"type": "PlatformIO",
+			"task": "Build",
+			"problemMatcher": [
+				"$platformio"
+			],
+			"group": "build",
+			"label": "PlatformIO: Build"
 		}
 	]
 }

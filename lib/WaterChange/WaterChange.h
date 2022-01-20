@@ -15,7 +15,6 @@ public:
     void start();
     void stop();
 
-    
     void reactForEvent(Events::EventType event);
 
 private:

@@ -20,6 +20,7 @@ class SmartHomeDevice
         int postData(const JsonVariant &obj, const char *endpoint);
         void postReadings(const JsonVariant &obj);
         void postLog(const JsonVariant &obj);
+        void postNotification(const char *title, const char *message);
 
     protected:
         Logger logger = Logger("SmartHomeDevice");

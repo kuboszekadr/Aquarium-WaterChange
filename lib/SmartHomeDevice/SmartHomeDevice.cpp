@@ -6,6 +6,30 @@ SmartHomeDevice::SmartHomeDevice(const char *host, int port, uint8_t device_id)
     _device_id = device_id;
 }
 
+void SmartHomeDevice::postNotification(const char *title, const char *message)
+{
+    char url[60]= "http://192.168.0.183:8080/notifier";
+    
+    StaticJsonDocument<512> doc;
+    JsonObject obj = doc.to<JsonObject>();
+
+    obj["title"] = title;
+    obj["message"] = message;
+    
+    String payload;
+    serializeJson(doc, payload);
+
+    HTTPClient client;
+    client.begin(url);
+    client.addHeader("Content-Type", "application/json");
+
+    int status_code = client.POST(payload);
+    Serial.println(payload);
+    Serial.println(status_code);
+
+    client.end();
+}
+
 void SmartHomeDevice::postReadings(const JsonVariant &obj)
 {
     StaticJsonDocument<1000> doc;
@@ -46,6 +70,8 @@ void SmartHomeDevice::sync(char *buf)
 
     char endpoint[60];
     sprintf(endpoint, "%s/%s", _host_url, "date");
+
+    Serial.println(endpoint);
 
     HTTPClient client;
     client.begin(endpoint);
