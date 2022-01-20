@@ -61,16 +61,18 @@
     document.getElementById("SubmitBtn").addEventListener("click", function () {
         var obj = new Object();
 
-        obj["trigger_low"] = document.getElementById("triggerLow").value;
-        obj["trigger_high"] = document.getElementById("triggerHigh").value;
+        obj.trigger_low = document.getElementById("triggerLow").value;
+        obj.trigger_high = document.getElementById("triggerHigh").value;
 
-        obj["sampling_amount"] = document.getElementById("samplingAmount").value;
-        obj["sampling_interval"] = document.getElementById("samplintInterva;").value;
+        obj.sampling_amount = document.getElementById("samplingAmount").value;
+        obj.sampling_interval = document.getElementById("samplingInterval").value;
 
         var payload = JSON.stringify(obj);
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/config?sensor", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
         xhr.send(payload);
 
         if (xhr.status == 200)
