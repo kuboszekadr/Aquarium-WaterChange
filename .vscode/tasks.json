@@ -3,11 +3,11 @@
 	"tasks": [
 		{
 			"type": "PlatformIO",
-			"task": "Remote Upload",
+			"task": "Upload",
 			"problemMatcher": [
 				"$platformio"
 			],
-			"label": "PlatformIO: Remote Upload",
+			"label": "PlatformIO: Upload",
 			"group": {
 				"kind": "build"
 			},

@@ -24,6 +24,8 @@ class SmartHomeDevice
 
     protected:
         Logger logger = Logger("SmartHomeDevice");
+        char _host[20];
+        char _url[5];
         char _host_url[60];
         uint8_t _device_id;
 

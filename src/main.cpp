@@ -51,7 +51,6 @@ void setup()
   setupSensor();
 
   logger.log("Setup complete");
-  delay(5000);
   Device::device->postNotification("WaterChange-init", "Device started");
 }
 

@@ -2,32 +2,22 @@
 
 SmartHomeDevice::SmartHomeDevice(const char *host, int port, uint8_t device_id)
 {
-    sprintf(_host_url, "http://%s:%d/api", host, port);
+    sprintf(_host_url, "http://%s:%d", host, port);
     _device_id = device_id;
 }
 
 void SmartHomeDevice::postNotification(const char *title, const char *message)
 {
-    char url[60]= "http://192.168.0.183:8080/notifier";
+    char url[60];
+    sprintf(url, "%s/%s", _host_url, "notifier");
     
     StaticJsonDocument<512> doc;
     JsonObject obj = doc.to<JsonObject>();
 
     obj["title"] = title;
     obj["message"] = message;
-    
-    String payload;
-    serializeJson(doc, payload);
 
-    HTTPClient client;
-    client.begin(url);
-    client.addHeader("Content-Type", "application/json");
-
-    int status_code = client.POST(payload);
-    Serial.println(payload);
-    Serial.println(status_code);
-
-    client.end();
+    postData(obj, "notifier");
 }
 
 void SmartHomeDevice::postReadings(const JsonVariant &obj)
@@ -38,12 +28,12 @@ void SmartHomeDevice::postReadings(const JsonVariant &obj)
     _obj["device_id"] = _device_id;
     _obj["data"] = obj; 
 
-    postData(_obj, "data_collector");
+    postData(_obj, "api/data_collector");
 }
 
 void SmartHomeDevice::postLog(const JsonVariant &obj)
 {
-    postData(obj, "logs");
+    postData(obj, "api/logs");
 }
 
 int SmartHomeDevice::postData(const JsonVariant &obj, const char *endpoint)
