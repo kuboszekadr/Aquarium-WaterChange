@@ -59,9 +59,7 @@ void SmartHomeDevice::sync(char *buf)
     logger.log("Syncing time with the server...");
 
     char endpoint[60];
-    sprintf(endpoint, "%s/%s", _host_url, "date");
-
-    Serial.println(endpoint);
+    sprintf(endpoint, "%s/%s", _host_url, "api/date");
 
     HTTPClient client;
     client.begin(endpoint);

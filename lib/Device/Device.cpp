@@ -11,7 +11,9 @@ void Device::setupAPI()
   device = new SmartHomeDevice(
       config.data["host"],
       config.data["port"].as<int>(),
-      1);
+      config.data["device_id"].as<int>());
+
+  String test = config.data["host"];
 }
 
 void Device::setupWiFi()
