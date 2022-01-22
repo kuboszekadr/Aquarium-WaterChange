@@ -2,6 +2,7 @@
 #include "WaterChange.h"
 #include "WaterLevel.h"
 #include "Logger.h"
+#include "Notification.h"
 
 #include <Arduino.h>
 #include <Events.h>
@@ -33,6 +34,10 @@ void streamToAPI(const char *module_name,
                  const char *msg,
                  const char *timestamp);
 
+void GmailNotification(
+    const char *title,
+    const char *message);
+
 Logger logger = Logger("main");
 
 void setup()
@@ -47,11 +52,13 @@ void setup()
   Logger::addStream(streamToSerial);
   Logger::addStream(streamToAPI);
 
+  Notification::addStream(GmailNotification);
+
   setupTasks();
   setupSensor();
 
   logger.log("Setup complete");
-  Device::device->postNotification("WaterChange-init", "Device started");
+  Notification::push("WaterChange-init", "Device started");
 }
 
 void loop()
@@ -133,4 +140,9 @@ void streamToAPI(const char *module_name,
   obj["log_timestamp"] = timestamp;
 
   Device::device->postLog(obj);
+}
+
+void GmailNotification(const char *title, const char *message)
+{
+  Device::device->postNotification(title, message);
 }

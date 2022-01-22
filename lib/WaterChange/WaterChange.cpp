@@ -40,6 +40,7 @@ void Programs::WaterChange::stop()
     _water->turnOff();     
 
     deactivate();
+    Notification::push("WaterChange - water change task", "Task finished - relays closed");
 }
 
 void Programs::WaterChange::pumpOut()
@@ -47,6 +48,8 @@ void Programs::WaterChange::pumpOut()
     logger.log("Pomping water out");
     _water->turnOff();
     _pomp->turnOn();
+    
+    Notification::push("WaterChange - water change task", "Task pomping water out");
 }
 
 void Programs::WaterChange::pour()
@@ -54,6 +57,8 @@ void Programs::WaterChange::pour()
     logger.log("Pouring water");
     _pomp->turnOff();
     _water->turnOn(); 
+
+    Notification::push("WaterChange - water change task", "Filling water");
 }
 
 void Programs::WaterChange::reactForEvent(Events::EventType event)
@@ -77,6 +82,7 @@ void Programs::WaterChange::reactForEvent(Events::EventType event)
     else if (event == Events::READING_ERROR)
     {
         logger.log("Reading error, terminating");
+        Notification::push("WaterChange - error", "Reading error please check device");
         stop();
     }
     _state = event;

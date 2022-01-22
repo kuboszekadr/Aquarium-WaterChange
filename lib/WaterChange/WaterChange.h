@@ -2,6 +2,7 @@
 #define WaterChange_h
 
 #include "Programs.h"
+#include "Notification.h"
 
 #include <Logger.h>
 
