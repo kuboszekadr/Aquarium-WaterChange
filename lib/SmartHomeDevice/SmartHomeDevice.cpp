@@ -54,7 +54,7 @@ int SmartHomeDevice::postData(const JsonVariant &obj, const char *endpoint)
     return response_code;
 }
 
-void SmartHomeDevice::sync(char *buf)
+void SmartHomeDevice::sync(JsonDocument &doc)
 {
     logger.log("Syncing time with the server...");
 
@@ -72,7 +72,7 @@ void SmartHomeDevice::sync(char *buf)
         return;
     }
 
-    client.getString().toCharArray(buf, 60);
+    deserializeJson(doc, client.getString());
     client.end();
 
     logger.log("Sync succesfull.");

@@ -39,19 +39,27 @@ void Device::setupTime()
   }
 
   // send request to host server
-  char timestamp[60];
-  device->sync(timestamp);
+  StaticJsonDocument<256> doc;
+  device->sync(doc);
 
-  // deserialize response
-  StaticJsonDocument<128> doc;
-  deserializeJson(doc, timestamp);
   long epoch = doc["date"];
-  // TODO: Add timezone
+  uint8_t timezone = doc["timezone"];
 
   // set device time
   ESP32Time _time = ESP32Time();
   _time.setTime(epoch);
 
+  char tz[10];
+  if (timezone < 0)
+  {
+    sprintf(tz, "UTC%i", timezone);
+  }
+  else
+  {
+    sprintf(tz, "UTC+%i", timezone);
+  }
+
+  setenv("TZ", tz, timezone);
   logger.log("Time set sucessfully");
 }
 

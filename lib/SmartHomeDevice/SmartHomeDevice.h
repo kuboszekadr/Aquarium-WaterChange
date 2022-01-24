@@ -15,7 +15,7 @@ class SmartHomeDevice
         uint8_t id() {return _device_id;};
         void login();
         void registerDevice();
-        void sync(char *buf);
+        void sync(JsonDocument &doc);
         
         int postData(const JsonVariant &obj, const char *endpoint);
         void postReadings(const JsonVariant &obj);
