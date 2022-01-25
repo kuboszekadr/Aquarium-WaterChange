@@ -43,23 +43,24 @@ void Device::setupTime()
   device->sync(doc);
 
   long epoch = doc["date"];
-  uint8_t timezone = doc["timezone"];
+  int timezone = doc["timezone"]; 
 
   // set device time
   ESP32Time _time = ESP32Time();
   _time.setTime(epoch);
 
   char tz[10];
-  if (timezone < 0)
+  if (timezone > 0) // trial and fail obtained...
   {
-    sprintf(tz, "UTC%i", timezone);
+    sprintf(tz, "UTC-%i", timezone);
   }
   else
   {
-    sprintf(tz, "UTC+%i", timezone);
+    sprintf(tz, "UTC+%i", -timezone);
   }
+  setenv("TZ", tz, 0);
+  tzset();
 
-  setenv("TZ", tz, timezone);
   logger.log("Time set sucessfully");
 }
 
