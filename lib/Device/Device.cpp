@@ -13,7 +13,8 @@ void Device::setupAPI()
       config.data["port"].as<int>(),
       config.data["device_id"].as<int>());
 
-  String test = config.data["host"];
+  String name = config.data["device_name"];
+  WiFi.setHostname(name.c_str());
 }
 
 void Device::setupWiFi()

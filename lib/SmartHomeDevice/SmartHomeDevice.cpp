@@ -17,7 +17,7 @@ void SmartHomeDevice::postNotification(const char *title, const char *message)
     obj["title"] = title;
     obj["message"] = message;
 
-    postData(obj, "notifier");
+    // postData(obj, "notifier"); //TODO: restore later-on
 }
 
 void SmartHomeDevice::postReadings(const JsonVariant &obj)
