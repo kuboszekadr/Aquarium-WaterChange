@@ -25,6 +25,10 @@ namespace ESP32WebServer
     void handle_GetRelayMode(AsyncWebServerRequest *request);
 
     void handle_GetSystemTime(AsyncWebServerRequest *request);
+    void handle_GetReadings(AsyncWebServerRequest *request);
+
+    extern StaticJsonDocument<256> last_reading;
 }
+
 
 #endif

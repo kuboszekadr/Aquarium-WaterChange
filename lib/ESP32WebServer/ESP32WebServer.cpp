@@ -2,17 +2,18 @@
 
 AsyncWebServer ESP32WebServer::server(80);
 Logger ESP32WebServer::logger = Logger("Webserver");
+StaticJsonDocument<256> ESP32WebServer::last_reading;
 
 void ESP32WebServer::start()
 {
-    server.on("/", [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/www/index.html", "text/html", false);
-    });
+    server.on("/", [](AsyncWebServerRequest *request)
+              { request->send(SPIFFS, "/www/index.html", "text/html", false); });
     server.serveStatic("/", SPIFFS, "/www");
 
     server.on("/config", HTTP_GET, handle_GetConfigRequest);
     server.on("/relay", HTTP_GET, handle_GetRelayMode);
     server.on("/time", HTTP_GET, handle_GetSystemTime);
+    server.on("/reading", HTTP_GET, handle_GetSystemTime);
 
     AsyncCallbackJsonWebHandler *handler = new AsyncCallbackJsonWebHandler(
         "/config",
@@ -98,6 +99,17 @@ void ESP32WebServer::handle_GetSystemTime(AsyncWebServerRequest *request)
 
     char response[80];
     serializeJson(doc, response);
+
+    request->send(
+        200,
+        "application/json",
+        response);
+}
+
+void ESP32WebServer::handle_GetReadings(AsyncWebServerRequest *request)
+{
+    String response;
+    serializeJson(last_reading, response);
 
     request->send(
         200,
