@@ -93,6 +93,7 @@ void sendData()
   {
     JsonVariant data = Sensors::readings.as<JsonVariant>();
     Device::device->postReadings(data);
+    ESP32WebServer::last_reading = data;
     Sensors::readings.clear();
   }
 }

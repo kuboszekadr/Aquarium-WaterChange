@@ -13,7 +13,7 @@ void ESP32WebServer::start()
     server.on("/config", HTTP_GET, handle_GetConfigRequest);
     server.on("/relay", HTTP_GET, handle_GetRelayMode);
     server.on("/time", HTTP_GET, handle_GetSystemTime);
-    server.on("/reading", HTTP_GET, handle_GetSystemTime);
+    server.on("/reading", HTTP_GET, handle_GetReadings);
 
     AsyncCallbackJsonWebHandler *handler = new AsyncCallbackJsonWebHandler(
         "/config",
