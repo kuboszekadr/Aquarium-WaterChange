@@ -1,10 +1,9 @@
 #ifndef WaterChange_h
 #define WaterChange_h
 
-#include "Programs.h"
-#include "Notification.h"
-
-#include <Logger.h>
+#include "../SmartHome-MicroContoler-Lib/Programs/Programs.h"
+#include "../SmartHome-MicroContoler-Lib/Notification/Notification.h"
+#include "../SmartHome-MicroContoler-Lib/Logger/Logger.h"
 
 namespace Programs
 {

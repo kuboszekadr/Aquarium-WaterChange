@@ -1,12 +1,13 @@
-#include "Device.h"
+#include "Device/Device.h"
+#include "Sensors/WaterLevel.h"
+#include "Sensors/Sensors.h"
+#include "Logger/Logger.h"
+#include "Notification/Notification.h"
+#include "Events/Events.h"
+
 #include "WaterChange.h"
-#include "WaterLevel.h"
-#include "Logger.h"
-#include "Notification.h"
 
 #include <Arduino.h>
-#include <Events.h>
-#include <Sensors.h>
 #include <SPIFFS.h>
 #include <CronAlarms.h>
 
