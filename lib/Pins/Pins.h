@@ -1,0 +1,5 @@
+#define HCSR04_ECHO 25
+#define HCSR04_TRIG 26
+
+#define WATER_FLOW_OUT 33
+#define WATER_FLOW_IN 32

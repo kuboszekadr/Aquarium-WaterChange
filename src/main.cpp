@@ -1,11 +1,12 @@
 #include "Device/Device.h"
-#include "Sensors/WaterLevel.h"
 #include "Sensors/Sensors.h"
 #include "Logger/Logger.h"
 #include "Notification/Notification.h"
 #include "Events/Events.h"
 
 #include "WaterChange.h"
+#include "WaterLevel.h"
+#include "Pins.h"
 
 #include <Arduino.h>
 #include <SPIFFS.h>
@@ -14,13 +15,15 @@
 int status = WL_IDLE_STATUS;
 
 Sensors::WaterLevel water_level_sensor(
-    25,              // echo
-    26,              // trig
-    1,               // sensor_id
-    "WaterLevelSump" // sensor_name
-);
+    HCSR04_ECHO,
+    HCSR04_TRIG,
+    1,
+    "WaterLevelSump");
 
-Programs::WaterChange water_change = Programs::WaterChange(33, 32, 1);
+Programs::WaterChange water_change = Programs::WaterChange(
+    WATER_FLOW_OUT,
+    WATER_FLOW_IN,
+    1);
 
 void setupTasks();
 void setupSensor();
