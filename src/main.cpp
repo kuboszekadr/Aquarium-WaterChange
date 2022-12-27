@@ -92,7 +92,7 @@ void sendData()
   if (Sensors::readings.size() > 0)
   {
     JsonVariant data = Sensors::readings.as<JsonVariant>();
-    Device::device->postReadings(data);
+    Device::device->postReadings(data, "WaterLevel");
     ESP32WebServer::last_reading = data;
     Sensors::readings.clear();
   }
