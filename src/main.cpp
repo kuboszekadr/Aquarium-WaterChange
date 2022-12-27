@@ -1,13 +1,17 @@
 #include "Device/Device.h"
 #include "Sensors/Sensors.h"
+#include "ESP32WebServer/ESP32WebServer.h"
+
 #include "Logger/Logger.h"
+#include "Logger/Loggers/API.hpp"
+#include "Logger/Loggers/Serial.hpp"
+
 #include "Notification/Notification.h"
 #include "Events/Events.h"
 
 #include "WaterChange.h"
 #include "WaterLevel.h"
 #include "Pins.h"
-#include "AsyncElegantOTA.h"
 
 #include <Arduino.h>
 #include <SPIFFS.h>
@@ -26,18 +30,9 @@ Programs::WaterChange water_change = Programs::WaterChange(
     WATER_FLOW_IN,
     1);
 
-void setupTasks();
+void initTasks();
 void setupSensor();
 void sendData();
-
-void streamToSerial(const char *module_name,
-                    const char *log_level,
-                    const char *msg,
-                    const char *timestamp);
-void streamToAPI(const char *module_name,
-                 const char *log_level,
-                 const char *msg,
-                 const char *timestamp);
 
 void GmailNotification(
     const char *title,
@@ -49,17 +44,14 @@ void setup()
 {
   Serial.begin(115200);
 
-  Device::setupSPIFSS();
-  Device::setupWiFi();
-  Device::setupAPI();
-  Device::setupTime();
+  Device::setup();
 
-  Logger::addStream(streamToSerial);
-  Logger::addStream(streamToAPI);
+  Logger::addStream(Loggers::logToSerial);
+  Logger::addStream(Loggers::logToAPI);
 
   Notification::addStream(GmailNotification);
 
-  setupTasks();
+  initTasks();
   setupSensor();
 
   logger.log("Setup complete");
@@ -73,11 +65,9 @@ void loop()
 
   Events::notifyListeners();
   sendData();
-
-  WiFiManager::manageConnection();
 }
 
-void setupTasks()
+void initTasks()
 {
   logger.log("Setting tasks...");
   Cron.create(
@@ -90,6 +80,11 @@ void setupTasks()
       []()
       { water_change.start(); },
       false);
+
+  Cron.create(
+      "0 */2 * * * *",
+      WiFiManager::manageConnection,
+      false);          
 }
 
 void sendData()
@@ -117,35 +112,6 @@ void setupSensor()
   water_level_sensor.setTriggerValues(
       sensor_config.data["trigger_low"],
       sensor_config.data["trigger_high"]);
-}
-
-void streamToSerial(const char *module_name,
-                    const char *log_level,
-                    const char *msg,
-                    const char *timestamp)
-{
-  char _msg[256];
-  sprintf(_msg,
-          "%s | %s | [%s] %s",
-          module_name, log_level, timestamp, msg);
-  Serial.println(_msg);
-}
-
-void streamToAPI(const char *module_name,
-                 const char *log_level,
-                 const char *msg,
-                 const char *timestamp)
-{
-  StaticJsonDocument<512> doc;
-  JsonObject obj = doc.to<JsonObject>();
-
-  obj["device_id"] = Device::device->id();
-  obj["module_name"] = module_name;
-  obj["log_level"] = log_level;
-  obj["msg"] = msg;
-  obj["log_timestamp"] = timestamp;
-
-  Device::device->postLog(obj);
 }
 
 void GmailNotification(const char *title, const char *message)
