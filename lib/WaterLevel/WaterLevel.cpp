@@ -68,7 +68,10 @@ Events::EventType Sensors::WaterLevel::checkTrigger()
     }
 
     // push to the queue if event is not empty
-    if ((event != Events::EventType::EMPTY) & (event != _last_trigger))
+    if (
+        (event != Events::EventType::EMPTY) 
+        & (event != _last_trigger)
+        )
     {
         Events::raise(event);
     }

@@ -9,7 +9,7 @@
 #include "Notification/Notification.h"
 #include "Events/Events.h"
 
-#include "WaterChange.h"
+#include "WaterManager.h"
 #include "WaterLevel.h"
 #include "Pins.h"
 
@@ -25,7 +25,7 @@ Sensors::WaterLevel water_level_sensor(
     1,
     "WaterLevelSump");
 
-Programs::WaterChange water_change = Programs::WaterChange(
+Programs::WaterManager water_change = Programs::WaterManager(
     WATER_FLOW_OUT,
     WATER_FLOW_IN,
     1);
@@ -55,7 +55,7 @@ void setup()
   setupSensor();
 
   logger.log("Setup complete");
-  Notification::push("WaterChange-init", "Device started");
+  Notification::push("WaterManager-init", "Device started");
 }
 
 void loop()
