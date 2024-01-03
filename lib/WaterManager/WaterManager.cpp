@@ -1,5 +1,7 @@
 #include "WaterManager.h"
 
+// Programs::WaterManager Programs::water_change = Programs::WaterManager(5, 6, 1);
+
 Programs::WaterManager::WaterManager(uint8_t pin_pomp, uint8_t pin_water, uint8_t id)
 {
     _pomp = new Relay("Pomp", pin_pomp);
@@ -124,6 +126,19 @@ void Programs::WaterManager::defaultHandler(Events::EventType event)
         logger.log("Water low!");
         pour();
     }
+}
+
+void Programs::WaterManager::configure(uint8_t pin_pomp, uint8_t pin_water)
+{
+    logger.log("Changing device configuration...");
+
+    delete _pomp;
+    delete _water;
+
+    _pomp = new Relay("Pomp", pin_pomp);
+    _water = new Relay("WaterIn", pin_water);
+
+    logger.log("Device config updated");
 }
 
 void Programs::WaterManager::changeMode()

@@ -6,6 +6,12 @@
 #include "Logger/Loggers/API.hpp"
 #include "Logger/Loggers/Serial.hpp"
 
+#include "Services/Services.h"
+#include "Services/ServiceSystemTime/ServiceSystemTime.h"
+#include "Services/ServiceConfig/ServiceConfig.h"
+#include "Services/ServiceOTA/ServiceOTA.h"
+#include "ServiceWaterManager.h"
+
 #include "Notification/Notification.h"
 #include "Events/Events.h"
 
@@ -16,6 +22,10 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
 #include <CronAlarms.h>
+
+#include <esp_task_wdt.h>
+
+#define WDT_TIMEOUT 20
 
 int status = WL_IDLE_STATUS;
 
@@ -38,11 +48,21 @@ void GmailNotification(
     const char *title,
     const char *message);
 
+const char VERSION[8] = "v1.0.0";
 Logger logger = Logger("main");
+
+Services::ServiceSystemTime service_time = Services::ServiceSystemTime();
+Services::ServiceOTA service_ota = Services::ServiceOTA();
+Services::ServiceWaterManager service_water_manager = Services::ServiceWaterManager();
+Services::ServiceConfig config_service = Services::ServiceConfig();
 
 void setup()
 {
   Serial.begin(115200);
+
+	esp_task_wdt_init(WDT_TIMEOUT, true);
+	esp_task_wdt_add(NULL);
+  // Programs::water_change.configure(WATER_FLOW_OUT, WATER_FLOW_IN);
 
   Device::setup();
 
@@ -50,12 +70,17 @@ void setup()
   Logger::addStream(Loggers::logToAPI);
 
   Notification::addStream(GmailNotification);
+  ESP32WebServer::start();
+
+  Services::init();
+  Services::server.begin();
 
   initTasks();
   setupSensor();
 
-  logger.log("Setup complete");
-  Notification::push("WaterManager-init", "Device started");
+	char msg[64];
+	snprintf(msg, 63, "Device started \nFirmware version: %s", VERSION);
+	Notification::push("WaterManager-init", msg);
 }
 
 void loop()
@@ -65,6 +90,9 @@ void loop()
 
   Events::notifyListeners();
   sendData();
+
+	esp_task_wdt_reset();
+
 }
 
 void initTasks()
@@ -74,6 +102,11 @@ void initTasks()
       "0 0 4 * * *",
       Device::setupTime,
       false);
+
+	Cron.create(
+		"*/30 * * * * *",
+		Device::sendHeartbeat,
+		false);
 
   Cron.create(
       "0 0 9 * * *",

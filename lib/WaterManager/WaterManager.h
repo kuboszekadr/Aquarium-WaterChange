@@ -8,31 +8,36 @@
 
 namespace Programs
 {
-class WaterManager : public Program
-{
-public:
-    WaterManager(uint8_t pin_pomp, uint8_t pin_water, uint8_t id);
-    
-    void start();
-    void stop();
+    class WaterManager : public Program
+    {
+    public:
+        WaterManager(uint8_t pin_pomp, uint8_t pin_water, uint8_t id);
 
-    void reactForEvent(Events::EventType event);
-    void constantLevelHandler(Events::EventType event);
-    void defaultHandler(Events::EventType event);
+        void start();
+        void stop();
 
-    void changeMode();
-    void loadConfig();
-    void saveConfig();
+        void reactForEvent(Events::EventType event);
+        void constantLevelHandler(Events::EventType event);
+        void defaultHandler(Events::EventType event);
 
-private:
-    Logger logger = Logger("WaterManager");
-    Relay *_pomp;
-    Relay *_water;
+        void configure(uint8_t pin_pomp, uint8_t pin_water);
 
-    bool constant_level = false;
+        void changeMode();
+        void loadConfig();
+        void saveConfig();
 
-    void pumpOut();
-    void pour();
-};
-} // namespace Programs
+    private:
+        Logger logger = Logger("WaterManager");
+        Relay *_pomp;
+        Relay *_water;
+
+        bool constant_level = false;
+
+        void pumpOut();
+        void pour();
+    };
+
+    // extern WaterManager water_change;
+
+}
 #endif
