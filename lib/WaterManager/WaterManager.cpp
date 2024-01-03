@@ -1,6 +1,6 @@
 #include "WaterManager.h"
 
-// Programs::WaterManager Programs::water_change = Programs::WaterManager(5, 6, 1);
+// Programs::WaterManager Programs::water_change = Programs::WaterManager(5, 6, 1); 
 
 Programs::WaterManager::WaterManager(uint8_t pin_pomp, uint8_t pin_water, uint8_t id)
 {
@@ -18,12 +18,6 @@ Programs::WaterManager::WaterManager(uint8_t pin_pomp, uint8_t pin_water, uint8_
 
 void Programs::WaterManager::start()
 {
-    if (constant_level)
-    {
-        logger.log("Constant level mode enabled, please use changeMode() to disable it");
-        return;
-    }
-
     if (isActive())
     {
         logger.log("Program is already running...");
@@ -64,7 +58,7 @@ void Programs::WaterManager::pumpOut()
 
 void Programs::WaterManager::pour()
 {
-    logger.log("Pouring water");
+    logger.log("Refilling water");
     _pomp->turnOff();
     _water->turnOn(); 
 
@@ -81,7 +75,7 @@ void Programs::WaterManager::reactForEvent(Events::EventType event)
         return;
     }
 
-    if (constant_level)
+    if (_keep_water_level)
     {
         constantLevelHandler(event);
     }
@@ -103,8 +97,10 @@ void Programs::WaterManager::constantLevelHandler(Events::EventType event)
 
     if (event == Events::WATER_HIGH)
     {
-        pour();
+        stop();
     }
+    pour();
+
     _state = event;
 }
 
@@ -118,12 +114,12 @@ void Programs::WaterManager::defaultHandler(Events::EventType event)
 
     if (event == Events::WATER_HIGH)
     {
-        logger.log("Water high!");
+        logger.log("Tank refilled");
         stop();
     }
     else if (event == Events::WATER_LOW)
     {
-        logger.log("Water low!");
+        logger.log("Refilling...");
         pour();
     }
 }
@@ -141,10 +137,15 @@ void Programs::WaterManager::configure(uint8_t pin_pomp, uint8_t pin_water)
     logger.log("Device config updated");
 }
 
-void Programs::WaterManager::changeMode()
+void Programs::WaterManager::changeMode(bool keep_water_level)
 {
-    constant_level = !constant_level;
-    if (constant_level)
+    if (keep_water_level == _keep_water_level)
+    {
+        return;
+    }
+    
+    _keep_water_level = keep_water_level;
+    if (_keep_water_level)
     {
         logger.log("Constant level mode enabled");
         Notification::push("WaterManager - constant level mode", "Constant level mode enabled");
@@ -164,11 +165,11 @@ void Programs::WaterManager::loadConfig()
 
     Config config = Config("water_manager");
     config.load();
-    constant_level = config.data["constant_level"];
+    _keep_water_level = config.data["constant_level"];
 
     logger.logf(
         "Constant level mode: %s", 
-        constant_level ? "enabled" : "disabled"
+        _keep_water_level ? "enabled" : "disabled"
     );
 }
 
@@ -177,7 +178,7 @@ void Programs::WaterManager::saveConfig()
     logger.log("Save config...");
 
     Config config = Config("water_manager");
-    config.data["constant_level"] = constant_level;
+    config.data["constant_level"] = _keep_water_level;
     config.save();
 
     logger.log("Config saved");

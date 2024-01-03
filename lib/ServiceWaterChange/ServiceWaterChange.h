@@ -1,5 +1,5 @@
-#ifndef ServiceWaterManager_h
-#define ServiceWaterManager_h
+#ifndef ServiceWaterChange_h
+#define ServiceWaterChange_h
 
 #include "../WaterManager/WaterManager.h"
 
@@ -10,12 +10,11 @@
 
 namespace Services
 {
-    class ServiceWaterManager : public IService
+    class ServiceWaterChange : public IService
     {
         public:
             void create();
 
-            static void get(AsyncWebServerRequest *request);
             static void post(AsyncWebServerRequest *request, JsonVariant &json);
     };
 }

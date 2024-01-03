@@ -22,22 +22,24 @@ namespace Programs
 
         void configure(uint8_t pin_pomp, uint8_t pin_water);
 
-        void changeMode();
+        void changeMode(bool keep_constant_level);
         void loadConfig();
         void saveConfig();
+
+        bool isConstantLevel() { return _keep_water_level; }
 
     private:
         Logger logger = Logger("WaterManager");
         Relay *_pomp;
         Relay *_water;
 
-        bool constant_level = false;
+        bool _keep_water_level = false;
 
         void pumpOut();
         void pour();
     };
 
-    // extern WaterManager water_change;
+    extern WaterManager water_change;
 
 }
 #endif

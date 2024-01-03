@@ -3,7 +3,12 @@
 void Services::ServiceWaterManager::create()
 {
     server.on("/watermanager", HTTP_GET, get);
-    server.on("/watermanager", HTTP_POST, post);
+
+    AsyncCallbackJsonWebHandler *post_handler = new AsyncCallbackJsonWebHandler(
+        "/watermanager",
+        post);
+    post_handler->setMethod(HTTP_POST);
+    server.addHandler(post_handler);
 }
 
 void Services::ServiceWaterManager::get(AsyncWebServerRequest *request)
@@ -11,25 +16,34 @@ void Services::ServiceWaterManager::get(AsyncWebServerRequest *request)
     AsyncResponseStream *response = request->beginResponseStream("application/json");
     DynamicJsonDocument doc(1024);
 
-    doc["constant_level"] = true;
+    doc["constant_level"] = Programs::water_change.isConstantLevel();
 
     serializeJson(doc, *response);
     request->send(response);
 }
 
-void Services::ServiceWaterManager::post(AsyncWebServerRequest *request)
+void Services::ServiceWaterManager::post(AsyncWebServerRequest *request, JsonVariant &json)
 {
-    AsyncResponseStream *response = request->beginResponseStream("application/json");
+
+    JsonObject obj = json.as<JsonObject>();
     DynamicJsonDocument doc(1024);
 
-    if (request->hasParam("constant_level"))
+    if (obj.containsKey("constant_level"))
     {
-        // water_change.constant_level = request->getParam("constant_level")->value().equals("true");
-        // water_change.saveConfig();
+        bool constant_level = obj["constant_level"];
+        Serial.println(int(constant_level));
+        Programs::water_change.changeMode(constant_level);
+        doc["status"] = "ok";
+    }
+    else
+    {
+        doc["status"] = "error";
+        doc["message"] = "Missing 'constant_level' field in request body";
     }
 
-    doc["constant_level"] = false;
+    doc["status"] = "ok";
 
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
     serializeJson(doc, *response);
     request->send(response);
 }
