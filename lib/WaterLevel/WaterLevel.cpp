@@ -5,76 +5,86 @@ Sensors::Measures Sensors::water_level_measure[1] = {Sensors::Measures::WATER_LE
 Sensors::WaterLevel::WaterLevel(
     uint8_t echo,
     uint8_t trig,
-    uint8_t id_sensor,
     const char *name)
     : Sensor(
-          id_sensor,
           water_level_measure,
           1,
           name,
+
           Events::EventType::WATER_LOW,
           Events::EventType::WATER_HIGH)
 {
     _echo = echo; // echo pin
     _trig = trig; // trig pin
 
-    pinMode(_trig, OUTPUT);
-    pinMode(_echo, INPUT);
+    // pinMode(_trig, OUTPUT);
+    // pinMode(_echo, INPUT);
 }
 
 bool Sensors::WaterLevel::makeReading()
 {
 
-    digitalWrite(_trig, LOW);
-    delayMicroseconds(2);
+    // digitalWrite(_trig, LOW);
+    // delayMicroseconds(2);
 
-    digitalWrite(_trig, HIGH);
-    delayMicroseconds(10);
+    // digitalWrite(_trig, HIGH);
+    // delayMicroseconds(10);
 
-    // Measuring distance
-    digitalWrite(_trig, LOW);
+    // digitalWrite(_trig, LOW);
 
-    // Get value
-    float reading = pulseIn(_echo, HIGH) / 58.0;
-    _readings[0] += reading; // returns water level in cm
-    _readings_count++;
+    // float reading = pulseIn(_echo, HIGH) / 58.0;
+    // _readings[0] += reading; // returns water level in cm
+    // _readings_count++;
 
-    _last_reading = millis();
+    // _last_reading = millis();
     return true;
 }
 
-Events::EventType Sensors::WaterLevel::checkTrigger()
+Events::EventType Sensors::WaterLevel::checkTrigger(float reading)
 {
     Events::EventType event = Events::EventType::EMPTY;
-    if (_readings_count == 0)
+    if (reading <= 0.0 || reading >= 99.0)
     {
-        return event;
+        return Events::EventType::READING_ERROR;
     }
 
-    // check current level of water
-    float r = _last_readings[0];
-    if (r > _trigger_value_low)
+    // check if water level is constant
+    if (keep_water_level)
     {
-        event = _trigger_low;
+        event = constantLevelHandler(reading);
     }
-    else if (r < _trigger_value_high)
+    else
     {
-        event = _trigger_high;
-    }
-    
-    if (r < 0.0 || r > 99.0)
-    {
-        event = Events::EventType::READING_ERROR;
+        event = defaultHandler(reading);
     }
 
     // push to the queue if event is not empty
-    if (
-        (event != Events::EventType::EMPTY) 
-        & (event != _last_trigger)
-        )
+    if (event != Events::EventType::EMPTY)
     {
         Events::raise(event);
     }
 
     return event;
+}
+
+Events::EventType Sensors::WaterLevel::defaultHandler(float reading)
+{
+    if (reading >= _trigger_value_low)
+    {
+        return Events::EventType::WATER_LOW;
+    }
+    else if (reading <= _trigger_value_high)
+    {
+        return Events::EventType::WATER_HIGH;
+    }
+    return Events::EventType::EMPTY;
+}
+
+Events::EventType Sensors::WaterLevel::constantLevelHandler(float reading)
+{
+    if (reading >= _trigger_value_high)
+    {
+        return Events::EventType::WATER_LOW;
+    }
+    return Events::EventType::WATER_HIGH;
 }

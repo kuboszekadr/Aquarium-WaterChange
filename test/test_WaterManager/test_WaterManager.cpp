@@ -6,13 +6,11 @@
 
 #include "Programs.h"
 #include "WaterManager.h"
-// #include "ConfigFake.hpp"
 
-using namespace fakeit;
 using namespace Programs;
 using namespace Events;
 
-WaterManager water_change = WaterManager(
+WaterManager water_manager = WaterManager(
     0,
     1);
 
@@ -20,24 +18,24 @@ void test_state(void)
 {
     TEST_ASSERT_EQUAL(
         WaterManager::State::IDLE, 
-        water_change.state()
+        water_manager.state()
         );
 }
 
 void test_react_for_event(void)
 {
     EventType water_low = EventType::WATER_LOW;
-    water_change.reactForEvent(water_low);
+    water_manager.reactForEvent(water_low);
     TEST_ASSERT_EQUAL(
         WaterManager::State::POURING, 
-        water_change.state()
+        water_manager.state()
         );
 
     EventType water_high = EventType::WATER_HIGH;
-    water_change.reactForEvent(water_high);
+    water_manager.reactForEvent(water_high);
     TEST_ASSERT_EQUAL(
         WaterManager::State::IDLE, 
-        water_change.state()
+        water_manager.state()
         );
 }
 

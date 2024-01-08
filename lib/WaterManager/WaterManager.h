@@ -27,14 +27,14 @@ namespace Programs
         void stop();
         void reactForEvent(Events::EventType event);
 
-        void constantLevelHandler(Events::EventType event);
-        void defaultHandler(Events::EventType event);
+        // void constantLevelHandler(Events::EventType event);
+        // void defaultHandler(Events::EventType event);
 
         void configure(uint8_t pin_pomp, uint8_t pin_water);
 
-        void changeMode(bool keep_constant_level);
-        void loadConfig();
-        void saveConfig();
+        // void changeMode(bool keep_constant_level);
+        // void loadConfig();
+        // void saveConfig();
 
         bool isConstantLevel() { return _keep_water_level; }
         State state() { return _state; }

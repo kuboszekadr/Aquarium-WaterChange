@@ -1,8 +1,8 @@
 #ifndef WaterLevel_h
 #define WaterLevel_h
 
-#include "../SmartHome-MicroContoler-Lib/Events/Events.h"
-#include "../SmartHome-MicroContoler-Lib/Sensors/Sensor.h"
+#include "../Events/Events.h"
+#include "../Sensors/Sensor.h"
 
 #include <Arduino.h>
 
@@ -18,11 +18,15 @@ namespace Sensors
 			uint8_t echo,
 			uint8_t trig,
 
-			uint8_t id_sensor,
 			const char *name);
 
-		bool makeReading();
-		Events::EventType checkTrigger();
+		virtual bool makeReading();
+
+		Events::EventType checkTrigger(float reading);
+		Events::EventType defaultHandler(float reading);
+		Events::EventType constantLevelHandler(float reading);
+
+		bool keep_water_level = false;
 
 	private:
 		uint8_t _echo;
