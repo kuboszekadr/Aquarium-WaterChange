@@ -78,7 +78,6 @@ void setup()
     Logger::addStream(Loggers::logToAPI);
 
     Notification::addStream(GmailNotification);
-    // ESP32WebServer::start();
 
     Services::init();
     Services::server.begin();
