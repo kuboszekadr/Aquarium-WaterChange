@@ -35,13 +35,13 @@ int status = WL_IDLE_STATUS;
 Sensors::WaterLevel water_level_sensor(
     HCSR04_ECHO,
     HCSR04_TRIG,
-    1,
-    "WaterLevelSump");
+    "WaterLevelSump"
+    );
 
 Programs::WaterManager Programs::water_change = Programs::WaterManager(
     WATER_FLOW_OUT,
-    WATER_FLOW_IN,
-    1);
+    WATER_FLOW_IN
+    );
 
 void initTasks();
 void setupSensor();
@@ -151,6 +151,8 @@ void setupSensor()
     water_level_sensor.setTriggerValues(
         sensor_config.data["trigger_low"],
         sensor_config.data["trigger_high"]);
+
+    water_level_sensor.start();
 }
 
 void GmailNotification(const char *title, const char *message)

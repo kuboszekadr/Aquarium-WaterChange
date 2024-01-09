@@ -16,13 +16,16 @@ Sensors::WaterLevel::WaterLevel(
 {
     _echo = echo; // echo pin
     _trig = trig; // trig pin
+
+    pinMode(_trig, OUTPUT);
+    pinMode(_echo, INPUT);   
 }
 
-void Sensors::WaterLevel::start()
-{
-    pinMode(_trig, OUTPUT);
-    pinMode(_echo, INPUT);
-}
+// void Sensors::WaterLevel::setup()
+// {
+//     pinMode(_trig, OUTPUT);
+//     pinMode(_echo, INPUT);   
+// }
 
 float Sensors::WaterLevel::makeReading()
 {

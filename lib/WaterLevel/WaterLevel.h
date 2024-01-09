@@ -4,7 +4,11 @@
 #include "../Events/Events.h"
 #include "../Sensors/Sensor.h"
 
-#include <Arduino.h>
+#ifdef UNIT_TEST
+    #include "ArduinoFake.h"
+#else
+    #include "Arduino.h"
+#endif
 
 #define WATER_LEVEL_MEASURE_ID 2
 
@@ -21,7 +25,7 @@ namespace Sensors
 			const char *name);
 
 		virtual float makeReading();
-		void start();
+		// void setup();
 
 		Events::EventType checkTrigger(float reading);
 		Events::EventType defaultHandler(float reading);

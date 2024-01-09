@@ -33,7 +33,6 @@ namespace Sensors
         void setSampling(uint8_t amount, uint32_t interval);
         
         void restart();
-        virtual void start() = 0;
     protected:
         uint32_t _last_reading = 0L; // when last reading was done (as millis)
         uint32_t _sampling_interval;

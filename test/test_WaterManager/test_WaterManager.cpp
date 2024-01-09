@@ -1,4 +1,4 @@
-#include <Arduino.h>
+#include <ArduinoFake.h>
 #include <unity.h>
 
 #include "Events.h"
@@ -9,10 +9,9 @@
 
 using namespace Programs;
 using namespace Events;
+using namespace fakeit;
 
-WaterManager water_manager = WaterManager(
-    0,
-    1);
+WaterManager water_manager = WaterManager(0, 1);
 
 void test_state(void)
 {
