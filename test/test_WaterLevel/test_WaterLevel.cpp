@@ -7,6 +7,8 @@
 
 using namespace Sensors;
 using namespace Events;
+using namespace fakeit;
+
 
 WaterLevel water_level = WaterLevel(0, 1, "WaterLevelTests");
 

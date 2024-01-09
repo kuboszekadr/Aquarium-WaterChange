@@ -16,28 +16,30 @@ Sensors::WaterLevel::WaterLevel(
 {
     _echo = echo; // echo pin
     _trig = trig; // trig pin
-
-    // pinMode(_trig, OUTPUT);
-    // pinMode(_echo, INPUT);
 }
 
-bool Sensors::WaterLevel::makeReading()
+void Sensors::WaterLevel::start()
 {
+    pinMode(_trig, OUTPUT);
+    pinMode(_echo, INPUT);
+}
 
-    // digitalWrite(_trig, LOW);
-    // delayMicroseconds(2);
+float Sensors::WaterLevel::makeReading()
+{
+    digitalWrite(_trig, LOW);
+    delayMicroseconds(2);
 
-    // digitalWrite(_trig, HIGH);
-    // delayMicroseconds(10);
+    digitalWrite(_trig, HIGH);
+    delayMicroseconds(10);
 
-    // digitalWrite(_trig, LOW);
+    digitalWrite(_trig, LOW);
 
-    // float reading = pulseIn(_echo, HIGH) / 58.0;
-    // _readings[0] += reading; // returns water level in cm
-    // _readings_count++;
+    float reading = pulseIn(_echo, HIGH) / 58.0;
+    _readings[0] += reading; // returns water level in cm
+    _readings_count++;
 
-    // _last_reading = millis();
-    return true;
+    _last_reading = millis();
+    return reading;
 }
 
 Events::EventType Sensors::WaterLevel::checkTrigger(float reading)

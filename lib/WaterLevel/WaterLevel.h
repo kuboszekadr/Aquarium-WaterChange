@@ -20,7 +20,8 @@ namespace Sensors
 
 			const char *name);
 
-		virtual bool makeReading();
+		virtual float makeReading();
+		void start();
 
 		Events::EventType checkTrigger(float reading);
 		Events::EventType defaultHandler(float reading);

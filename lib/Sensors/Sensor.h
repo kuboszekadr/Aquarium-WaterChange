@@ -22,7 +22,7 @@ namespace Sensors
                Events::EventType trigger_low,
                Events::EventType trigger_high);
 
-        virtual bool makeReading() = 0;           // to be overwriten by the subclasses
+        virtual float makeReading() = 0;           // to be overwriten by the subclasses
         virtual Events::EventType checkTrigger(float reading) = 0; // check if current level of sensor value is between low and high trigger
 
         bool isAvailable() { return true; };          // check if sensor gathered enough data
@@ -31,7 +31,9 @@ namespace Sensors
         void getName(char *buffer);
         void setTriggerValues(float low, float high);
         void setSampling(uint8_t amount, uint32_t interval);
+        
         void restart();
+        virtual void start() = 0;
     protected:
         uint32_t _last_reading = 0L; // when last reading was done (as millis)
         uint32_t _sampling_interval;
