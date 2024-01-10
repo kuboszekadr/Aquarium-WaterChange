@@ -28,15 +28,13 @@ void Sensors::Readings::toJSON(JsonObject &doc)
 
 void Sensors::Readings::addNewReading(std::string measure_name, float reading)
 {
-    // _readings_count++;
-    // _readings[measure] = reading;
+    _readings[measure_name].push_back(reading);
 }
 
 void Sensors::Readings::restart()
 {
-    // _readings_count = 0;
-    // for (uint8_t i = 0; i < _measures_amount; i++)
-    // {
-    //     _readings[i] = 0.0;
-    // }
+    for (auto &reading : _readings)
+    {
+        reading.second.clear();
+    }
 }
