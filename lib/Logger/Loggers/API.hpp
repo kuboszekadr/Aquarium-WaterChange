@@ -2,7 +2,7 @@
 #define LoggerAPI__h
 
 #include <ArduinoJson.h>
-#include <Device/Device.h>
+#include "../Device/Device.h"
 
 namespace Loggers
 {

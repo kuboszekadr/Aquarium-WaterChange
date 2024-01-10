@@ -1,7 +1,7 @@
 #ifndef SmartHomeDevice__h
 #define SmartHomeDevice__h
 
-#include "Logger/Logger.h"
+#include "../Logger/Logger.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>

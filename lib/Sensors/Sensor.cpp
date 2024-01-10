@@ -18,7 +18,7 @@ Sensors::Sensor::Sensor(
     _trigger_low = trigger_low;
     _trigger_high = trigger_high;
 
-    _last_readings = new float[measures_amount]();
+    // _readings = Readings(measures_id, measures_amount);
     _name = name;
 }
 
@@ -37,13 +37,4 @@ void Sensors::Sensor::setSampling(uint8_t amount, uint32_t interval)
 {
     _sampling_amount = amount;
     _sampling_interval = interval;
-}
-
-void Sensors::Sensor::restart()
-{
-    // _readings_count = 0;
-    // for (uint8_t i = 0; i < _measures_amount; i++)
-    // {
-    //     _readings[i] = 0.0;
-    // }
 }

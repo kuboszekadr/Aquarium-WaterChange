@@ -32,7 +32,6 @@ void Services::ServiceWaterManager::post(AsyncWebServerRequest *request, JsonVar
     {
         bool constant_level = obj["constant_level"];
         Serial.println(int(constant_level));
-        Programs::water_change.changeMode(constant_level);
         doc["status"] = "ok";
     }
     else

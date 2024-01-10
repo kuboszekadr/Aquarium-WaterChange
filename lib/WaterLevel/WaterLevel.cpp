@@ -21,12 +21,6 @@ Sensors::WaterLevel::WaterLevel(
     pinMode(_echo, INPUT);   
 }
 
-// void Sensors::WaterLevel::setup()
-// {
-//     pinMode(_trig, OUTPUT);
-//     pinMode(_echo, INPUT);   
-// }
-
 float Sensors::WaterLevel::makeReading()
 {
     digitalWrite(_trig, LOW);
@@ -38,8 +32,6 @@ float Sensors::WaterLevel::makeReading()
     digitalWrite(_trig, LOW);
 
     float reading = pulseIn(_echo, HIGH) / 58.0;
-    _readings[0] += reading; // returns water level in cm
-    _readings_count++;
 
     _last_reading = millis();
     return reading;

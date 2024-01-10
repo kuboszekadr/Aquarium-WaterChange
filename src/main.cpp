@@ -1,22 +1,21 @@
-#include "Device/Device.h"
-#include "Sensors/Sensors.h"
-#include "ESP32WebServer/ESP32WebServer.h"
+#include "Device.h"
+#include "Sensors.h"
 
-#include "Logger/Logger.h"
-#include "Logger/Loggers/API.hpp"
-#include "Logger/Loggers/Serial.hpp"
+#include "Logger.h"
+#include "Loggers/API.hpp"
+#include "Loggers/Serial.hpp"
 
-#include "Services/Services.h"
-#include "Services/ServiceSystemTime/ServiceSystemTime.h"
-#include "Services/ServiceConfig/ServiceConfig.h"
-#include "Services/ServiceOTA/ServiceOTA.h"
-#include "Services/ServiceRestart/ServiceRestart.h"
+#include "Services.h"
+#include "ServiceSystemTime/ServiceSystemTime.h"
+#include "ServiceConfig/ServiceConfig.h"
+#include "ServiceOTA/ServiceOTA.h"
+#include "ServiceRestart/ServiceRestart.h"
 
 #include "ServiceWaterManager.h"
 #include "ServiceWaterChange.h"
 
-#include "Notification/Notification.h"
-#include "Events/Events.h"
+#include "Notification.h"
+#include "Events.h"
 
 #include "WaterManager.h"
 #include "WaterLevel.h"
@@ -132,7 +131,6 @@ void sendData()
     {
         JsonVariant data = Sensors::readings.as<JsonVariant>();
         Device::device->postReadings(data, "WaterLevel");
-        ESP32WebServer::last_reading = data;
         Sensors::readings.clear();
     }
 }
@@ -151,8 +149,6 @@ void setupSensor()
     water_level_sensor.setTriggerValues(
         sensor_config.data["trigger_low"],
         sensor_config.data["trigger_high"]);
-
-    water_level_sensor.start();
 }
 
 void GmailNotification(const char *title, const char *message)
