@@ -2,7 +2,6 @@
 #define Sensor_h
 
 #include "../Events/EventType.h"
-#include "Measures.h"
 #include "Readings.h"
 
 #include <Arduino.h>
@@ -15,8 +14,7 @@ namespace Sensors
     class Sensor
     {
     public:
-        Sensor(Measures *measures_id,
-               uint8_t measures_amount,
+        Sensor(std::vector<std::string> measures,
                const char *name,
 
                Events::EventType trigger_low,
@@ -29,6 +27,7 @@ namespace Sensors
         bool isReady() { return (millis() - _last_reading) >= _sampling_interval; }; // check if sensor can gather data
 
         void getName(char *buffer);
+        Readings getReadings() { return _readings; };
 
         void setTriggerValues(float low, float high);
         void setSampling(uint8_t amount, uint32_t interval);
@@ -36,7 +35,7 @@ namespace Sensors
         void restart();
     protected:
         const char *_name; // sensor name / label
-        // Readings _readings;
+        Readings _readings = Readings();
 
         uint32_t _last_reading = 0L; // when last reading was done (as millis)
         uint8_t _sampling_amount;

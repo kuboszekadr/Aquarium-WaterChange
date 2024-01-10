@@ -2,7 +2,7 @@
 
 uint8_t Sensors::sensors_amount;                  // how many sensors are initalized
 Sensors::Sensor *Sensors::sensors[SENSOR_AMOUNT]; // array of generated sensors
-StaticJsonDocument<1024> Sensors::readings;
+JsonDocument Sensors::readings;
 
 void Sensors::loop()
 {
@@ -11,25 +11,27 @@ void Sensors::loop()
     {
         Sensor *sensor = sensors[i];
 
-        // check if sensor is reading for data collection
         if (sensor->isReady())
         {
             sensor->makeReading();
         }
 
-        // check if sensor has collected enough data to share
         if (sensor->isAvailable())
         {
             if (!readings.size() == 0)
             {   
-                readings.createNestedArray();
+                readings.to<JsonArray>();
             }
             
-            // JsonObject reading = readings.createNestedObject();
-            // sensor->toJSON(reading); 
+            JsonArray records = sensor->getReadings().toJSON().as<JsonArray>();
+            for (JsonVariant record : records)
+            {
+                readings.add(record);
+            }
             
-            // sensor->checkTrigger();
-            // sensor->restart();
+            //FIXME: simplification 
+            sensor->checkTrigger(records[0]["value"].as<float>());
+            sensor->restart();
         }
     }    
 }

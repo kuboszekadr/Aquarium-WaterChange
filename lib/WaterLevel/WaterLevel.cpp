@@ -1,14 +1,11 @@
 #include "WaterLevel.h"
 
-Sensors::Measures Sensors::water_level_measure[1] = {Sensors::Measures::WATER_LEVEL};
-
 Sensors::WaterLevel::WaterLevel(
     uint8_t echo,
     uint8_t trig,
     const char *name)
     : Sensor(
-          water_level_measure,
-          1,
+          {std::string("WaterLevel")},
           name,
 
           Events::EventType::WATER_LOW,

@@ -18,8 +18,8 @@ namespace Sensors
 {
   extern uint8_t sensors_amount;         // how many sensors are initalized
   extern Sensor *sensors[SENSOR_AMOUNT]; // array of generated sensors
-  extern StaticJsonDocument<1024> readings;
-
+  extern JsonDocument readings;
+  
   void loop();
 } // namespace Sensors
 #endif

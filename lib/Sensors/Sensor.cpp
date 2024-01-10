@@ -1,9 +1,9 @@
 #include "Sensor.h"
 
 Sensors::Sensor::Sensor(
-    Measures *measures_id,
-    uint8_t measures_amount,
+    std::vector<std::string> measures_name,
     const char *name,
+
     Events::EventType trigger_low,
     Events::EventType trigger_high)
 {
@@ -18,7 +18,7 @@ Sensors::Sensor::Sensor(
     _trigger_low = trigger_low;
     _trigger_high = trigger_high;
 
-    // _readings = Readings(measures_id, measures_amount);
+    _readings = Readings(measures_name);
     _name = name;
 }
 
@@ -37,4 +37,9 @@ void Sensors::Sensor::setSampling(uint8_t amount, uint32_t interval)
 {
     _sampling_amount = amount;
     _sampling_interval = interval;
+}
+
+void Sensors::Sensor::restart()
+{
+    _readings.restart();
 }

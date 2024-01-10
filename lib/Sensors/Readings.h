@@ -21,6 +21,8 @@ namespace Sensors
     class Readings
     {
     public:
+        Readings() {};
+        ~Readings();
         Readings(std::vector<std::string> measures);
 
         JsonDocument  toJSON();

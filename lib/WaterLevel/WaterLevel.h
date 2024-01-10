@@ -14,7 +14,6 @@
 
 namespace Sensors
 {
-	extern Measures water_level_measure[1];
 	class WaterLevel : public Sensor
 	{
 	public:
@@ -25,7 +24,6 @@ namespace Sensors
 			const char *name);
 
 		virtual float makeReading();
-		// void setup();
 
 		Events::EventType checkTrigger(float reading);
 		Events::EventType defaultHandler(float reading);

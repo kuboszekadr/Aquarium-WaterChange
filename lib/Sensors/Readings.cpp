@@ -10,6 +10,11 @@ Sensors::Readings::Readings(std::vector<std::string> measures)
     }
 }
 
+Sensors::Readings::~Readings()
+{
+    _readings.clear();
+}
+
 JsonDocument Sensors::Readings::toJSON()
 {
 #ifdef ARDUINO
