@@ -10,20 +10,33 @@ Sensors::Readings::Readings(std::vector<std::string> measures)
     }
 }
 
-void Sensors::Readings::toJSON(JsonObject &doc)
+JsonDocument Sensors::Readings::toJSON()
 {
-    // ESP32Time time;
-    // String ts = time.getTime("%Y%m%d %H%M%S");
+#ifdef ARDUINO
+    ESP32Time time;
+    String ts = time.getTime("%Y%m%d %H%M%S");
+#else
+    const char ts[] = "20200101 000000";
+#endif
 
-    // for (uint8_t i = 0; i < _measures_amount; i++)
-    // {
-    //     doc["measure_name"] = _measures_id[i];
+    JsonDocument doc;
+    JsonArray records = doc.to<JsonArray>();
 
-    //     float value = _readings[i] / _readings_count;
-    //     doc["value"] = value;
+    for (const auto &pair : _readings)
+    {
+        std::string measure_name = pair.first;
+        std::vector<float> readings = pair.second;
 
-    //     doc["timestamp"] = ts;
-    // }
+        float sum = std::accumulate(readings.begin(), readings.end(), 0.0f);
+        float average = readings.empty() ? 0.0f : sum / readings.size();
+
+        JsonObject record = records.add<JsonObject>();
+        record["measure_name"] = measure_name;
+        record["value"] = average;
+        record["timestamp"] = ts;
+    }
+
+    return doc;
 }
 
 void Sensors::Readings::addNewReading(std::string measure_name, float reading)

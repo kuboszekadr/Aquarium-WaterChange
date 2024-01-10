@@ -4,12 +4,17 @@
 #include "Measures.h"
 
 #include <ArduinoJson.h>
-// #include <ESP32Time.h>
+
+#ifdef ARDUINO
+    #include <ESP32Time.h>
+#else
+    #include <string>
+#endif
 
 #include <map>
 #include <vector>
-#include <string>
 #include <utility>
+#include <numeric>
 
 namespace Sensors
 {
@@ -18,7 +23,7 @@ namespace Sensors
     public:
         Readings(std::vector<std::string> measures);
 
-        void toJSON(JsonObject &doc);
+        JsonDocument  toJSON();
         void restart();
         void addNewReading(std::string measure_name, float reading);
     
