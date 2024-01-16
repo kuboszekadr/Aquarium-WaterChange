@@ -1,11 +1,11 @@
 #ifndef WaterChange_h
 #define WaterChange_h
 
-#include "../Programs/Programs.h"
-#include "../Notification/Notification.h"
-#include "../Logger/Logger.h"
-#include "../Config/Config.h"
-#include "../Relay/Relay.h"
+#include "Programs/Programs.h"
+#include "Notification/Notification.h"
+#include "Logger/Logger.h"
+#include "Config/Config.h"
+#include "Relay/Relay.h"
 
 namespace Programs
 {

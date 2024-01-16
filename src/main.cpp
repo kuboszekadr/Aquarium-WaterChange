@@ -1,17 +1,18 @@
-#include "Device.h"
-#include "Sensors.h"
+#include "Device/Device.h"
+#include "Sensors/Sensors.h"
 
 //Loggers
-#include "Logger.h"
-#include "Loggers/API.hpp"
-#include "Loggers/Serial.hpp"
+#include "Logger/Logger.h"
+#include "Logger/Loggers/API.hpp"
+#include "Logger/Loggers/Serial.hpp"
 
 //Services
-#include "Services.h"
-#include "ServiceSystemTime/ServiceSystemTime.h"
-#include "ServiceConfig/ServiceConfig.h"
-#include "ServiceOTA/ServiceOTA.h"
-#include "ServiceRestart/ServiceRestart.h"
+#include "Services/Services.h"
+#include "Services/ServiceSystemTime/ServiceSystemTime.h"
+#include "Services/ServiceConfig/ServiceConfig.h"
+#include "Services/ServiceOTA/ServiceOTA.h"
+#include "Services/ServiceRestart/ServiceRestart.h"
+
 #include "ServiceWaterManager.h"
 #include "ServiceWaterChange.h"
 
@@ -21,8 +22,8 @@
 #include "Pins.h"
 
 //Utils
-#include "Notification.h"
-#include "Events.h"
+#include "Notification/Notification.h"
+#include "Events/Events.h"
 #include "ESP32Time.h"
 
 #include <Arduino.h>

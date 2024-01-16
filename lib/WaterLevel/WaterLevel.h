@@ -1,8 +1,8 @@
 #ifndef WaterLevel_h
 #define WaterLevel_h
 
-#include "../Events/Events.h"
-#include "../Sensors/Sensor.h"
+#include "Events/Events.h"
+#include "Sensors/Sensor.h"
 
 #ifdef ARDUINO
     #include "Arduino.h"

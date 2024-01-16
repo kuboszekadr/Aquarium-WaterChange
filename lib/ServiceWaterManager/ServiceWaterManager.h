@@ -1,8 +1,8 @@
 #ifndef ServiceWaterManager_h
 #define ServiceWaterManager_h
 
-#include "../WaterManager/WaterManager.h"
-#include "../Services/Services.h"
+#include "WaterManager.h"
+#include "Services/Services.h"
 
 #include <ArduinoJson.h>
 #include <AsyncJson.h>
