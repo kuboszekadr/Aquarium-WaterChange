@@ -3,6 +3,11 @@
 
 #include <cstring>
 #include <vector>
+#include <cstdarg>
+#include <cstdio>
+#include <stdio.h>
+
+#include "../Timestamp/Timestamp.h"
 
 typedef void (*stream)(const char *module_name,
                        const char *log_level,
@@ -10,6 +15,7 @@ typedef void (*stream)(const char *module_name,
                        const char *timestamp);
 
 extern std::vector<stream> streams;
+
 const char date_format[16] = "%F %T";
 
 class Logger
@@ -25,11 +31,6 @@ public:
 private:
     char _log_level[32] = "INFO"; // placeholder
     char _module_name[32] = "";
-
-// #ifdef UNIT_TEST
-// #else
-//     ESP32Time _time;
-// #endif
 
     void _stream(const char *module_name,
                  const char *log_level,

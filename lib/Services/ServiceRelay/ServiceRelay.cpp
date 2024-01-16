@@ -7,7 +7,7 @@ void Services::ServiceRelay::create()
 
 void Services::ServiceRelay::get(AsyncWebServerRequest *request)
 {
-    StaticJsonDocument<200> doc;
+    JsonDocument doc;
     JsonArray result = doc.to<JsonArray>();
 
     for (const auto &relay : Relay::relays)

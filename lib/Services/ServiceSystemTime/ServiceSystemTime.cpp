@@ -10,7 +10,7 @@ void Services::ServiceSystemTime::get(AsyncWebServerRequest *request)
     ESP32Time t;
     String system_time = t.getTime("%F %X");
 
-    StaticJsonDocument<80> doc;
+    JsonDocument doc;
     JsonObject result = doc.to<JsonObject>();
     result["time"] = system_time;
 
@@ -22,5 +22,3 @@ void Services::ServiceSystemTime::get(AsyncWebServerRequest *request)
         "application/json",
         response);
 }
-
-Services::ServiceSystemTime time_service = Services::ServiceSystemTime();

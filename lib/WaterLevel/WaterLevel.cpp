@@ -30,7 +30,10 @@ float Sensors::WaterLevel::makeReading()
 
     float reading = pulseIn(_echo, HIGH) / 58.0;
 
+    _readings.addNewReading("WaterLevel", reading);
+    
     _last_reading = millis();
+    _readings_amount++;
     return reading;
 }
 

@@ -23,7 +23,7 @@ namespace Sensors
         virtual float makeReading() = 0;           // to be overwriten by the subclasses
         virtual Events::EventType checkTrigger(float reading) = 0; // check if current level of sensor value is between low and high trigger
 
-        bool isAvailable() { return true; };          // check if sensor gathered enough data
+        bool isAvailable() { return _readings_amount >= _sampling_amount; };          // check if sensor gathered enough data
         bool isReady() { return (millis() - _last_reading) >= _sampling_interval; }; // check if sensor can gather data
 
         void getName(char *buffer);
@@ -37,9 +37,11 @@ namespace Sensors
         const char *_name; // sensor name / label
         Readings _readings = Readings();
 
+        uint8_t _sampling_amount = 1; // how many readings should be made
+        uint8_t _readings_amount = 0;
+
         uint32_t _last_reading = 0L; // when last reading was done (as millis)
-        uint8_t _sampling_amount;
-        uint32_t _sampling_interval; // how often sensor should make reading (in millis)
+        uint32_t _sampling_interval = 0L; // how often sensor should make reading (in millis)
 
         float _trigger_value_low = -1.0; // average sensor value
         Events::EventType _trigger_low;  // event to be rised when sensor value is below low value

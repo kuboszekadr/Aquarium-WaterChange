@@ -39,7 +39,7 @@ void Device::setupTime()
     }
 
     // send request to host server
-    StaticJsonDocument<256> doc;
+    JsonDocument doc;
     uint8_t timeout = 0;
 
     while (timeout < 10)
@@ -69,13 +69,7 @@ void Device::setupTime()
         sprintf(tz, "UTC+%i", -timezone);
     }
 
-    // set device time
-    ESP32Time _time = ESP32Time();
-    _time.setTime(epoch);
-
-    setenv("TZ", tz, 0);
-    tzset();
-
+    setTime(epoch, tz);
     logger.log("Time set sucessfully");
 }
 
@@ -89,7 +83,7 @@ void Device::setupSPIFSS()
 
 void Device::sendHeartbeat()
 {
-    StaticJsonDocument<128> doc;
+    JsonDocument doc;
     JsonObject obj = doc.to<JsonObject>();
 
     obj["device_name"] = device->device_name;

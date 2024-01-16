@@ -16,6 +16,8 @@ namespace Services
             static void updateOnRequest(AsyncWebServerRequest *request);
             static void updateOnUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
     };
+
+    extern ServiceOTA ota;
 }
 
 #endif

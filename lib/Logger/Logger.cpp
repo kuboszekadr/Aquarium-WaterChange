@@ -15,31 +15,21 @@ void Logger::log(const char *msg)
 
 void Logger::logf(const char *msg_format, ...)
 {
-    // get current system timestamp
-    // char dt[32] = "";
-    // struct tm timestamp = _time.getTimeStruct();
-    // strftime(dt,
-    //          32,
-    //          date_format,
-    //          &timestamp);
+    char *ts = getTimestamp();
 
-    // char ts[40] = "";
-    // sprintf(ts, "%s.%03d", dt, _time.getMillis());
-    // Serial.println(ts);
+    // prepare message
+    va_list args;
+    va_start(args, msg_format);
 
-    // // prepare message
-    // va_list args;
-    // va_start(args, msg_format);
+    char msg[128];
+    vsprintf(msg, msg_format, args);
+    va_end(args);
 
-    // char msg[128];
-    // vsprintf(msg, msg_format, args);
-    // va_end(args);
-
-    // // send to streams
-    // _stream(_module_name,
-    //         _log_level,
-    //         msg,
-    //         ts);
+    // send to streams
+    _stream(_module_name,
+            _log_level,
+            msg,
+            ts);
 }
 
 void Logger::addStream(stream s)

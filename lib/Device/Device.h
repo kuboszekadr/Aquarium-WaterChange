@@ -5,10 +5,10 @@
 #include "../SmartHomeDevice/SmartHomeDevice.h"
 #include "../WiFiManager/WiFiManager.h"
 #include "../Logger/Logger.h"
+#include "../Timestamp/Timestamp.h"
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <ESP32Time.h>
 #include <SPIFFS.h>
 #include <WiFi.h>
 

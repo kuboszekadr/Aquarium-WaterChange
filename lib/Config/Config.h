@@ -8,9 +8,8 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-#ifdef UNIT_TEST
-#else
-    // #include <SPIFFS.h>
+#ifdef ARDUINO
+    #include <SPIFFS.h>
 #endif
 
 
@@ -18,6 +17,7 @@ typedef enum
 {
     CONFIG_LOADED,
     CONFIG_FILE_ERROR,
+    CONFIG_FILE_DOESNT_EXIST,
     CONFIG_SERIALIZATION_ERROR,
     CONFIG_SAVED
 } config_status_t;
@@ -34,7 +34,7 @@ public:
     virtual config_status_t load();
     virtual config_status_t save();
 
-    StaticJsonDocument<512> data;
+    JsonDocument data;
 
 protected:
     char _name[16];

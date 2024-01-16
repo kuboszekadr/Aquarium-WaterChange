@@ -6,7 +6,9 @@ Relay::Relay(const char *name, int pin)
 {
     _pin = pin;
     pinMode(_pin, OUTPUT);
-    digitalWrite(_pin, HIGH); // on ESP32 seems like HIGH=LOW on arduino...
+    digitalWrite(_pin, HIGH); // on ESP3s2 seems like HIGH=LOW on arduino...
+
+    relays[name] = this;
 }
 
 Relay::~Relay()

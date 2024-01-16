@@ -17,6 +17,8 @@ namespace Services
             static void get(AsyncWebServerRequest *request);
             static void post(AsyncWebServerRequest *request, JsonVariant &json);
     };
+
+    extern ServiceWaterManager water_manager;
 }
 
 #endif

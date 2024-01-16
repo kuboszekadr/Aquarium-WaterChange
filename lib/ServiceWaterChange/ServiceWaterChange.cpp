@@ -13,7 +13,7 @@ void Services::ServiceWaterChange::post(AsyncWebServerRequest *request, JsonVari
 {
     JsonObject obj = json.as<JsonObject>();
     String action = obj["action"].as<String>();
-    DynamicJsonDocument doc(1024);
+    JsonDocument doc;
 
     if (action == "start")
     {

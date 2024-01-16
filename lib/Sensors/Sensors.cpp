@@ -6,6 +6,11 @@ JsonDocument Sensors::readings;
 
 void Sensors::loop()
 {
+    if (readings.size() == 0)
+    {   
+        readings.to<JsonArray>();
+    }
+    
     // loop through sensors
     for (int i = 0; i < sensors_amount; i++)
     {
@@ -18,19 +23,16 @@ void Sensors::loop()
 
         if (sensor->isAvailable())
         {
-            if (!readings.size() == 0)
-            {   
-                readings.to<JsonArray>();
-            }
-            
-            JsonArray records = sensor->getReadings().toJSON().as<JsonArray>();
-            for (JsonVariant record : records)
+            JsonDocument doc = sensor->getReadings().toJSON();
+            JsonArray arr = doc.as<JsonArray>();
+
+            for (JsonObject record : arr)
             {
                 readings.add(record);
             }
-            
+
             //FIXME: simplification 
-            sensor->checkTrigger(records[0]["value"].as<float>());
+            sensor->checkTrigger(arr[0]["value"].as<float>());
             sensor->restart();
         }
     }    

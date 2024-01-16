@@ -1,12 +1,12 @@
 #ifndef LoggerSerial__h
 #define LoggerSerial__h
 
-#ifdef UNIT_TEST
+#ifdef ARDUINO
+    #include <Arduino.h>
+#else
     #include <iostream>
     #include <string>
     #include <sstream>
-#else
-    #include <Arduino.h>
 #endif
 
 namespace Loggers
@@ -21,10 +21,10 @@ namespace Loggers
                 "%s | %s | [%s] %s",
                 module_name, log_level, timestamp, msg);
                 
-        #ifdef UNIT_TEST                
-            std::cout << _msg << std::endl;
-        #else
+        #ifdef ARDUINO                
             Serial.println(_msg);
+        #else
+            std::cout << _msg << std::endl;
         #endif
     }
 }

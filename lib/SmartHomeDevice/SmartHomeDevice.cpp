@@ -11,7 +11,7 @@ void SmartHomeDevice::postNotification(const char *title, const char *message)
     char url[60];
     sprintf(url, "%s/%s", host_url, "notifier");
 
-    StaticJsonDocument<512> doc;
+    JsonDocument doc;
     JsonObject obj = doc.to<JsonObject>();
 
     obj["title"] = title;
@@ -22,7 +22,7 @@ void SmartHomeDevice::postNotification(const char *title, const char *message)
 
 void SmartHomeDevice::postReadings(const JsonVariant &obj, const char *sensor_name)
 {
-    StaticJsonDocument<1000> doc;
+    JsonDocument doc;
     JsonObject _obj = doc.to<JsonObject>();
 
     _obj["device_name"] = device_name;

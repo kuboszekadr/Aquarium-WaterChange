@@ -18,8 +18,7 @@ Sensors::Readings::~Readings()
 JsonDocument Sensors::Readings::toJSON()
 {
 #ifdef ARDUINO
-    ESP32Time time;
-    String ts = time.getTime("%Y%m%d %H%M%S");
+    char *ts = getTimestamp();
 #else
     const char ts[] = "20200101 000000";
 #endif

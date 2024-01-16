@@ -1,25 +1,29 @@
 #include "Device.h"
 #include "Sensors.h"
 
+//Loggers
 #include "Logger.h"
 #include "Loggers/API.hpp"
 #include "Loggers/Serial.hpp"
 
+//Services
 #include "Services.h"
 #include "ServiceSystemTime/ServiceSystemTime.h"
 #include "ServiceConfig/ServiceConfig.h"
 #include "ServiceOTA/ServiceOTA.h"
 #include "ServiceRestart/ServiceRestart.h"
-
 #include "ServiceWaterManager.h"
 #include "ServiceWaterChange.h"
 
-#include "Notification.h"
-#include "Events.h"
-
+//Custom
 #include "WaterManager.h"
 #include "WaterLevel.h"
 #include "Pins.h"
+
+//Utils
+#include "Notification.h"
+#include "Events.h"
+#include "ESP32Time.h"
 
 #include <Arduino.h>
 #include <SPIFFS.h>
@@ -28,6 +32,11 @@
 #include <esp_task_wdt.h>
 
 #define WDT_TIMEOUT 20
+#ifdef DEV
+    #define DEVICE_NAME "WaterManager-Dev"
+#else
+    #define DEVICE_NAME "WaterManager"
+#endif
 
 int status = WL_IDLE_STATUS;
 
@@ -53,19 +62,20 @@ void GmailNotification(
 const char VERSION[8] = "v1.0.0";
 Logger logger = Logger("main");
 
-Services::ServiceSystemTime service_time = Services::ServiceSystemTime();
-Services::ServiceOTA service_ota = Services::ServiceOTA();
+Services::ServiceSystemTime Services::time = Services::ServiceSystemTime();
+Services::ServiceOTA Services::ota = Services::ServiceOTA();
 
-Services::ServiceWaterManager service_water_manager = Services::ServiceWaterManager();
-Services::ServiceWaterChange service_water_change = Services::ServiceWaterChange();
+Services::ServiceWaterManager Services::water_manager = Services::ServiceWaterManager();
+Services::ServiceWaterChange Services::water_change = Services::ServiceWaterChange();
 
-Services::ServiceConfig config_service = Services::ServiceConfig();
-Services::ServiceRestart service_restart = Services::ServiceRestart();
+Services::ServiceConfig Services::config = Services::ServiceConfig();
+Services::ServiceRestart Services::restart = Services::ServiceRestart();
 
 void setup()
 {
     Serial.begin(115200);
 
+    Logger::addStream(Loggers::logToSerial);
     Programs::water_change.configure(WATER_FLOW_OUT, WATER_FLOW_IN);
 
     esp_task_wdt_init(WDT_TIMEOUT, true);
@@ -73,7 +83,6 @@ void setup()
 
     Device::setup();
 
-    Logger::addStream(Loggers::logToSerial);
     Logger::addStream(Loggers::logToAPI);
 
     Notification::addStream(GmailNotification);
@@ -129,8 +138,7 @@ void sendData()
 {
     if (Sensors::readings.size() > 0)
     {
-        JsonVariant data = Sensors::readings.as<JsonVariant>();
-        Device::device->postReadings(data, "WaterLevel");
+        Device::device->postReadings(Sensors::readings, DEVICE_NAME);
         Sensors::readings.clear();
     }
 }
@@ -141,6 +149,10 @@ void setupSensor()
 
     Config sensor_config = Config("sensor");
     sensor_config.load();
+
+    // String test;
+    // serializeJson(sensor_config.data, test);
+    // Serial.println(test);
 
     water_level_sensor.setSampling(
         sensor_config.data["sampling_amount"],

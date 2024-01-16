@@ -13,6 +13,8 @@ namespace Services
         void create();
         static void get(AsyncWebServerRequest *request);
     };
+
+    extern ServiceSystemTime time;
 }
 
 

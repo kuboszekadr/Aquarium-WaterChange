@@ -16,6 +16,8 @@ namespace Services
 
         static void get(AsyncWebServerRequest *request);
     };
+
+    extern ServiceRestart restart;
 }
 
 #endif

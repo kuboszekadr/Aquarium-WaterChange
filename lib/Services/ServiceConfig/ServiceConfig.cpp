@@ -41,7 +41,7 @@ void Services::ServiceConfig::post(AsyncWebServerRequest *request, JsonVariant &
     const char* file = obj["file_name"];
     const char* folder = obj["folder"] | "config";
     
-    StaticJsonDocument<512> doc;
+    JsonDocument doc;
     deserializeJson(doc, obj["content"]);
 
     Config config = Config(file, folder);

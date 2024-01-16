@@ -2,14 +2,14 @@
 
 Programs::WaterManager::WaterManager(uint8_t pin_pomp, uint8_t pin_water)
 {
-    // _pomp = new Relay("Pomp", pin_pomp);
-    // _water = new Relay("WaterIn", pin_water);
+    _pomp = new Relay("Pomp", pin_pomp);
+    _water = new Relay("WaterIn", pin_water);
 
     listenTo(Events::WATER_LOW);
     listenTo(Events::WATER_HIGH);
     listenTo(Events::READING_ERROR);
 
-    // loadConfig();
+    loadConfig();
 }
 
 void Programs::WaterManager::start()
@@ -33,8 +33,8 @@ void Programs::WaterManager::start()
 
 void Programs::WaterManager::stop()
 {
-    // _pomp->turnOff();
-    // _water->turnOff();     
+    _pomp->turnOff();
+    _water->turnOff();     
 
     deactivate();
     _state = IDLE;
@@ -42,16 +42,16 @@ void Programs::WaterManager::stop()
 
 void Programs::WaterManager::pumpOut()
 {
-    // _water->turnOff();
-    // _pomp->turnOn();
+    _water->turnOff();
+    _pomp->turnOn();
     
     _state = POMPING;
 }
 
 void Programs::WaterManager::pour()
 {
-    // _pomp->turnOff();
-    // _water->turnOn(); 
+    _pomp->turnOff();
+    _water->turnOn(); 
 
     _state = POURING;
 }
@@ -106,7 +106,13 @@ void Programs::WaterManager::changeMode(bool keep_water_level)
 void Programs::WaterManager::loadConfig()
 {
     Config config = Config("water_manager");
-    config.load();
+    
+    if (config.load() == CONFIG_FILE_DOESNT_EXIST)
+    {
+        config.data["constant_level"] = _keep_water_level;
+        config.save();
+    }
+
     _keep_water_level = config.data["constant_level"];
 
     logger.logf(

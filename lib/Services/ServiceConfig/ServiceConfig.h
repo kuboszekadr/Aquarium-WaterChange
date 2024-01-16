@@ -17,6 +17,8 @@ namespace Services
         static void get(AsyncWebServerRequest *request, JsonVariant &json);
         static void post(AsyncWebServerRequest *request, JsonVariant &json);
     };
+
+    extern ServiceConfig config;
 }
 
 #endif

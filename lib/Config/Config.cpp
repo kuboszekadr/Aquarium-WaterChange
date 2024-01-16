@@ -9,35 +9,39 @@ Config::Config(const char *name, const char *root)
 
 config_status_t Config::load()
 {
-    // logger.logf("Opening: %s", _path);
-    // File config_file = SPIFFS.open(_path, FILE_READ);
+#ifdef ARDUINO
+    logger.logf("Opening: %s", _path);
+    File config_file = SPIFFS.open(_path, FILE_READ);
 
-    // if (!config_file)
-    // {
-    //     logger.logf("Config file %s does not exists!", _path);
-    //     return CONFIG_FILE_ERROR;
-    // }
+    if (!config_file)
+    {
+        logger.logf("Config file %s does not exists!", _path);
+        return CONFIG_FILE_DOESNT_EXIST;
+    }
 
-    // logger.log("Deserializing...");
-    // DeserializationError err = deserializeJson(data, config_file);
-    // if (err)
-    // {
-    //     logger.logf("Serialization error for %s...", _path);
-    //     return CONFIG_SERIALIZATION_ERROR;
-    // }
+    logger.log("Deserializing...");
+    DeserializationError err = deserializeJson(data, config_file);
+    if (err)
+    {
+        logger.logf("Serialization error for %s...", _path);
+        return CONFIG_SERIALIZATION_ERROR;
+    }
 
-    // logger.log("Config loaded sucesfully.");
+    logger.log("Config loaded sucesfully.");
+#endif
     return CONFIG_LOADED;
 }
 
 config_status_t Config::save()
 {
-    // File config_file = SPIFFS.open(_path, FILE_WRITE);
-    // if (!config_file)
-    // {
-    //     return CONFIG_FILE_ERROR;
-    // }
+#ifdef ARDUINO
+    File config_file = SPIFFS.open(_path, FILE_WRITE);
+    if (!config_file)
+    {
+        return CONFIG_FILE_ERROR;
+    }
 
-    // serializeJson(data, config_file);
+    serializeJson(data, config_file);
+#endif
     return CONFIG_SAVED;
 }

@@ -1,11 +1,7 @@
 #ifndef Relay_h
 #define Relay_h
 
-#ifdef UNIT_TEST
-	#include "ArduinoFake.h"
-#else
-	#include <Arduino.h>
-#endif
+#include <Arduino.h>
 
 #include <map>
 

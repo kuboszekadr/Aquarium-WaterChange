@@ -41,5 +41,6 @@ void Sensors::Sensor::setSampling(uint8_t amount, uint32_t interval)
 
 void Sensors::Sensor::restart()
 {
+    _readings_amount = 0;
     _readings.restart();
 }

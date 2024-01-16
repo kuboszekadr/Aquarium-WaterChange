@@ -14,7 +14,7 @@ void Services::ServiceWaterManager::create()
 void Services::ServiceWaterManager::get(AsyncWebServerRequest *request)
 {
     AsyncResponseStream *response = request->beginResponseStream("application/json");
-    DynamicJsonDocument doc(1024);
+    JsonDocument doc;
 
     doc["constant_level"] = Programs::water_change.isConstantLevel();
 
@@ -26,12 +26,11 @@ void Services::ServiceWaterManager::post(AsyncWebServerRequest *request, JsonVar
 {
 
     JsonObject obj = json.as<JsonObject>();
-    DynamicJsonDocument doc(1024);
+    JsonDocument doc;
 
     if (obj.containsKey("constant_level"))
     {
         bool constant_level = obj["constant_level"];
-        Serial.println(int(constant_level));
         doc["status"] = "ok";
     }
     else

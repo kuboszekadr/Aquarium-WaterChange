@@ -10,8 +10,6 @@
     #include "Arduino.h"
 #endif
 
-#define WATER_LEVEL_MEASURE_ID 2
-
 namespace Sensors
 {
 	class WaterLevel : public Sensor
@@ -23,7 +21,7 @@ namespace Sensors
 
 			const char *name);
 
-		virtual float makeReading();
+		float makeReading();
 
 		Events::EventType checkTrigger(float reading);
 		Events::EventType defaultHandler(float reading);

@@ -11,7 +11,7 @@ namespace Loggers
              const char *msg,
              const char *timestamp)
     {
-        StaticJsonDocument<512> doc;
+        JsonDocument doc;
         JsonObject obj = doc.to<JsonObject>();
 
         obj["device_name"] = Device::device->device_name;

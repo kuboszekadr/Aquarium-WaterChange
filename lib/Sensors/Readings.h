@@ -6,7 +6,7 @@
 #include <ArduinoJson.h>
 
 #ifdef ARDUINO
-    #include <ESP32Time.h>
+    #include "../Timestamp/Timestamp.h"
 #else
     #include <string>
 #endif
