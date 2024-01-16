@@ -16,7 +16,7 @@ void Services::ServiceWaterManager::get(AsyncWebServerRequest *request)
     AsyncResponseStream *response = request->beginResponseStream("application/json");
     JsonDocument doc;
 
-    doc["constant_level"] = Programs::water_change.isConstantLevel();
+    doc["constant_level"] = false;
 
     serializeJson(doc, *response);
     request->send(response);

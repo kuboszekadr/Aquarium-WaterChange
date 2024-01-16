@@ -119,7 +119,12 @@ void loop()
  */
 void initTasks()
 {
+    
+    Config tasks = Config("tasks");
+    tasks.load();
+
     logger.log("Setting tasks...");
+    auto time_sync_config = tasks.data["timeSync"];
     Cron.create(
         "0 0 4 * * *",
         Device::setupTime,
