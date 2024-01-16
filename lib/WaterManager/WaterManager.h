@@ -31,11 +31,6 @@ namespace Programs
 
         void configure(uint8_t pin_pomp, uint8_t pin_water);
 
-        void changeMode(bool keep_constant_level);
-        void loadConfig();
-        void saveConfig();
-
-        bool isConstantLevel() { return _keep_water_level; }
         State state() { return _state; }
 
     private:
@@ -44,8 +39,6 @@ namespace Programs
         Relay *_water;
 
         State _state = IDLE;
-
-        bool _keep_water_level = false;
 
         void pumpOut();
         void pour();

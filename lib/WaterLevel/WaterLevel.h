@@ -4,10 +4,10 @@
 #include "../Events/Events.h"
 #include "../Sensors/Sensor.h"
 
-#ifdef UNIT_TEST
-    #include "ArduinoFake.h"
-#else
+#ifdef ARDUINO
     #include "Arduino.h"
+#else
+    #include "ArduinoFake.h"
 #endif
 
 namespace Sensors

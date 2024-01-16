@@ -8,8 +8,6 @@ Programs::WaterManager::WaterManager(uint8_t pin_pomp, uint8_t pin_water)
     listenTo(Events::WATER_LOW);
     listenTo(Events::WATER_HIGH);
     listenTo(Events::READING_ERROR);
-
-    loadConfig();
 }
 
 void Programs::WaterManager::start()
@@ -90,40 +88,4 @@ void Programs::WaterManager::configure(uint8_t pin_pomp, uint8_t pin_water)
 
     _pomp = new Relay("Pomp", pin_pomp);
     _water = new Relay("WaterIn", pin_water);
-}
-
-void Programs::WaterManager::changeMode(bool keep_water_level)
-{
-    if (keep_water_level == _keep_water_level)
-    {
-        return;
-    }
-    
-    _keep_water_level = keep_water_level;
-    saveConfig();
-}
-
-void Programs::WaterManager::loadConfig()
-{
-    Config config = Config("water_manager");
-    
-    if (config.load() == CONFIG_FILE_DOESNT_EXIST)
-    {
-        config.data["constant_level"] = _keep_water_level;
-        config.save();
-    }
-
-    _keep_water_level = config.data["constant_level"];
-
-    logger.logf(
-        "Constant level mode: %s", 
-        _keep_water_level ? "enabled" : "disabled"
-    );
-}
-
-void Programs::WaterManager::saveConfig()
-{
-    Config config = Config("water_manager");
-    config.data["constant_level"] = _keep_water_level;
-    config.save();
 }

@@ -18,6 +18,11 @@ Sensors::WaterLevel::WaterLevel(
     pinMode(_echo, INPUT);   
 }
 
+/**
+ * Makes a reading of the water level using the ultrasonic sensor.
+ * 
+ * @return The measured water level in centimeters.
+ */
 float Sensors::WaterLevel::makeReading()
 {
     digitalWrite(_trig, LOW);
@@ -37,6 +42,14 @@ float Sensors::WaterLevel::makeReading()
     return reading;
 }
 
+/**
+ * @brief Checks the trigger based on the water level reading.
+ * 
+ * This function delegates the trigger checking based on current state of the constant water level monitoring.
+ * 
+ * @param reading The water level reading.
+ * @return The event type based on the reading.
+ */
 Events::EventType Sensors::WaterLevel::checkTrigger(float reading)
 {
     Events::EventType event = Events::EventType::EMPTY;
@@ -64,6 +77,12 @@ Events::EventType Sensors::WaterLevel::checkTrigger(float reading)
     return event;
 }
 
+/**
+ * @brief Default handler for the water level sensor reading while constant level is turned off.
+ * 
+ * @param reading The water level sensor reading.
+ * @return The event type based on the water level reading.
+ */
 Events::EventType Sensors::WaterLevel::defaultHandler(float reading)
 {
     if (reading >= _trigger_value_low)
@@ -77,6 +96,12 @@ Events::EventType Sensors::WaterLevel::defaultHandler(float reading)
     return Events::EventType::EMPTY;
 }
 
+/**
+ * @brief Default handler for the water level sensor reading while constant level is turned on.
+ * 
+ * @param reading The water level sensor reading.
+ * @return The event type based on the water level reading.
+ */
 Events::EventType Sensors::WaterLevel::constantLevelHandler(float reading)
 {
     if (reading >= _trigger_value_high)

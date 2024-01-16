@@ -54,6 +54,7 @@ Programs::WaterManager Programs::water_change = Programs::WaterManager(
 void initTasks();
 void setupSensor();
 void sendData();
+void startWaterChange();
 
 void GmailNotification(
     const char *title,
@@ -109,6 +110,13 @@ void loop()
     esp_task_wdt_reset();
 }
 
+/**
+ * @brief Initializes the tasks for the aquarium water change system.
+ * 
+ * Sets up the scheduled tasks using the Cron library, ,
+ * creates tasks for setting up the device time, sending heartbeat,
+ * starting water change, and managing WiFi connection.
+ */
 void initTasks()
 {
     logger.log("Setting tasks...");
@@ -124,8 +132,7 @@ void initTasks()
 
     Cron.create(
         "0 0 9 * * *",
-        []()
-        { Programs::water_change.start(); },
+        startWaterChange,
         false);
 
     Cron.create(
@@ -143,16 +150,31 @@ void sendData()
     }
 }
 
+/**
+ * @brief Starts the water change process.
+ * 
+ * This function disables the constant water level monitoring, starts the water change program,
+ * and restores the original state of the water level monitoring after the water change is complete.
+ */
+void startWaterChange()
+{
+    bool constant_level_hanlder = water_level_sensor.keep_water_level;
+    water_level_sensor.keep_water_level = false;
+    Programs::water_change.start();
+    water_level_sensor.keep_water_level = constant_level_hanlder;
+}
+
+/**
+ * @brief Sets up the sensor configuration and trigger values.
+ * 
+ * This function initializes the sensor configuration by loading the settings from a configuration file.
+ */
 void setupSensor()
 {
     logger.log("Setting sensors...");
 
     Config sensor_config = Config("sensor");
     sensor_config.load();
-
-    // String test;
-    // serializeJson(sensor_config.data, test);
-    // Serial.println(test);
 
     water_level_sensor.setSampling(
         sensor_config.data["sampling_amount"],
@@ -163,6 +185,12 @@ void setupSensor()
         sensor_config.data["trigger_high"]);
 }
 
+/**
+ * Sends a Gmail notification with the specified title and message.
+ *
+ * @param title The title of the notification.
+ * @param message The message content of the notification.
+ */
 void GmailNotification(const char *title, const char *message)
 {
     Device::device->postNotification(title, message);
