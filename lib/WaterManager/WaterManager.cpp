@@ -12,12 +12,12 @@ Programs::WaterManager::WaterManager(uint8_t pin_pomp, uint8_t pin_water)
 
 void Programs::WaterManager::start()
 {
-    if (isActive())
+    if (isRunning())
     {
         return;
     }
 
-    activate();
+    _is_running = true;
 
     if (_event == Events::WATER_LOW)
     {
@@ -29,12 +29,12 @@ void Programs::WaterManager::start()
     }
 }
 
-void Programs::WaterManager::stop()
+void Programs::WaterManager::terminate()
 {
     _pomp->turnOff();
     _water->turnOff();     
 
-    deactivate();
+    _is_running = false;
     _state = IDLE;
 }
 
@@ -58,7 +58,7 @@ void Programs::WaterManager::reactForEvent(Events::EventType event)
 {
     if (event == Events::READING_ERROR)
     {
-        stop();
+        terminate();
         return;
     }
 
@@ -73,7 +73,7 @@ void Programs::WaterManager::reactForEvent(Events::EventType event)
 
     if (event == Events::WATER_HIGH)
     {
-        stop();
+        terminate();
     }
     else if (event == Events::WATER_LOW)
     {
@@ -88,4 +88,20 @@ void Programs::WaterManager::configure(uint8_t pin_pomp, uint8_t pin_water)
 
     _pomp = new Relay("Pomp", pin_pomp);
     _water = new Relay("WaterIn", pin_water);
+}
+
+void Programs::WaterManager::loadConfig()
+{
+    Config config = Config("water_manager");
+    config.load();
+    
+    _is_active = config.data["active"] | true;  
+}
+
+void Programs::WaterManager::saveConfig()
+{
+    Config config = Config("water_manager");
+
+    config.data["active"] = _is_active;
+    config.save();
 }

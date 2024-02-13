@@ -23,13 +23,16 @@ namespace Programs
         ~WaterManager() {};
 
         void start();
-        void stop();
+        void terminate();
         void reactForEvent(Events::EventType event);
 
         void constantLevelHandler(Events::EventType event);
         void defaultHandler(Events::EventType event);
 
         void configure(uint8_t pin_pomp, uint8_t pin_water);
+        
+        void loadConfig();
+        void saveConfig();
 
         State state() { return _state; }
 
@@ -44,6 +47,6 @@ namespace Programs
         void pour();
     };
 
-    extern WaterManager water_change;
+    extern WaterManager water_manager;
 }
 #endif

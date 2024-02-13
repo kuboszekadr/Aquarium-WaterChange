@@ -110,3 +110,45 @@ Events::EventType Sensors::WaterLevel::constantLevelHandler(float reading)
     }
     return Events::EventType::WATER_HIGH;
 }
+
+/**
+ * @brief Serializes the sensor data to JSON.
+ * 
+ * This function serializes the sensor data to JSON and sends it to the serial output.
+ */ 
+void Sensors::WaterLevel::saveConfig()
+{
+    Config config = Config("sensor");
+
+    JsonDocument& doc = config.data;    
+    doc["keep_water_level"] = keep_water_level;
+    
+    doc["trigger_low"] = _trigger_value_low;
+    doc["trigger_high"] = _trigger_value_high;
+
+    doc["sampling_amount"] = _sampling_amount;
+    doc["sampling_interval"] = _sampling_interval;
+
+    serializeJsonPretty(doc, Serial);
+
+    config.save();
+}
+
+/**
+ * @brief Loads the sensor configuration from the configuration file.
+ * 
+ * This function loads the sensor configuration from the configuration file.
+ */
+void Sensors::WaterLevel::loadConfig()
+{
+    Config config = Config("sensor");
+    config.load();
+
+    keep_water_level = config.data["keep_water_level"] | false;
+
+    _trigger_value_low = config.data["trigger_low"];
+    _trigger_value_high = config.data["trigger_high"];
+
+    _sampling_amount = config.data["sampling_amount"] | 30;
+    _sampling_interval = config.data["sampling_interval"] | 2000;
+}

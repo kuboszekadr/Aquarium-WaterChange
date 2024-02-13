@@ -18,14 +18,29 @@ void Services::ServiceWaterChange::post(AsyncWebServerRequest *request, JsonVari
     if (action == "start")
     {
         // Start water change
-        Programs::water_change.start();
+        Programs::water_manager.start();
         doc["status"] = "Water change started";
     }
     else if (action == "stop")
     {
         // Stop water change
-        Programs::water_change.stop();
+        Programs::water_manager.terminate();
         doc["status"] = "Water change stopped";
+    }
+    else if (action == "deactivate")
+    {
+        // Deactivate water change
+        Programs::water_manager.deactivate();
+        Programs::water_manager.saveConfig();
+        doc["status"] = "Water change deactivated";
+    }
+    else
+    {
+        request->send(
+            500,
+            "application/json",
+            "{\"status\": \"error\", \"message\": \"Invalid action\"}"
+            );
     }
     
     AsyncResponseStream *response = request->beginResponseStream("application/json");

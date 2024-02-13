@@ -13,8 +13,7 @@
 #include "Services/ServiceOTA/ServiceOTA.h"
 #include "Services/ServiceRestart/ServiceRestart.h"
 
-#include "ServiceWaterManager.h"
-#include "ServiceWaterChange.h"
+
 
 //Custom
 #include "WaterManager.h"
@@ -33,13 +32,16 @@
 #include <esp_task_wdt.h>
 
 #define WDT_TIMEOUT 20
-#ifdef DEV
-    #define DEVICE_NAME "WaterManager-Dev"
-#else
+#define DEVELOP
+
+#ifndef DEVELOP
     #define DEVICE_NAME "WaterManager"
+#else
+    #define DEVICE_NAME "WaterManager-Develop"
 #endif
 
 int status = WL_IDLE_STATUS;
+bool constant_water_level_setup = false; // walkaround for the water level sensor
 
 Sensors::WaterLevel water_level_sensor(
     HCSR04_ECHO,
@@ -47,7 +49,10 @@ Sensors::WaterLevel water_level_sensor(
     "WaterLevelSump"
     );
 
-Programs::WaterManager Programs::water_change = Programs::WaterManager(
+#include "ServiceWaterManager.h"
+#include "ServiceWaterChange.h"
+
+Programs::WaterManager Programs::water_manager = Programs::WaterManager(
     WATER_FLOW_OUT,
     WATER_FLOW_IN
     );
@@ -61,14 +66,14 @@ void GmailNotification(
     const char *title,
     const char *message);
 
-const char VERSION[8] = "v1.0.0";
+const char VERSION[8] = "v1.1.0";
 Logger logger = Logger("main");
 
 Services::ServiceSystemTime Services::time = Services::ServiceSystemTime();
 Services::ServiceOTA Services::ota = Services::ServiceOTA();
 
-Services::ServiceWaterManager Services::water_manager = Services::ServiceWaterManager();
-Services::ServiceWaterChange Services::water_change = Services::ServiceWaterChange();
+Services::ServiceWaterManager Services::water_manager_service = Services::ServiceWaterManager();
+Services::ServiceWaterChange Services::water_manager = Services::ServiceWaterChange();
 
 Services::ServiceConfig Services::config = Services::ServiceConfig();
 Services::ServiceRestart Services::restart = Services::ServiceRestart();
@@ -76,9 +81,8 @@ Services::ServiceRestart Services::restart = Services::ServiceRestart();
 void setup()
 {
     Serial.begin(115200);
-
     Logger::addStream(Loggers::logToSerial);
-    Programs::water_change.configure(WATER_FLOW_OUT, WATER_FLOW_IN);
+    Programs::water_manager.configure(WATER_FLOW_OUT, WATER_FLOW_IN);
 
     esp_task_wdt_init(WDT_TIMEOUT, true);
     esp_task_wdt_add(NULL);
@@ -108,6 +112,15 @@ void loop()
     Events::notifyListeners();
     sendData();
 
+    if (Programs::water_manager.isRunning())
+    {
+        water_level_sensor.keep_water_level = false;
+    }
+    else
+    {
+        water_level_sensor.keep_water_level = constant_water_level_setup;
+    }
+
     esp_task_wdt_reset();
 }
 
@@ -125,9 +138,9 @@ void initTasks()
     tasks.load();
 
     logger.log("Setting tasks...");
-    auto time_sync_config = tasks.data["timeSync"];
+    auto time_sync_config = tasks.data["timeSync"].as<const char*>();
     Cron.create(
-        "0 0 4 * * *",
+        const_cast<char*>(time_sync_config),
         Device::setupTime,
         false);
 
@@ -136,8 +149,9 @@ void initTasks()
         Device::sendHeartbeat,
         false);
 
+    auto water_change_config = tasks.data["startWaterChange"].as<const char*>();
     Cron.create(
-        "0 0 9 * * *",
+        const_cast<char*>(water_change_config),
         startWaterChange,
         false);
 
@@ -164,10 +178,7 @@ void sendData()
  */
 void startWaterChange()
 {
-    bool constant_level_hanlder = water_level_sensor.keep_water_level;
-    water_level_sensor.keep_water_level = false;
-    Programs::water_change.start();
-    water_level_sensor.keep_water_level = constant_level_hanlder;
+    Programs::water_manager.start();
 }
 
 /**
@@ -177,18 +188,10 @@ void startWaterChange()
  */
 void setupSensor()
 {
-    logger.log("Setting sensors...");
-
-    Config sensor_config = Config("sensor");
-    sensor_config.load();
-
-    water_level_sensor.setSampling(
-        sensor_config.data["sampling_amount"],
-        sensor_config.data["sampling_interval"]);
-
-    water_level_sensor.setTriggerValues(
-        sensor_config.data["trigger_low"],
-        sensor_config.data["trigger_high"]);
+    water_level_sensor.loadConfig();
+    constant_water_level_setup = water_level_sensor.keep_water_level;
+    
+    Programs::water_manager.loadConfig();
 }
 
 /**

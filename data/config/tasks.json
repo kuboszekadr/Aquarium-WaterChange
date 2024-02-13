@@ -1,6 +1,1 @@
-{
-    "timeSync": "0 0 4 * * *",
-    "sendHeartbeat": "*/30 * * * * *",
-    "startWaterChange": "0 0 9 * * *",
-    "manageConnection": "0 */2 * * * *"
-}
+{"timeSync": "0 0 4 * * *", "startWaterChange": "0 0 9 * * *"}

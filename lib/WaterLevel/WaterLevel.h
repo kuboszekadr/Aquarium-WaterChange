@@ -6,9 +6,12 @@
 
 #ifdef ARDUINO
     #include "Arduino.h"
+	#include "Config/Config.h"
 #else
     #include "ArduinoFake.h"
 #endif
+
+#include <ArduinoJson.h>
 
 namespace Sensors
 {
@@ -29,7 +32,11 @@ namespace Sensors
 
 		bool keep_water_level = false;
 
+		void saveConfig();
+		void loadConfig();
+
 	private:
+		
 		uint8_t _echo;
 		uint8_t _trig;
 	};

@@ -17,7 +17,7 @@ namespace Services
             static void post(AsyncWebServerRequest *request, JsonVariant &json);
     };
 
-    extern ServiceWaterChange water_change;
+    extern ServiceWaterChange water_manager;
 }
 
 #endif

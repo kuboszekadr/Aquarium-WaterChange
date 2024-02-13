@@ -4,9 +4,9 @@
 #include "WaterLevel.h"
 #include "WaterManager.h"
 
-#include "Event.h"
-#include "EventType.h"
-#include "Programs.h"
+#include "Events/Event.h"
+#include "Events/EventType.h"
+#include "Programs/Programs.h"
 
 using namespace Sensors;
 using namespace Programs;
